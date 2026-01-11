@@ -16,10 +16,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-// ══════════════════════════════════════════════════════════════════════════
-// DATABASE CONNECTION
-// ══════════════════════════════════════════════════════════════════════════
-
 const dbConfig = {
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -46,7 +42,6 @@ async function initDatabase() {
 }
 
 async function createWebTables() {
-    // Create web-specific table for character sheets
     try {
         await pool.execute(`
             CREATE TABLE IF NOT EXISTS web_character_sheets (
@@ -75,10 +70,6 @@ async function createWebTables() {
     }
 }
 
-// ══════════════════════════════════════════════════════════════════════════
-// GOD DATA
-// ══════════════════════════════════════════════════════════════════════════
-
 const GODS = {
     'Zeus': { emoji: '⚡', color: 'Yellow', effect: 'Jump Boost I', domain: 'Sky & Thunder' },
     'Poseidon': { emoji: '🔱', color: 'Aqua', effect: 'Water Breathing', domain: 'Sea' },
@@ -102,31 +93,27 @@ const GODS = {
 };
 
 // ══════════════════════════════════════════════════════════════════════════
-// API ROUTES
+// API ROUTES - Case insensitive username matching with LOWER()
 // ══════════════════════════════════════════════════════════════════════════
 
-// Health check
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', database: pool ? 'connected' : 'demo mode' });
 });
 
-// Get all gods
 app.get('/api/gods', (req, res) => {
     res.json({ success: true, data: GODS });
 });
 
-// Get player by Minecraft username
+// Main player lookup - CASE INSENSITIVE
 app.get('/api/player/:username', async (req, res) => {
-    const { username } = req.params;
+    const username = req.params.username.toLowerCase(); // Convert to lowercase
     
-    if (!pool) {
-        return res.json(getDemoPlayer(username));
-    }
+    if (!pool) return res.json(getDemoPlayer(username));
     
     try {
-        // Find discord_id from minecraft_links using minecraft_username column
+        // Case-insensitive search using LOWER()
         const [linkRows] = await pool.execute(
-            'SELECT discord_id FROM minecraft_links WHERE minecraft_username = ?',
+            'SELECT discord_id, minecraft_username FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
             [username]
         );
         
@@ -138,20 +125,20 @@ app.get('/api/player/:username', async (req, res) => {
         }
         
         const discordId = linkRows[0].discord_id;
+        const actualMcUsername = linkRows[0].minecraft_username; // Get the actual stored username
         
-        // Get player data - using simple query first to avoid join issues
         const [playerRows] = await pool.execute(
-            `SELECT * FROM players WHERE user_id = ?`,
+            'SELECT * FROM players WHERE user_id = ?',
             [discordId]
         );
         
         if (playerRows.length === 0) {
-            return res.json({ success: false, error: 'Player profile not found' });
+            return res.json({ success: false, error: 'Player profile not found in database.' });
         }
         
         const player = playerRows[0];
         
-        // Get cabin name separately if cabin_id exists
+        // Get cabin info
         let cabinName = null;
         let cabinFavor = 0;
         if (player.cabin_id) {
@@ -164,9 +151,7 @@ app.get('/api/player/:username', async (req, res) => {
                     cabinName = cabinRows[0].name;
                     cabinFavor = cabinRows[0].divine_favor || 0;
                 }
-            } catch (e) {
-                console.log('Cabin lookup note:', e.message);
-            }
+            } catch (e) { /* ignore */ }
         }
         
         // Get unread mail count
@@ -177,9 +162,7 @@ app.get('/api/player/:username', async (req, res) => {
                 [discordId]
             );
             unreadMail = mailRows[0].count;
-        } catch (e) {
-            console.log('Mail count note:', e.message);
-        }
+        } catch (e) { /* ignore */ }
         
         const godInfo = GODS[player.god_parent] || {};
         
@@ -188,7 +171,7 @@ app.get('/api/player/:username', async (req, res) => {
             data: {
                 user_id: player.user_id,
                 discord_username: player.username,
-                mc_username: username,
+                mc_username: actualMcUsername,
                 god_parent: player.god_parent,
                 god_emoji: godInfo.emoji || '❓',
                 god_color: godInfo.color || 'Unknown',
@@ -212,126 +195,93 @@ app.get('/api/player/:username', async (req, res) => {
     }
 });
 
-// Get player mail
+// Mail routes - case insensitive
 app.get('/api/player/:username/mail', async (req, res) => {
-    const { username } = req.params;
-    
-    if (!pool) {
-        return res.json({ success: true, data: [] });
-    }
+    const username = req.params.username.toLowerCase();
+    if (!pool) return res.json({ success: true, data: [] });
     
     try {
         const [linkRows] = await pool.execute(
-            'SELECT discord_id FROM minecraft_links WHERE minecraft_username = ?',
+            'SELECT discord_id FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
             [username]
         );
-        
-        if (linkRows.length === 0) {
-            return res.json({ success: true, data: [] });
-        }
+        if (linkRows.length === 0) return res.json({ success: true, data: [] });
         
         const [rows] = await pool.execute(
             'SELECT * FROM mail WHERE user_id = ? ORDER BY created_at DESC LIMIT 50',
             [linkRows[0].discord_id]
         );
-        
         res.json({ success: true, data: rows });
     } catch (error) {
-        console.error('Mail error:', error);
         res.json({ success: true, data: [] });
     }
 });
 
-// Mark mail as read
 app.post('/api/mail/:mailId/read', async (req, res) => {
-    const { mailId } = req.params;
-    
     if (!pool) return res.json({ success: true });
-    
     try {
-        await pool.execute('UPDATE mail SET is_read = 1 WHERE mail_id = ?', [mailId]);
+        await pool.execute('UPDATE mail SET is_read = 1 WHERE mail_id = ?', [req.params.mailId]);
         res.json({ success: true });
     } catch (error) {
         res.json({ success: false });
     }
 });
 
-// Get player inventory
+// Inventory - case insensitive
 app.get('/api/player/:username/inventory', async (req, res) => {
-    const { username } = req.params;
-    
-    if (!pool) {
-        return res.json({ success: true, data: [] });
-    }
+    const username = req.params.username.toLowerCase();
+    if (!pool) return res.json({ success: true, data: [] });
     
     try {
         const [linkRows] = await pool.execute(
-            'SELECT discord_id FROM minecraft_links WHERE minecraft_username = ?',
+            'SELECT discord_id FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
             [username]
         );
-        
-        if (linkRows.length === 0) {
-            return res.json({ success: true, data: [] });
-        }
+        if (linkRows.length === 0) return res.json({ success: true, data: [] });
         
         const [rows] = await pool.execute(
             'SELECT * FROM inventory WHERE user_id = ?',
             [linkRows[0].discord_id]
         );
-        
         res.json({ success: true, data: rows });
     } catch (error) {
-        console.error('Inventory error:', error);
         res.json({ success: true, data: [] });
     }
 });
 
-// Get character sheet
+// Character sheet - case insensitive
 app.get('/api/player/:username/character', async (req, res) => {
-    const { username } = req.params;
-    
+    const username = req.params.username.toLowerCase();
     if (!pool) return res.json({ success: true, data: null });
     
     try {
         const [linkRows] = await pool.execute(
-            'SELECT discord_id FROM minecraft_links WHERE minecraft_username = ?',
+            'SELECT discord_id FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
             [username]
         );
-        
-        if (linkRows.length === 0) {
-            return res.json({ success: true, data: null });
-        }
+        if (linkRows.length === 0) return res.json({ success: true, data: null });
         
         const [rows] = await pool.execute(
             'SELECT * FROM web_character_sheets WHERE discord_id = ?',
             [linkRows[0].discord_id]
         );
-        
         res.json({ success: true, data: rows[0] || null });
     } catch (error) {
-        console.error('Character error:', error);
         res.json({ success: true, data: null });
     }
 });
 
-// Save character sheet
 app.post('/api/player/:username/character', async (req, res) => {
-    const { username } = req.params;
+    const username = req.params.username.toLowerCase();
     const data = req.body;
-    
-    if (!pool) return res.json({ success: true, message: 'Demo mode' });
+    if (!pool) return res.json({ success: true });
     
     try {
         const [linkRows] = await pool.execute(
-            'SELECT discord_id FROM minecraft_links WHERE minecraft_username = ?',
+            'SELECT discord_id FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
             [username]
         );
-        
-        if (linkRows.length === 0) {
-            return res.status(404).json({ success: false, error: 'Not linked' });
-        }
-        
-        const discordId = linkRows[0].discord_id;
+        if (linkRows.length === 0) return res.status(404).json({ success: false, error: 'Not linked' });
         
         await pool.execute(`
             INSERT INTO web_character_sheets 
@@ -345,28 +295,19 @@ app.post('/api/player/:username/character', async (req, res) => {
             weapon = VALUES(weapon), fighting_style = VALUES(fighting_style),
             abilities = VALUES(abilities), goals = VALUES(goals), fears = VALUES(fears),
             image_url = VALUES(image_url)`,
-            [discordId, data.name, data.age, data.gender, data.pronouns, data.personality,
-             data.likes, data.dislikes, data.backstory, data.weapon, data.style,
-             data.abilities, data.goals, data.fears, data.image]
+            [linkRows[0].discord_id, data.name, data.age, data.gender, data.pronouns, 
+             data.personality, data.likes, data.dislikes, data.backstory, data.weapon, 
+             data.style, data.abilities, data.goals, data.fears, data.image]
         );
-        
         res.json({ success: true });
     } catch (error) {
-        console.error('Save error:', error);
         res.status(500).json({ success: false, error: error.message });
     }
 });
 
-// Get leaderboard
+// Leaderboard
 app.get('/api/leaderboard', async (req, res) => {
-    if (!pool) {
-        return res.json({
-            success: true,
-            data: [
-                { username: 'DemoPlayer1', drachma: 500, god_parent: 'Zeus' }
-            ]
-        });
-    }
+    if (!pool) return res.json({ success: true, data: [] });
     
     try {
         const [rows] = await pool.execute(`
@@ -374,62 +315,39 @@ app.get('/api/leaderboard', async (req, res) => {
             FROM players p
             LEFT JOIN minecraft_links ml ON p.user_id = ml.discord_id
             WHERE p.is_active = 1
-            ORDER BY p.drachma DESC 
-            LIMIT 20
+            ORDER BY p.drachma DESC LIMIT 20
         `);
-        
         res.json({ success: true, data: rows });
     } catch (error) {
-        console.error('Leaderboard error:', error);
         res.json({ success: true, data: [] });
     }
 });
 
-// Demo player for when database isn't available
 function getDemoPlayer(username) {
     const godNames = Object.keys(GODS);
     const randomGod = godNames[Math.floor(Math.random() * godNames.length)];
     const godInfo = GODS[randomGod];
-    
     return {
-        success: true,
-        isDemo: true,
+        success: true, isDemo: true,
         data: {
-            mc_username: username,
-            god_parent: randomGod,
-            god_emoji: godInfo.emoji,
-            god_color: godInfo.color,
-            god_effect: godInfo.effect,
-            god_domain: godInfo.domain,
+            mc_username: username, god_parent: randomGod,
+            god_emoji: godInfo.emoji, god_color: godInfo.color,
+            god_effect: godInfo.effect, god_domain: godInfo.domain,
             drachma: Math.floor(Math.random() * 500) + 100,
-            cabin_name: null,
-            divine_favor: Math.floor(Math.random() * 100),
-            unread_mail: 0
+            cabin_name: null, divine_favor: 0, unread_mail: 0
         }
     };
 }
 
-// Serve frontend for all other routes
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// ══════════════════════════════════════════════════════════════════════════
-// START SERVER
-// ══════════════════════════════════════════════════════════════════════════
-
 async function start() {
     await initDatabase();
-    
     app.listen(PORT, () => {
-        console.log(`
-╔═══════════════════════════════════════════════════════════╗
-║         ⚡ CAMP HALF-BLOOD SERVER ⚡                       ║
-╠═══════════════════════════════════════════════════════════╣
-║  Server running on port ${PORT}                              ║
-║  Database: ${pool ? 'Connected' : 'Demo Mode'}                               ║
-╚═══════════════════════════════════════════════════════════╝
-        `);
+        console.log(`⚡ Camp Half-Blood Server running on port ${PORT}`);
+        console.log(`Database: ${pool ? 'Connected' : 'Demo Mode'}`);
     });
 }
 
