@@ -1,5 +1,5 @@
 // ══════════════════════════════════════════════════════════════════════════
-// CAMP HALF-BLOOD - BACKEND SERVER (BigInt fix)
+// CAMP HALF-BLOOD - BACKEND SERVER (Fixed column names)
 // ══════════════════════════════════════════════════════════════════════════
 
 const express = require('express');
@@ -23,7 +23,6 @@ const dbConfig = {
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
-    // FIX: Return big numbers as strings to avoid precision loss
     supportBigNumbers: true,
     bigNumberStrings: true
 };
@@ -47,9 +46,9 @@ async function createWebTables() {
         await pool.execute(`
             CREATE TABLE IF NOT EXISTS web_character_sheets (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                discord_id BIGINT UNIQUE,
+                discord_id VARCHAR(20) UNIQUE,
                 char_name VARCHAR(100),
-                age INT,
+                age VARCHAR(10),
                 gender VARCHAR(50),
                 pronouns VARCHAR(50),
                 personality TEXT,
@@ -101,7 +100,7 @@ app.get('/api/gods', (req, res) => {
     res.json({ success: true, data: GODS });
 });
 
-// Main player lookup - with BigInt fix
+// Main player lookup
 app.get('/api/player/:username', async (req, res) => {
     const username = req.params.username;
     console.log('🔍 Looking up player:', username);
@@ -109,12 +108,10 @@ app.get('/api/player/:username', async (req, res) => {
     if (!pool) return res.json(getDemoPlayer(username));
     
     try {
-        // Get discord_id as string to preserve precision
         const [linkRows] = await pool.execute(
             'SELECT CAST(discord_id AS CHAR) as discord_id, minecraft_username FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
             [username]
         );
-        console.log('📋 minecraft_links result:', JSON.stringify(linkRows));
         
         if (linkRows.length === 0) {
             return res.json({ 
@@ -123,16 +120,14 @@ app.get('/api/player/:username', async (req, res) => {
             });
         }
         
-        const discordId = linkRows[0].discord_id; // Now it's a string
+        const discordId = linkRows[0].discord_id;
         const actualMcUsername = linkRows[0].minecraft_username;
         console.log('✅ Found discord_id:', discordId);
         
-        // Use string comparison for the BigInt
         const [playerRows] = await pool.execute(
             'SELECT * FROM players WHERE CAST(user_id AS CHAR) = ?',
             [discordId]
         );
-        console.log('📋 players result count:', playerRows.length);
         
         if (playerRows.length === 0) {
             return res.json({ success: false, error: 'Player profile not found in database.' });
@@ -141,31 +136,37 @@ app.get('/api/player/:username', async (req, res) => {
         console.log('✅ Found player:', playerRows[0].username);
         const player = playerRows[0];
         
-        // Get cabin info
+        // Get cabin info - FIXED: using cabin_name instead of name
         let cabinName = null;
         let cabinFavor = 0;
         if (player.cabin_id) {
             try {
                 const [cabinRows] = await pool.execute(
-                    'SELECT name, divine_favor FROM cabins WHERE cabin_id = ?',
+                    'SELECT cabin_name, divine_favor FROM cabins WHERE cabin_id = ?',
                     [player.cabin_id]
                 );
                 if (cabinRows.length > 0) {
-                    cabinName = cabinRows[0].name;
+                    cabinName = cabinRows[0].cabin_name;
                     cabinFavor = cabinRows[0].divine_favor || 0;
+                    console.log('✅ Found cabin:', cabinName);
                 }
-            } catch (e) { }
+            } catch (e) {
+                console.log('Cabin error:', e.message);
+            }
         }
         
-        // Get unread mail count
+        // Get unread mail count - FIXED: using recipient_id instead of user_id
         let unreadMail = 0;
         try {
             const [mailRows] = await pool.execute(
-                'SELECT COUNT(*) as count FROM mail WHERE CAST(user_id AS CHAR) = ? AND is_read = 0',
+                'SELECT COUNT(*) as count FROM mail WHERE CAST(recipient_id AS CHAR) = ? AND is_read = 0',
                 [discordId]
             );
             unreadMail = mailRows[0].count;
-        } catch (e) { }
+            console.log('✅ Unread mail:', unreadMail);
+        } catch (e) {
+            console.log('Mail error:', e.message);
+        }
         
         const godInfo = GODS[player.god_parent] || {};
         
@@ -199,6 +200,7 @@ app.get('/api/player/:username', async (req, res) => {
     }
 });
 
+// Get mail - FIXED: using recipient_id
 app.get('/api/player/:username/mail', async (req, res) => {
     const username = req.params.username;
     if (!pool) return res.json({ success: true, data: [] });
@@ -211,11 +213,13 @@ app.get('/api/player/:username/mail', async (req, res) => {
         if (linkRows.length === 0) return res.json({ success: true, data: [] });
         
         const [rows] = await pool.execute(
-            'SELECT * FROM mail WHERE CAST(user_id AS CHAR) = ? ORDER BY created_at DESC LIMIT 50',
+            'SELECT * FROM mail WHERE CAST(recipient_id AS CHAR) = ? ORDER BY created_at DESC LIMIT 50',
             [linkRows[0].discord_id]
         );
+        console.log('✅ Found mail:', rows.length);
         res.json({ success: true, data: rows });
     } catch (error) {
+        console.log('Mail fetch error:', error.message);
         res.json({ success: true, data: [] });
     }
 });
@@ -251,8 +255,10 @@ app.get('/api/player/:username/inventory', async (req, res) => {
     }
 });
 
+// Get character sheet
 app.get('/api/player/:username/character', async (req, res) => {
     const username = req.params.username;
+    console.log('📋 Getting character sheet for:', username);
     if (!pool) return res.json({ success: true, data: null });
     
     try {
@@ -263,18 +269,24 @@ app.get('/api/player/:username/character', async (req, res) => {
         if (linkRows.length === 0) return res.json({ success: true, data: null });
         
         const [rows] = await pool.execute(
-            'SELECT * FROM web_character_sheets WHERE CAST(discord_id AS CHAR) = ?',
+            'SELECT * FROM web_character_sheets WHERE discord_id = ?',
             [linkRows[0].discord_id]
         );
+        console.log('📋 Character sheet found:', rows.length > 0);
         res.json({ success: true, data: rows[0] || null });
     } catch (error) {
+        console.log('Character fetch error:', error.message);
         res.json({ success: true, data: null });
     }
 });
 
+// Save character sheet - FIXED with better error handling
 app.post('/api/player/:username/character', async (req, res) => {
     const username = req.params.username;
     const data = req.body;
+    console.log('💾 Saving character sheet for:', username);
+    console.log('💾 Data received:', JSON.stringify(data).substring(0, 200));
+    
     if (!pool) return res.json({ success: true });
     
     try {
@@ -282,26 +294,81 @@ app.post('/api/player/:username/character', async (req, res) => {
             'SELECT CAST(discord_id AS CHAR) as discord_id FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
             [username]
         );
-        if (linkRows.length === 0) return res.status(404).json({ success: false, error: 'Not linked' });
         
-        await pool.execute(`
-            INSERT INTO web_character_sheets 
-            (discord_id, char_name, age, gender, pronouns, personality, likes, dislikes, 
-             backstory, weapon, fighting_style, abilities, goals, fears, image_url)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ON DUPLICATE KEY UPDATE
-            char_name = VALUES(char_name), age = VALUES(age), gender = VALUES(gender),
-            pronouns = VALUES(pronouns), personality = VALUES(personality), 
-            likes = VALUES(likes), dislikes = VALUES(dislikes), backstory = VALUES(backstory),
-            weapon = VALUES(weapon), fighting_style = VALUES(fighting_style),
-            abilities = VALUES(abilities), goals = VALUES(goals), fears = VALUES(fears),
-            image_url = VALUES(image_url)`,
-            [linkRows[0].discord_id, data.name, data.age, data.gender, data.pronouns, 
-             data.personality, data.likes, data.dislikes, data.backstory, data.weapon, 
-             data.style, data.abilities, data.goals, data.fears, data.image]
+        if (linkRows.length === 0) {
+            console.log('❌ No link found for:', username);
+            return res.status(404).json({ success: false, error: 'Not linked' });
+        }
+        
+        const discordId = linkRows[0].discord_id;
+        console.log('💾 Discord ID:', discordId);
+        
+        // Check if record exists
+        const [existing] = await pool.execute(
+            'SELECT id FROM web_character_sheets WHERE discord_id = ?',
+            [discordId]
         );
+        
+        if (existing.length > 0) {
+            // Update existing
+            console.log('💾 Updating existing character sheet');
+            await pool.execute(`
+                UPDATE web_character_sheets SET
+                    char_name = ?, age = ?, gender = ?, pronouns = ?,
+                    personality = ?, likes = ?, dislikes = ?, backstory = ?,
+                    weapon = ?, fighting_style = ?, abilities = ?,
+                    goals = ?, fears = ?, image_url = ?
+                WHERE discord_id = ?`,
+                [
+                    data.name || null,
+                    data.age || null,
+                    data.gender || null,
+                    data.pronouns || null,
+                    data.personality || null,
+                    data.likes || null,
+                    data.dislikes || null,
+                    data.backstory || null,
+                    data.weapon || null,
+                    data.style || null,
+                    data.abilities || null,
+                    data.goals || null,
+                    data.fears || null,
+                    data.image || null,
+                    discordId
+                ]
+            );
+        } else {
+            // Insert new
+            console.log('💾 Creating new character sheet');
+            await pool.execute(`
+                INSERT INTO web_character_sheets 
+                (discord_id, char_name, age, gender, pronouns, personality, likes, dislikes, 
+                 backstory, weapon, fighting_style, abilities, goals, fears, image_url)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [
+                    discordId,
+                    data.name || null,
+                    data.age || null,
+                    data.gender || null,
+                    data.pronouns || null,
+                    data.personality || null,
+                    data.likes || null,
+                    data.dislikes || null,
+                    data.backstory || null,
+                    data.weapon || null,
+                    data.style || null,
+                    data.abilities || null,
+                    data.goals || null,
+                    data.fears || null,
+                    data.image || null
+                ]
+            );
+        }
+        
+        console.log('✅ Character sheet saved successfully');
         res.json({ success: true });
     } catch (error) {
+        console.error('❌ Character save error:', error);
         res.status(500).json({ success: false, error: error.message });
     }
 });
