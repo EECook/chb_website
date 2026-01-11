@@ -1,6 +1,5 @@
 // ══════════════════════════════════════════════════════════════════════════
-// CAMP HALF-BLOOD - BACKEND SERVER
-// Updated to match your existing database schema
+// CAMP HALF-BLOOD - BACKEND SERVER (with debug logging)
 // ══════════════════════════════════════════════════════════════════════════
 
 const express = require('express');
@@ -37,7 +36,6 @@ async function initDatabase() {
         await createWebTables();
     } catch (error) {
         console.error('❌ Database connection failed:', error.message);
-        console.log('⚠️  Running in demo mode');
     }
 }
 
@@ -92,10 +90,6 @@ const GODS = {
     'Tyche': { emoji: '🎲', color: 'Blue', effect: 'Luck', domain: 'Fortune' }
 };
 
-// ══════════════════════════════════════════════════════════════════════════
-// API ROUTES - Case insensitive username matching with LOWER()
-// ══════════════════════════════════════════════════════════════════════════
-
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', database: pool ? 'connected' : 'demo mode' });
 });
@@ -104,20 +98,27 @@ app.get('/api/gods', (req, res) => {
     res.json({ success: true, data: GODS });
 });
 
-// Main player lookup - CASE INSENSITIVE
+// Main player lookup with DEBUG LOGGING
 app.get('/api/player/:username', async (req, res) => {
-    const username = req.params.username.toLowerCase(); // Convert to lowercase
+    const username = req.params.username;
+    console.log('🔍 Looking up player:', username);
     
-    if (!pool) return res.json(getDemoPlayer(username));
+    if (!pool) {
+        console.log('⚠️ No database pool, returning demo');
+        return res.json(getDemoPlayer(username));
+    }
     
     try {
-        // Case-insensitive search using LOWER()
+        // Step 1: Find in minecraft_links
+        console.log('📋 Step 1: Checking minecraft_links...');
         const [linkRows] = await pool.execute(
             'SELECT discord_id, minecraft_username FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
             [username]
         );
+        console.log('📋 minecraft_links result:', JSON.stringify(linkRows));
         
         if (linkRows.length === 0) {
+            console.log('❌ No minecraft link found');
             return res.json({ 
                 success: false, 
                 error: 'Minecraft account not linked! Use !mclink in Discord first.' 
@@ -125,17 +126,28 @@ app.get('/api/player/:username', async (req, res) => {
         }
         
         const discordId = linkRows[0].discord_id;
-        const actualMcUsername = linkRows[0].minecraft_username; // Get the actual stored username
+        const actualMcUsername = linkRows[0].minecraft_username;
+        console.log('✅ Found discord_id:', discordId, 'type:', typeof discordId);
         
+        // Step 2: Find in players
+        console.log('📋 Step 2: Checking players table...');
         const [playerRows] = await pool.execute(
             'SELECT * FROM players WHERE user_id = ?',
             [discordId]
         );
+        console.log('📋 players result count:', playerRows.length);
         
         if (playerRows.length === 0) {
+            console.log('❌ No player found for discord_id:', discordId);
+            
+            // Debug: try to see what's in players table
+            const [allPlayers] = await pool.execute('SELECT user_id, username FROM players LIMIT 5');
+            console.log('📋 Sample players in DB:', JSON.stringify(allPlayers));
+            
             return res.json({ success: false, error: 'Player profile not found in database.' });
         }
         
+        console.log('✅ Found player:', playerRows[0].username);
         const player = playerRows[0];
         
         // Get cabin info
@@ -151,7 +163,7 @@ app.get('/api/player/:username', async (req, res) => {
                     cabinName = cabinRows[0].name;
                     cabinFavor = cabinRows[0].divine_favor || 0;
                 }
-            } catch (e) { /* ignore */ }
+            } catch (e) { }
         }
         
         // Get unread mail count
@@ -162,10 +174,11 @@ app.get('/api/player/:username', async (req, res) => {
                 [discordId]
             );
             unreadMail = mailRows[0].count;
-        } catch (e) { /* ignore */ }
+        } catch (e) { }
         
         const godInfo = GODS[player.god_parent] || {};
         
+        console.log('✅ Sending successful response');
         res.json({
             success: true,
             data: {
@@ -190,14 +203,13 @@ app.get('/api/player/:username', async (req, res) => {
             }
         });
     } catch (error) {
-        console.error('Database error:', error);
+        console.error('❌ Database error:', error);
         res.status(500).json({ success: false, error: 'Database error: ' + error.message });
     }
 });
 
-// Mail routes - case insensitive
 app.get('/api/player/:username/mail', async (req, res) => {
-    const username = req.params.username.toLowerCase();
+    const username = req.params.username;
     if (!pool) return res.json({ success: true, data: [] });
     
     try {
@@ -227,9 +239,8 @@ app.post('/api/mail/:mailId/read', async (req, res) => {
     }
 });
 
-// Inventory - case insensitive
 app.get('/api/player/:username/inventory', async (req, res) => {
-    const username = req.params.username.toLowerCase();
+    const username = req.params.username;
     if (!pool) return res.json({ success: true, data: [] });
     
     try {
@@ -249,9 +260,8 @@ app.get('/api/player/:username/inventory', async (req, res) => {
     }
 });
 
-// Character sheet - case insensitive
 app.get('/api/player/:username/character', async (req, res) => {
-    const username = req.params.username.toLowerCase();
+    const username = req.params.username;
     if (!pool) return res.json({ success: true, data: null });
     
     try {
@@ -272,7 +282,7 @@ app.get('/api/player/:username/character', async (req, res) => {
 });
 
 app.post('/api/player/:username/character', async (req, res) => {
-    const username = req.params.username.toLowerCase();
+    const username = req.params.username;
     const data = req.body;
     if (!pool) return res.json({ success: true });
     
@@ -305,7 +315,6 @@ app.post('/api/player/:username/character', async (req, res) => {
     }
 });
 
-// Leaderboard
 app.get('/api/leaderboard', async (req, res) => {
     if (!pool) return res.json({ success: true, data: [] });
     
