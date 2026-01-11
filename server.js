@@ -1,5 +1,5 @@
 // ══════════════════════════════════════════════════════════════════════════
-// CAMP HALF-BLOOD - BACKEND SERVER (with debug logging)
+// CAMP HALF-BLOOD - BACKEND SERVER (BigInt fix)
 // ══════════════════════════════════════════════════════════════════════════
 
 const express = require('express');
@@ -22,7 +22,10 @@ const dbConfig = {
     database: process.env.DB_NAME,
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0
+    queueLimit: 0,
+    // FIX: Return big numbers as strings to avoid precision loss
+    supportBigNumbers: true,
+    bigNumberStrings: true
 };
 
 let pool;
@@ -98,52 +101,40 @@ app.get('/api/gods', (req, res) => {
     res.json({ success: true, data: GODS });
 });
 
-// Main player lookup with DEBUG LOGGING
+// Main player lookup - with BigInt fix
 app.get('/api/player/:username', async (req, res) => {
     const username = req.params.username;
     console.log('🔍 Looking up player:', username);
     
-    if (!pool) {
-        console.log('⚠️ No database pool, returning demo');
-        return res.json(getDemoPlayer(username));
-    }
+    if (!pool) return res.json(getDemoPlayer(username));
     
     try {
-        // Step 1: Find in minecraft_links
-        console.log('📋 Step 1: Checking minecraft_links...');
+        // Get discord_id as string to preserve precision
         const [linkRows] = await pool.execute(
-            'SELECT discord_id, minecraft_username FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
+            'SELECT CAST(discord_id AS CHAR) as discord_id, minecraft_username FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
             [username]
         );
         console.log('📋 minecraft_links result:', JSON.stringify(linkRows));
         
         if (linkRows.length === 0) {
-            console.log('❌ No minecraft link found');
             return res.json({ 
                 success: false, 
                 error: 'Minecraft account not linked! Use !mclink in Discord first.' 
             });
         }
         
-        const discordId = linkRows[0].discord_id;
+        const discordId = linkRows[0].discord_id; // Now it's a string
         const actualMcUsername = linkRows[0].minecraft_username;
-        console.log('✅ Found discord_id:', discordId, 'type:', typeof discordId);
+        console.log('✅ Found discord_id:', discordId);
         
-        // Step 2: Find in players
-        console.log('📋 Step 2: Checking players table...');
+        // Use string comparison for the BigInt
         const [playerRows] = await pool.execute(
-            'SELECT * FROM players WHERE user_id = ?',
+            'SELECT * FROM players WHERE CAST(user_id AS CHAR) = ?',
             [discordId]
         );
         console.log('📋 players result count:', playerRows.length);
         
         if (playerRows.length === 0) {
-            console.log('❌ No player found for discord_id:', discordId);
-            
-            // Debug: try to see what's in players table
-            const [allPlayers] = await pool.execute('SELECT user_id, username FROM players LIMIT 5');
-            console.log('📋 Sample players in DB:', JSON.stringify(allPlayers));
-            
             return res.json({ success: false, error: 'Player profile not found in database.' });
         }
         
@@ -170,7 +161,7 @@ app.get('/api/player/:username', async (req, res) => {
         let unreadMail = 0;
         try {
             const [mailRows] = await pool.execute(
-                'SELECT COUNT(*) as count FROM mail WHERE user_id = ? AND is_read = 0',
+                'SELECT COUNT(*) as count FROM mail WHERE CAST(user_id AS CHAR) = ? AND is_read = 0',
                 [discordId]
             );
             unreadMail = mailRows[0].count;
@@ -214,13 +205,13 @@ app.get('/api/player/:username/mail', async (req, res) => {
     
     try {
         const [linkRows] = await pool.execute(
-            'SELECT discord_id FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
+            'SELECT CAST(discord_id AS CHAR) as discord_id FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
             [username]
         );
         if (linkRows.length === 0) return res.json({ success: true, data: [] });
         
         const [rows] = await pool.execute(
-            'SELECT * FROM mail WHERE user_id = ? ORDER BY created_at DESC LIMIT 50',
+            'SELECT * FROM mail WHERE CAST(user_id AS CHAR) = ? ORDER BY created_at DESC LIMIT 50',
             [linkRows[0].discord_id]
         );
         res.json({ success: true, data: rows });
@@ -245,13 +236,13 @@ app.get('/api/player/:username/inventory', async (req, res) => {
     
     try {
         const [linkRows] = await pool.execute(
-            'SELECT discord_id FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
+            'SELECT CAST(discord_id AS CHAR) as discord_id FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
             [username]
         );
         if (linkRows.length === 0) return res.json({ success: true, data: [] });
         
         const [rows] = await pool.execute(
-            'SELECT * FROM inventory WHERE user_id = ?',
+            'SELECT * FROM inventory WHERE CAST(user_id AS CHAR) = ?',
             [linkRows[0].discord_id]
         );
         res.json({ success: true, data: rows });
@@ -266,13 +257,13 @@ app.get('/api/player/:username/character', async (req, res) => {
     
     try {
         const [linkRows] = await pool.execute(
-            'SELECT discord_id FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
+            'SELECT CAST(discord_id AS CHAR) as discord_id FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
             [username]
         );
         if (linkRows.length === 0) return res.json({ success: true, data: null });
         
         const [rows] = await pool.execute(
-            'SELECT * FROM web_character_sheets WHERE discord_id = ?',
+            'SELECT * FROM web_character_sheets WHERE CAST(discord_id AS CHAR) = ?',
             [linkRows[0].discord_id]
         );
         res.json({ success: true, data: rows[0] || null });
@@ -288,7 +279,7 @@ app.post('/api/player/:username/character', async (req, res) => {
     
     try {
         const [linkRows] = await pool.execute(
-            'SELECT discord_id FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
+            'SELECT CAST(discord_id AS CHAR) as discord_id FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
             [username]
         );
         if (linkRows.length === 0) return res.status(404).json({ success: false, error: 'Not linked' });
@@ -322,7 +313,7 @@ app.get('/api/leaderboard', async (req, res) => {
         const [rows] = await pool.execute(`
             SELECT p.username, p.drachma, p.god_parent, ml.minecraft_username as mc_username
             FROM players p
-            LEFT JOIN minecraft_links ml ON p.user_id = ml.discord_id
+            LEFT JOIN minecraft_links ml ON CAST(p.user_id AS CHAR) = CAST(ml.discord_id AS CHAR)
             WHERE p.is_active = 1
             ORDER BY p.drachma DESC LIMIT 20
         `);
