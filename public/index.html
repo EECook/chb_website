@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camp Half-Blood | Where Demigods Become Heroes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="starfield"></div>
+    <div id="particles"></div>
+
+    <!-- NAVIGATION -->
+    <nav id="main-nav">
+        <div class="nav-container">
+            <div class="nav-brand" onclick="showLanding()">⚡ Camp Half-Blood</div>
+            <div class="nav-links">
+                <button class="nav-btn" onclick="showLanding()">🏠 Home</button>
+                <div class="nav-item">
+                    <button class="nav-btn">💬 Discord <span class="arrow">▼</span></button>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-item" onclick="showPage('getting-started')"><span class="icon">🌟</span><span class="text"><span class="title">Getting Started</span><span class="desc">New player guide</span></span></div>
+                        <div class="dropdown-item" onclick="showPage('profile')"><span class="icon">👤</span><span class="text"><span class="title">Profile & Mail</span><span class="desc">Your demigod identity</span></span></div>
+                        <div class="dropdown-item" onclick="showPage('mclink')"><span class="icon">🔗</span><span class="text"><span class="title">MC Link</span><span class="desc">Connect accounts</span></span></div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item" onclick="showPage('gods')"><span class="icon">🏛️</span><span class="text"><span class="title">Gods & Claiming</span><span class="desc">Divine heritage</span></span></div>
+                        <div class="dropdown-item" onclick="showPage('cabins')"><span class="icon">🏕️</span><span class="text"><span class="title">Cabins & Teams</span><span class="desc">Join forces</span></span></div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item" onclick="showPage('economy')"><span class="icon">💰</span><span class="text"><span class="title">Drachma & Economy</span><span class="desc">Currency system</span></span></div>
+                        <div class="dropdown-item" onclick="showPage('games')"><span class="icon">🎮</span><span class="text"><span class="title">Mini-Games & Casino</span><span class="desc">Play to earn</span></span></div>
+                        <div class="dropdown-item" onclick="showPage('shops')"><span class="icon">🏪</span><span class="text"><span class="title">Shops & Trading</span><span class="desc">Buy and sell</span></span></div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item" onclick="showPage('events')"><span class="icon">📅</span><span class="text"><span class="title">Events & Timeline</span><span class="desc">What's happening</span></span></div>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <button class="nav-btn">⛏️ Minecraft <span class="arrow">▼</span></button>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-item" onclick="showPage('mc-commands')"><span class="icon">⌨️</span><span class="text"><span class="title">Commands</span><span class="desc">In-game reference</span></span></div>
+                        <div class="dropdown-item" onclick="showPage('mc-sync')"><span class="icon">🔄</span><span class="text"><span class="title">Deposit & Withdraw</span><span class="desc">Manage Drachma</span></span></div>
+                        <div class="dropdown-item" onclick="showPage('mc-gods')"><span class="icon">✨</span><span class="text"><span class="title">God Effects</span><span class="desc">Colors & effects</span></span></div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item" onclick="showPage('mc-quests')"><span class="icon">📜</span><span class="text"><span class="title">Questlines</span><span class="desc">Story adventures</span></span></div>
+                        <div class="dropdown-item" onclick="showPage('mc-events')"><span class="icon">🎭</span><span class="text"><span class="title">Live Events</span><span class="desc">Theater, battles</span></span></div>
+                        <div class="dropdown-item" onclick="showPage('mc-tournaments')"><span class="icon">🏆</span><span class="text"><span class="title">Tournaments</span><span class="desc">CTF, arena</span></span></div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item" onclick="showPage('mc-shops')"><span class="icon">🏪</span><span class="text"><span class="title">Player Shops</span><span class="desc">Fulfillment</span></span></div>
+                    </div>
+                </div>
+                <button class="nav-btn" onclick="showPage('lore')">📖 Lore</button>
+                <button class="nav-btn portal-btn" onclick="showPortal()">🌐 Portal</button>
+            </div>
+            <button class="mobile-toggle" onclick="toggleMobile()"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu" id="mobile-menu">
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-item" onclick="showLanding(); closeMobile();">🏠 Home</div>
+        </div>
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-title">💬 Discord</div>
+            <div class="mobile-menu-item" onclick="showPage('getting-started'); closeMobile();">Getting Started</div>
+            <div class="mobile-menu-item" onclick="showPage('profile'); closeMobile();">Profile & Mail</div>
+            <div class="mobile-menu-item" onclick="showPage('mclink'); closeMobile();">MC Link</div>
+            <div class="mobile-menu-item" onclick="showPage('gods'); closeMobile();">Gods & Claiming</div>
+            <div class="mobile-menu-item" onclick="showPage('cabins'); closeMobile();">Cabins & Teams</div>
+            <div class="mobile-menu-item" onclick="showPage('economy'); closeMobile();">Drachma & Economy</div>
+            <div class="mobile-menu-item" onclick="showPage('games'); closeMobile();">Mini-Games</div>
+            <div class="mobile-menu-item" onclick="showPage('shops'); closeMobile();">Shops</div>
+            <div class="mobile-menu-item" onclick="showPage('events'); closeMobile();">Events</div>
+        </div>
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-title">⛏️ Minecraft</div>
+            <div class="mobile-menu-item" onclick="showPage('mc-commands'); closeMobile();">Commands</div>
+            <div class="mobile-menu-item" onclick="showPage('mc-sync'); closeMobile();">Deposit/Withdraw</div>
+            <div class="mobile-menu-item" onclick="showPage('mc-gods'); closeMobile();">God Effects</div>
+            <div class="mobile-menu-item" onclick="showPage('mc-quests'); closeMobile();">Questlines</div>
+            <div class="mobile-menu-item" onclick="showPage('mc-events'); closeMobile();">Live Events</div>
+            <div class="mobile-menu-item" onclick="showPage('mc-tournaments'); closeMobile();">Tournaments</div>
+            <div class="mobile-menu-item" onclick="showPage('mc-shops'); closeMobile();">Player Shops</div>
+        </div>
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-item" onclick="showPage('lore'); closeMobile();">📖 Lore</div>
+            <div class="mobile-menu-item" onclick="showPortal(); closeMobile();">🌐 Portal</div>
+        </div>
+    </div>
+
+    <!-- LANDING PAGE -->
+    <section id="landing">
+        <div class="landing-content">
+            <div class="greek-border"></div>
+            <span class="lightning-icon">⚡</span>
+            <h1 class="main-title">Camp Half-Blood</h1>
+            <p class="subtitle">Where Demigods Become Heroes</p>
+            <p class="tagline">A world where <em>Discord</em> meets <em>Minecraft</em>, where ancient mythology comes alive, and where <strong>your story</strong> is waiting to be written.</p>
+            <p class="tagline-small">No prior lore knowledge required. Just bring your curiosity.</p>
+            <div class="landing-buttons">
+                <button class="enter-btn" onclick="scrollToWelcome()">Begin Your Journey</button>
+                <button class="secondary-btn" onclick="showPortal()">🌐 Player Portal</button>
+            </div>
+        </div>
+        <div class="scroll-indicator" onclick="scrollToWelcome()"><span></span></div>
+    </section>
+
+    <!-- WELCOME SECTION -->
+    <section id="welcome" class="content-section">
+        <div class="section-container">
+            <div class="parchment-box scroll-reveal">
+                <h2 class="section-title"><span class="emoji">📜</span>Something Stirs...</h2>
+                <p class="story-text">You've always felt different. Strange things happen around you. Lightning flickers when you're angry. The sea calls your name. Shadows whisper secrets.<br><br><em>There's a reason for that.</em><br><br>You are a <strong>demigod</strong> — half mortal, half divine. One of your parents is an Olympian god.</p>
+            </div>
+            <div class="phase-box scroll-reveal">
+                <div class="phase-badge">Phase 1</div>
+                <h3>⚖️ Unsettling Circumstances</h3>
+                <p>As new Demigods arrive, something feels… <em>off</em>.</p>
+                <div class="phase-details">
+                    <div class="phase-detail"><span class="icon">🏛️</span><div><h4>The Gods Are Quiet</h4><p>Camp runs well, but divine supervision is absent. No orders. No watchful eyes.</p></div></div>
+                    <div class="phase-detail"><span class="icon">🧭</span><div><h4>What You Can Do</h4><p>Questlines available. Explore, meet NPCs, uncover threads. Prepare for tournaments.</p></div></div>
+                </div>
+            </div>
+            <div class="grecian-divider scroll-reveal"></div>
+            <h3 class="realms-title scroll-reveal">✦ Three Realms, One Legend ✦</h3>
+            <div class="realms-grid">
+                <div class="realm-card discord scroll-reveal" onclick="showPage('getting-started')">
+                    <div class="realm-glow"></div>
+                    <span class="realm-icon">💬</span>
+                    <h4 class="realm-title">Discord Realm</h4>
+                    <p class="realm-desc">Your social hub. Chat, roleplay, manage your demigod life.</p>
+                    <ul class="realm-features"><li>Interactive claiming</li><li>10 mini-games</li><li>Cabin teams</li><li>Mail & shops</li><li>Vi's Casino 🎰</li></ul>
+                    <span class="realm-cta">Explore →</span>
+                </div>
+                <div class="realm-card minecraft scroll-reveal" onclick="showPage('mc-commands')">
+                    <div class="realm-glow"></div>
+                    <span class="realm-icon">⛏️</span>
+                    <h4 class="realm-title">Minecraft Realm</h4>
+                    <p class="realm-desc">Build, battle, explore. Synced with Discord.</p>
+                    <ul class="realm-features"><li>Two-way Drachma sync</li><li>Custom questlines</li><li>God effects</li><li>Tournaments</li><li>Origins modpack</li></ul>
+                    <span class="realm-cta">Explore →</span>
+                </div>
+                <div class="realm-card portal scroll-reveal" onclick="showPortal()">
+                    <div class="realm-glow"></div>
+                    <span class="realm-icon">🌐</span>
+                    <h4 class="realm-title">Player Portal</h4>
+                    <p class="realm-desc">Your profile anywhere. Stats, mail, character sheet.</p>
+                    <ul class="realm-features"><li>Complete profile</li><li>Character builder</li><li>Mail & inventory</li><li>Shop management</li><li>Leaderboards</li></ul>
+                    <span class="realm-cta">Open →</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JOURNEY SECTION -->
+    <section id="journey" class="content-section">
+        <div class="section-container">
+            <div class="journey-intro scroll-reveal">
+                <h2>⚔️ Your Journey Begins</h2>
+                <p>Follow these steps to become a hero</p>
+            </div>
+            <div class="journey-path">
+                <div class="journey-step scroll-reveal"><div class="step-number">1</div><div class="step-content"><h4 class="step-title">📋 Create Your Profile</h4><p class="step-desc">Type <span class="step-command">!profile</span> in Discord. Start with <strong>100 Drachma</strong>.</p></div></div>
+                <div class="journey-step scroll-reveal"><div class="step-number">2</div><div class="step-content"><h4 class="step-title">🏛️ Discover Your Divine Parent</h4><p class="step-desc">Use <span class="step-command">!claim</span> to take the Oracle's quiz.</p></div></div>
+                <div class="journey-step scroll-reveal"><div class="step-number">3</div><div class="step-content"><h4 class="step-title">⛏️ Link Minecraft</h4><p class="step-desc">Connect with <span class="step-command">!mclink YourName</span> for sync.</p></div></div>
+                <div class="journey-step scroll-reveal"><div class="step-number">4</div><div class="step-content"><h4 class="step-title">🏕️ Join a Cabin</h4><p class="step-desc">Use <span class="step-command">!cabin list</span> or create your own.</p></div></div>
+                <div class="journey-step scroll-reveal"><div class="step-number">5</div><div class="step-content"><h4 class="step-title">💰 Start Your Adventure</h4><p class="step-desc">Play <span class="step-command">!games</span>, join events, explore!</p></div></div>
+            </div>
+            <div style="text-align: center; margin-top: 3rem;" class="scroll-reveal">
+                <button class="enter-btn" onclick="showPage('getting-started')">📚 Full Documentation</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- DOCUMENTATION -->
+    <section id="documentation"><div class="doc-container"><div id="doc-content"></div></div></section>
+
+    <!-- PORTAL -->
+    <section id="portal">
+        <div class="portal-container">
+            <div class="page-header"><span class="page-icon">🌐</span><h1 class="page-title">Player Portal</h1><p class="page-subtitle">Access your demigod profile</p></div>
+            <div class="login-card" id="portal-login">
+                <span class="login-icon">🔐</span>
+                <h2>Connect Your Account</h2>
+                <p>Link to your demigod profile</p>
+                <div class="login-options" id="login-options">
+                    <button class="login-btn discord" onclick="connectDiscord()"><span class="btn-icon">💬</span><span class="btn-text"><span class="btn-title">Connect with Discord</span><span class="btn-desc">Use your Discord account</span></span></button>
+                    <div class="login-divider">or</div>
+                    <button class="login-btn minecraft" onclick="showMCLogin()"><span class="btn-icon">⛏️</span><span class="btn-text"><span class="btn-title">Connect with Minecraft</span><span class="btn-desc">Use your MC username</span></span></button>
+                </div>
+                <div class="mc-form" id="mc-form">
+                    <div class="form-group"><label>Minecraft Username</label><input type="text" id="mc-username" placeholder="YourMinecraftName"></div>
+                    <button class="submit-btn" onclick="loginWithMC()">Connect Account</button>
+                    <span class="back-link" onclick="showLoginOptions()">← Back</span>
+                </div>
+            </div>
+            <div class="portal-dashboard" id="portal-dashboard">
+                <div class="player-banner">
+                    <div class="player-avatar" id="player-avatar">👤</div>
+                    <div class="player-info"><div class="player-name" id="player-name">Demigod</div><div class="player-god" id="player-god">⚡ Child of Zeus</div></div>
+                    <div class="player-stats"><div class="stat-box"><div class="stat-value" id="player-drachma">0</div><div class="stat-label">💰 Drachma</div></div><div class="stat-box"><div class="stat-value" id="player-mail">0</div><div class="stat-label">📬 Mail</div></div></div>
+                </div>
+                <div class="portal-tabs">
+                    <button class="portal-tab active" onclick="switchPortalTab('overview')">📊 Overview</button>
+                    <button class="portal-tab" onclick="switchPortalTab('character')">📝 Character</button>
+                    <button class="portal-tab" onclick="switchPortalTab('inventory')">🎒 Inventory</button>
+                    <button class="portal-tab" onclick="switchPortalTab('mail')">📬 Mail</button>
+                </div>
+                <div class="portal-panel active" id="panel-overview">
+                    <div class="doc-section">
+                        <h2>📊 Profile Overview</h2>
+                        <div class="feature-grid">
+                            <div class="feature-card"><h4>🏛️ God Parent</h4><p id="overview-god">Zeus</p><p style="font-size:0.85rem;margin-top:0.5rem;"><span id="overview-color">Nametag: Yellow</span><br><span id="overview-effect">Effect: Jump Boost I</span></p></div>
+                            <div class="feature-card"><h4>🏕️ Cabin</h4><p id="overview-cabin">Not in a cabin</p></div>
+                            <div class="feature-card"><h4>✨ Divine Favor</h4><p id="overview-favor">0</p></div>
+                            <div class="feature-card"><h4>⛏️ MC Link</h4><p id="overview-mc">Not linked</p></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CHARACTER PANEL - WITH SIDEBAR AND MULTIPLE IMAGES -->
+                <div class="portal-panel" id="panel-character">
+                    <div class="character-panel-layout">
+                        <!-- Sidebar for viewing other characters -->
+                        <div class="character-sidebar" id="character-sidebar">
+                            <h3>📜 Community Characters</h3>
+                            <p class="no-chars">Loading...</p>
+                        </div>
+                        
+                        <!-- Main character sheet -->
+                        <div class="character-sheet">
+                            <div class="sheet-section">
+                                <h3>🎭 Basic Info</h3>
+                                <div class="form-row">
+                                    <div class="form-group"><label>Character Name</label><input type="text" id="char-name" placeholder="Your character's name"></div>
+                                    <div class="form-group"><label>Age</label><input type="text" id="char-age" placeholder="16"></div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group"><label>Gender</label><input type="text" id="char-gender" placeholder="Any"></div>
+                                    <div class="form-group"><label>Pronouns</label><input type="text" id="char-pronouns" placeholder="they/them"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- MULTIPLE IMAGES SECTION -->
+                            <div class="sheet-section">
+                                <h3>📸 Character Images (up to 3)</h3>
+                                <p style="font-size:0.85rem;color:var(--marble-dark);margin-bottom:1rem;">Upload small images (&lt;500KB) or paste image URLs. Images are visible to others if your sheet is public.</p>
+                                <div class="images-grid">
+                                    <div class="image-slot">
+                                        <div class="image-preview" id="char-image-preview-1"><span class="placeholder">Image 1</span></div>
+                                        <div class="image-controls">
+                                            <label class="upload-btn" for="char-image-1">📁 Upload</label>
+                                            <input type="file" id="char-image-1" accept="image/*" style="display:none;" onchange="previewImage(event, 'char-image-preview-1')">
+                                            <button class="remove-btn" onclick="removeImage('char-image-preview-1')">✕</button>
+                                        </div>
+                                        <div class="url-input">
+                                            <input type="text" id="char-url-1" placeholder="Or paste image URL...">
+                                            <button onclick="setImageUrl('char-url-1', 'char-image-preview-1')">Set</button>
+                                        </div>
+                                    </div>
+                                    <div class="image-slot">
+                                        <div class="image-preview" id="char-image-preview-2"><span class="placeholder">Image 2</span></div>
+                                        <div class="image-controls">
+                                            <label class="upload-btn" for="char-image-2">📁 Upload</label>
+                                            <input type="file" id="char-image-2" accept="image/*" style="display:none;" onchange="previewImage(event, 'char-image-preview-2')">
+                                            <button class="remove-btn" onclick="removeImage('char-image-preview-2')">✕</button>
+                                        </div>
+                                        <div class="url-input">
+                                            <input type="text" id="char-url-2" placeholder="Or paste image URL...">
+                                            <button onclick="setImageUrl('char-url-2', 'char-image-preview-2')">Set</button>
+                                        </div>
+                                    </div>
+                                    <div class="image-slot">
+                                        <div class="image-preview" id="char-image-preview-3"><span class="placeholder">Image 3</span></div>
+                                        <div class="image-controls">
+                                            <label class="upload-btn" for="char-image-3">📁 Upload</label>
+                                            <input type="file" id="char-image-3" accept="image/*" style="display:none;" onchange="previewImage(event, 'char-image-preview-3')">
+                                            <button class="remove-btn" onclick="removeImage('char-image-preview-3')">✕</button>
+                                        </div>
+                                        <div class="url-input">
+                                            <input type="text" id="char-url-3" placeholder="Or paste image URL...">
+                                            <button onclick="setImageUrl('char-url-3', 'char-image-preview-3')">Set</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="sheet-section">
+                                <h3>✨ Personality</h3>
+                                <div class="form-group"><label>Traits</label><textarea id="char-personality" placeholder="Describe your character's personality..."></textarea></div>
+                                <div class="form-row">
+                                    <div class="form-group"><label>Likes</label><textarea id="char-likes" placeholder="What do they enjoy?"></textarea></div>
+                                    <div class="form-group"><label>Dislikes</label><textarea id="char-dislikes" placeholder="What do they dislike?"></textarea></div>
+                                </div>
+                            </div>
+                            
+                            <div class="sheet-section">
+                                <h3>📖 Backstory</h3>
+                                <div class="form-group"><label>History</label><textarea id="char-backstory" placeholder="Tell your character's story..." style="min-height:150px;"></textarea></div>
+                            </div>
+                            
+                            <div class="sheet-section">
+                                <h3>⚔️ Combat</h3>
+                                <div class="form-row">
+                                    <div class="form-group"><label>Weapon</label><input type="text" id="char-weapon" placeholder="Sword, Bow, etc."></div>
+                                    <div class="form-group"><label>Fighting Style</label><input type="text" id="char-style" placeholder="Aggressive, Defensive..."></div>
+                                </div>
+                                <div class="form-group"><label>Abilities</label><textarea id="char-abilities" placeholder="Powers inherited from your god parent..."></textarea></div>
+                            </div>
+                            
+                            <div class="sheet-section">
+                                <h3>🎯 Goals & Fears</h3>
+                                <div class="form-row">
+                                    <div class="form-group"><label>Goals</label><textarea id="char-goals" placeholder="What does your character want to achieve?"></textarea></div>
+                                    <div class="form-group"><label>Fears</label><textarea id="char-fears" placeholder="What are they afraid of?"></textarea></div>
+                                </div>
+                            </div>
+                            
+                            <div class="sheet-section">
+                                <h3>⚙️ Settings</h3>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="char-public" checked>
+                                    <span>Make my character sheet public (visible to other players)</span>
+                                </label>
+                            </div>
+                            
+                            <button class="submit-btn save-char-btn" onclick="saveCharacterSheet()" style="margin-top:1rem;">💾 Save Character Sheet</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="portal-panel" id="panel-inventory"><div class="doc-section"><h2>🎒 Inventory</h2><p>Loading...</p></div></div>
+                <div class="portal-panel" id="panel-mail"><div class="doc-section"><h2>📬 Mail</h2><p>Loading...</p></div></div>
+                <div style="text-align:center;margin-top:2rem;"><button class="secondary-btn" onclick="logoutPortal()">🚪 Disconnect</button></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-brand">⚡ Camp Half-Blood ⚡</div>
+        <p>Built for demigods, by demigods</p>
+        <div class="footer-links"><a href="#" onclick="showPage('getting-started')">Docs</a><a href="#" onclick="showPortal()">Portal</a><a href="#" onclick="showPage('lore')">Lore</a></div>
+    </footer>
+
+    <script src="pages.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
