@@ -2,10 +2,7 @@
 // CAMP HALF-BLOOD - FRONTEND JAVASCRIPT (WITH API)
 // ══════════════════════════════════════════════════════════════════════════
 
-// API Base URL - automatically uses same domain in production
 const API_BASE = window.location.origin;
-
-// Current session
 let currentSession = null;
 
 // ══════════════════════════════════════════════════════════════════════════
@@ -128,12 +125,14 @@ function showPortal() {
     navVisible = true;
     window.scrollTo(0, 0);
     
-    // Check for saved session
     const saved = localStorage.getItem('chb_session');
     if (saved) {
         try {
             currentSession = JSON.parse(saved);
             refreshPlayerData();
+            loadCharacterSheet();
+            loadMail();
+            loadInventory();
         } catch(e) {
             console.error('Session load failed:', e);
         }
@@ -155,7 +154,6 @@ function closeMobile() {
 // ══════════════════════════════════════════════════════════════════════════
 
 function connectDiscord() {
-    // For now, show message. Full OAuth can be added later.
     alert('Discord OAuth coming soon!\n\nFor now, connect with your Minecraft username.');
 }
 
@@ -176,7 +174,6 @@ async function loginWithMC() {
         return;
     }
     
-    // Show loading state
     const btn = document.querySelector('#mc-form .submit-btn');
     const originalText = btn.textContent;
     btn.textContent = 'Connecting...';
@@ -206,10 +203,6 @@ async function loginWithMC() {
             
             if (result.isNew) {
                 alert(`Welcome to Camp Half-Blood, ${username}! 🏕️\n\nYou've been given 100 Drachma to start.\nUse !claim in Discord to discover your godly parent!`);
-            }
-            
-            if (result.isDemo) {
-                console.log('⚠️ Running in demo mode - data is simulated');
             }
             
             loadPortalDashboard();
@@ -262,7 +255,6 @@ function loadPortalDashboard() {
     document.getElementById('portal-login').style.display = 'none';
     document.getElementById('portal-dashboard').classList.add('active');
     
-    // Update banner
     document.getElementById('player-name').textContent = currentSession.username;
     
     if (currentSession.god) {
@@ -275,7 +267,6 @@ function loadPortalDashboard() {
     document.getElementById('player-drachma').textContent = currentSession.drachma;
     document.getElementById('player-mail').textContent = currentSession.mail;
     
-    // Update overview
     document.getElementById('overview-god').textContent = currentSession.god || 'Unclaimed';
     document.getElementById('overview-color').textContent = `Nametag: ${currentSession.godColor || 'N/A'}`;
     document.getElementById('overview-effect').textContent = `Effect: ${currentSession.godEffect || 'N/A'}`;
@@ -283,10 +274,9 @@ function loadPortalDashboard() {
     document.getElementById('overview-favor').textContent = currentSession.favor;
     document.getElementById('overview-mc').textContent = currentSession.username;
     
-    // Show demo warning if applicable
     if (currentSession.isDemo) {
         const banner = document.querySelector('.player-banner');
-        if (!banner.querySelector('.demo-warning')) {
+        if (banner && !banner.querySelector('.demo-warning')) {
             const warning = document.createElement('div');
             warning.className = 'demo-warning';
             warning.style.cssText = 'background: rgba(251,191,36,0.2); color: #fbbf24; padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.85rem; margin-top: 1rem; text-align: center;';
@@ -296,25 +286,43 @@ function loadPortalDashboard() {
     }
 }
 
+// FIXED: Now updates panel even when empty
 async function loadMail() {
     if (!currentSession?.username) return;
+    
+    const mailPanel = document.getElementById('panel-mail');
+    
+    // Add mail styles if not present
+    if (!document.getElementById('mail-styles')) {
+        const style = document.createElement('style');
+        style.id = 'mail-styles';
+        style.textContent = `
+            .mail-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.2); border-radius: 8px; margin-bottom: 0.75rem; cursor: pointer; transition: all 0.3s ease; }
+            .mail-item:hover { border-color: var(--gold); transform: translateX(5px); }
+            .mail-item.unread { border-left: 3px solid var(--lightning); background: rgba(79,195,247,0.1); }
+            .mail-icon { font-size: 1.5rem; }
+            .mail-subject { font-family: 'Cinzel', serif; color: var(--gold); margin-bottom: 0.25rem; }
+            .mail-sender { font-size: 0.85rem; color: var(--marble-dark); }
+            .mail-date { font-size: 0.75rem; color: var(--gold-dark); }
+        `;
+        document.head.appendChild(style);
+    }
     
     try {
         const response = await fetch(`${API_BASE}/api/player/${encodeURIComponent(currentSession.username)}/mail`);
         const result = await response.json();
         
-        if (result.success && result.data.length > 0) {
-            const mailPanel = document.getElementById('panel-mail');
+        if (result.success && result.data && result.data.length > 0) {
             mailPanel.innerHTML = `
                 <div class="doc-section">
                     <h2>📬 Your Mail (${result.data.length})</h2>
                     <div class="mail-list">
                         ${result.data.map(mail => `
-                            <div class="mail-item ${mail.is_read ? '' : 'unread'}" onclick="openMail(${mail.id})">
+                            <div class="mail-item ${mail.is_read ? '' : 'unread'}" onclick="openMail(${mail.mail_id})">
                                 <div class="mail-icon">${mail.is_read ? '📭' : '📬'}</div>
                                 <div class="mail-content">
-                                    <div class="mail-subject">${mail.subject}</div>
-                                    <div class="mail-sender">From: ${mail.sender}</div>
+                                    <div class="mail-subject">${mail.subject || 'No Subject'}</div>
+                                    <div class="mail-sender">Type: ${mail.mail_type || 'message'}</div>
                                     <div class="mail-date">${new Date(mail.created_at).toLocaleDateString()}</div>
                                 </div>
                             </div>
@@ -322,25 +330,29 @@ async function loadMail() {
                     </div>
                 </div>
             `;
-            
-            // Add mail styles if not present
-            if (!document.getElementById('mail-styles')) {
-                const style = document.createElement('style');
-                style.id = 'mail-styles';
-                style.textContent = `
-                    .mail-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.2); border-radius: 8px; margin-bottom: 0.75rem; cursor: pointer; transition: all 0.3s ease; }
-                    .mail-item:hover { border-color: var(--gold); transform: translateX(5px); }
-                    .mail-item.unread { border-left: 3px solid var(--lightning); background: rgba(79,195,247,0.1); }
-                    .mail-icon { font-size: 1.5rem; }
-                    .mail-subject { font-family: 'Cinzel', serif; color: var(--gold); margin-bottom: 0.25rem; }
-                    .mail-sender { font-size: 0.85rem; color: var(--marble-dark); }
-                    .mail-date { font-size: 0.75rem; color: var(--gold-dark); }
-                `;
-                document.head.appendChild(style);
-            }
+        } else {
+            // Show empty state
+            mailPanel.innerHTML = `
+                <div class="doc-section">
+                    <h2>📬 Your Mail</h2>
+                    <div class="info-box tip">
+                        <div class="info-box-title">📭 No Mail</div>
+                        <p>Your mailbox is empty! Mail from gods, events, and other players will appear here.</p>
+                    </div>
+                </div>
+            `;
         }
     } catch (error) {
         console.error('Mail load failed:', error);
+        mailPanel.innerHTML = `
+            <div class="doc-section">
+                <h2>📬 Mail</h2>
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Error</div>
+                    <p>Could not load mail. Please try again.</p>
+                </div>
+            </div>
+        `;
     }
 }
 
@@ -354,46 +366,68 @@ async function openMail(mailId) {
     }
 }
 
+// FIXED: Now updates panel even when empty
 async function loadInventory() {
     if (!currentSession?.username) return;
+    
+    const invPanel = document.getElementById('panel-inventory');
+    
+    // Add inventory styles
+    if (!document.getElementById('inv-styles')) {
+        const style = document.createElement('style');
+        style.id = 'inv-styles';
+        style.textContent = `
+            .inventory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
+            .inventory-item { background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.2); border-radius: 8px; padding: 1rem; text-align: center; }
+            .item-name { font-family: 'Cinzel', serif; color: var(--gold); margin-bottom: 0.5rem; }
+            .item-qty { color: var(--marble-dark); font-size: 0.9rem; }
+            .item-tag { background: rgba(79,195,247,0.2); color: var(--lightning); padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.75rem; margin-top: 0.5rem; display: inline-block; }
+        `;
+        document.head.appendChild(style);
+    }
     
     try {
         const response = await fetch(`${API_BASE}/api/player/${encodeURIComponent(currentSession.username)}/inventory`);
         const result = await response.json();
         
-        if (result.success && result.data.length > 0) {
-            const invPanel = document.getElementById('panel-inventory');
+        if (result.success && result.data && result.data.length > 0) {
             invPanel.innerHTML = `
                 <div class="doc-section">
                     <h2>🎒 Your Inventory (${result.data.length} items)</h2>
                     <div class="inventory-grid">
                         ${result.data.map(item => `
                             <div class="inventory-item">
-                                <div class="item-name">${item.item_name}</div>
-                                <div class="item-qty">x${item.quantity}</div>
+                                <div class="item-name">${item.item_name || item.name || 'Unknown Item'}</div>
+                                <div class="item-qty">x${item.quantity || 1}</div>
                                 ${item.is_redeemable ? '<div class="item-tag">✨ Redeemable</div>' : ''}
                             </div>
                         `).join('')}
                     </div>
                 </div>
             `;
-            
-            // Add inventory styles
-            if (!document.getElementById('inv-styles')) {
-                const style = document.createElement('style');
-                style.id = 'inv-styles';
-                style.textContent = `
-                    .inventory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
-                    .inventory-item { background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.2); border-radius: 8px; padding: 1rem; text-align: center; }
-                    .item-name { font-family: 'Cinzel', serif; color: var(--gold); margin-bottom: 0.5rem; }
-                    .item-qty { color: var(--marble-dark); font-size: 0.9rem; }
-                    .item-tag { background: rgba(79,195,247,0.2); color: var(--lightning); padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.75rem; margin-top: 0.5rem; display: inline-block; }
-                `;
-                document.head.appendChild(style);
-            }
+        } else {
+            // Show empty state
+            invPanel.innerHTML = `
+                <div class="doc-section">
+                    <h2>🎒 Your Inventory</h2>
+                    <div class="info-box tip">
+                        <div class="info-box-title">📦 Empty Inventory</div>
+                        <p>You don't have any items yet! Win games, complete quests, or visit shops to get items.</p>
+                    </div>
+                </div>
+            `;
         }
     } catch (error) {
         console.error('Inventory load failed:', error);
+        invPanel.innerHTML = `
+            <div class="doc-section">
+                <h2>🎒 Inventory</h2>
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Error</div>
+                    <p>Could not load inventory. Please try again.</p>
+                </div>
+            </div>
+        `;
     }
 }
 
@@ -422,6 +456,7 @@ async function loadCharacterSheet() {
             if (data.image_url) {
                 document.getElementById('char-image-preview').innerHTML = `<img src="${data.image_url}" alt="Character">`;
             }
+            console.log('✅ Character sheet loaded');
         }
     } catch (error) {
         console.error('Character load failed:', error);
@@ -453,6 +488,8 @@ async function saveCharacterSheet() {
         image: imageEl ? imageEl.src : null
     };
     
+    console.log('💾 Saving character sheet...', data);
+    
     try {
         const response = await fetch(`${API_BASE}/api/player/${encodeURIComponent(currentSession.username)}/character`, {
             method: 'POST',
@@ -461,6 +498,7 @@ async function saveCharacterSheet() {
         });
         
         const result = await response.json();
+        console.log('💾 Save response:', result);
         
         if (result.success) {
             alert('Character sheet saved! ✅');
@@ -481,7 +519,6 @@ function logoutPortal() {
     showLoginOptions();
     document.getElementById('mc-username').value = '';
     
-    // Clear form fields
     ['char-name', 'char-age', 'char-gender', 'char-pronouns', 'char-personality', 
      'char-likes', 'char-dislikes', 'char-backstory', 'char-weapon', 'char-style',
      'char-abilities', 'char-goals', 'char-fears'].forEach(id => {
@@ -489,6 +526,10 @@ function logoutPortal() {
         if (el) el.value = '';
     });
     document.getElementById('char-image-preview').innerHTML = '<span class="placeholder">No image</span>';
+    
+    // Reset mail and inventory panels
+    document.getElementById('panel-mail').innerHTML = '<div class="doc-section"><h2>📬 Mail</h2><p>Login to view your mail.</p></div>';
+    document.getElementById('panel-inventory').innerHTML = '<div class="doc-section"><h2>🎒 Inventory</h2><p>Login to view your inventory.</p></div>';
 }
 
 function switchPortalTab(tabId) {
@@ -525,14 +566,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (e) => {
         const mobileMenu = document.getElementById('mobile-menu');
         const mobileToggle = document.querySelector('.mobile-toggle');
-        if (mobileMenu.classList.contains('active') && 
+        if (mobileMenu && mobileMenu.classList.contains('active') && 
             !mobileMenu.contains(e.target) && 
-            !mobileToggle.contains(e.target)) {
+            mobileToggle && !mobileToggle.contains(e.target)) {
             closeMobile();
         }
     });
 
-    // Check API health
     fetch(`${API_BASE}/api/health`)
         .then(r => r.json())
         .then(data => {
