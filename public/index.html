@@ -17,23 +17,21 @@
             <div class="nav-brand" onclick="showLanding()">⚡ Camp Half-Blood</div>
             <div class="nav-links">
                 <button class="nav-btn" onclick="showLanding()">🏠 Home</button>
-                <div class="nav-item">
-                    <button class="nav-btn">💬 Discord <span class="arrow">▼</span></button>
-                    <div class="dropdown-menu">
-                        <div class="dropdown-item" onclick="showPage('getting-started')"><span class="icon">🌟</span><span class="text"><span class="title">Getting Started</span><span class="desc">New player guide</span></span></div>
-                        <div class="dropdown-item" onclick="showPage('profile')"><span class="icon">👤</span><span class="text"><span class="title">Profile & Mail</span><span class="desc">Your demigod identity</span></span></div>
-                        <div class="dropdown-item" onclick="showPage('mclink')"><span class="icon">🔗</span><span class="text"><span class="title">MC Link</span><span class="desc">Connect accounts</span></span></div>
-                        <div class="dropdown-divider"></div>
-                        <div class="dropdown-item" onclick="showPage('gods')"><span class="icon">🏛️</span><span class="text"><span class="title">Gods & Claiming</span><span class="desc">Divine heritage</span></span></div>
-                        <div class="dropdown-item" onclick="showPage('cabins')"><span class="icon">🏕️</span><span class="text"><span class="title">Cabins & Teams</span><span class="desc">Join forces</span></span></div>
-                        <div class="dropdown-divider"></div>
-                        <div class="dropdown-item" onclick="showPage('economy')"><span class="icon">💰</span><span class="text"><span class="title">Drachma & Economy</span><span class="desc">Currency system</span></span></div>
-                        <div class="dropdown-item" onclick="showPage('games')"><span class="icon">🎮</span><span class="text"><span class="title">Mini-Games & Casino</span><span class="desc">Play to earn</span></span></div>
-                        <div class="dropdown-item" onclick="showPage('shops')"><span class="icon">🏪</span><span class="text"><span class="title">Shops & Trading</span><span class="desc">Buy and sell</span></span></div>
-                        <div class="dropdown-divider"></div>
-                        <div class="dropdown-item" onclick="showPage('events')"><span class="icon">📅</span><span class="text"><span class="title">Events & Timeline</span><span class="desc">What's happening</span></span></div>
+                    <div class="nav-item">
+                        <button class="nav-btn">⛏️ Minecraft <span class="arrow">▼</span></button>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-item" onclick="showPage('mc-commands')"><span class="icon">⌨️</span><span class="text"><span class="title">Commands</span><span class="desc">In-game reference</span></span></div>
+                            <div class="dropdown-item" onclick="showPage('mc-sync')"><span class="icon">🔄</span><span class="text"><span class="title">Deposit & Withdraw</span><span class="desc">Manage Drachma</span></span></div>
+                            <div class="dropdown-item" onclick="showPage('mc-gods')"><span class="icon">✨</span><span class="text"><span class="title">God Effects</span><span class="desc">Colors & effects</span></span></div>
+                            <div class="dropdown-item" onclick="showPage('skills')"><span class="icon">⚔️</span><span class="text"><span class="title">Skill Trees</span><span class="desc">Train abilities</span></span></div>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-item" onclick="showPage('mc-quests')"><span class="icon">📜</span><span class="text"><span class="title">Questlines</span><span class="desc">Story adventures</span></span></div>
+                            <div class="dropdown-item" onclick="showPage('mc-events')"><span class="icon">🎭</span><span class="text"><span class="title">Live Events</span><span class="desc">Theater, battles</span></span></div>
+                            <div class="dropdown-item" onclick="showPage('mc-tournaments')"><span class="icon">🏆</span><span class="text"><span class="title">Tournaments</span><span class="desc">CTF, arena</span></span></div>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-item" onclick="showPage('mc-shops')"><span class="icon">🏪</span><span class="text"><span class="title">Player Shops</span><span class="desc">Fulfillment</span></span></div>
+                        </div>
                     </div>
-                </div>
                 <div class="nav-item">
                     <button class="nav-btn">⛏️ Minecraft <span class="arrow">▼</span></button>
                     <div class="dropdown-menu">
@@ -59,18 +57,6 @@
     <div class="mobile-menu" id="mobile-menu">
         <div class="mobile-menu-section">
             <div class="mobile-menu-item" onclick="showLanding(); closeMobile();">🏠 Home</div>
-        </div>
-        <div class="mobile-menu-section">
-            <div class="mobile-menu-title">💬 Discord</div>
-            <div class="mobile-menu-item" onclick="showPage('getting-started'); closeMobile();">Getting Started</div>
-            <div class="mobile-menu-item" onclick="showPage('profile'); closeMobile();">Profile & Mail</div>
-            <div class="mobile-menu-item" onclick="showPage('mclink'); closeMobile();">MC Link</div>
-            <div class="mobile-menu-item" onclick="showPage('gods'); closeMobile();">Gods & Claiming</div>
-            <div class="mobile-menu-item" onclick="showPage('cabins'); closeMobile();">Cabins & Teams</div>
-            <div class="mobile-menu-item" onclick="showPage('economy'); closeMobile();">Drachma & Economy</div>
-            <div class="mobile-menu-item" onclick="showPage('games'); closeMobile();">Mini-Games</div>
-            <div class="mobile-menu-item" onclick="showPage('shops'); closeMobile();">Shops</div>
-            <div class="mobile-menu-item" onclick="showPage('events'); closeMobile();">Events</div>
         </div>
         <div class="mobile-menu-section">
             <div class="mobile-menu-title">⛏️ Minecraft</div>
