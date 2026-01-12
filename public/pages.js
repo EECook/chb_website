@@ -619,14 +619,14 @@ const PAGES = {
         `
     },
 
-        'skills': {
+'skills': {
         icon: '⚔️',
         title: 'Skill Trees',
         subtitle: 'Train your demigod abilities',
         content: `
             <div class="doc-section">
                 <h2>⚔️ The Skill System</h2>
-                <p>Every demigod can train and improve their abilities through the skill tree system. Spend your <strong>XP Levels</strong> to unlock powerful upgrades that affect both Discord and Minecraft!</p>
+                <p>Every demigod can train and improve their abilities through the skill tree system. Spend your <strong>XP Levels</strong> to unlock powerful upgrades that grant real effects in Minecraft!</p>
                 
                 <div class="info-box tip">
                     <div class="info-box-title">💡 Cross-Platform Power</div>
@@ -639,12 +639,12 @@ const PAGES = {
                 
                 <div class="command">
                     <div class="command-name">!skills</div>
-                    <div class="command-desc">Opens your skill tree interface. View all branches, your current levels, and available upgrades.</div>
+                    <div class="command-desc">Opens your skill tree interface. View all branches, your current tiers, and available upgrades.</div>
                 </div>
 
                 <div class="command">
                     <div class="command-name">!skills [branch]</div>
-                    <div class="command-desc">View a specific branch. Example: <code>!skills combat</code></div>
+                    <div class="command-desc">View a specific branch. Example: <code>!skills warfare</code></div>
                 </div>
             </div>
 
@@ -662,8 +662,6 @@ const PAGES = {
                         <tr><td>Tier 5</td><td>600 levels</td><td>+200 levels</td></tr>
                     </table>
                 </div>
-                
-                <p>Maxing a single skill costs <strong>600 XP levels</strong> total. Maxing an entire branch (4 skills) costs <strong>2,400 XP levels</strong>.</p>
 
                 <div class="info-box warning">
                     <div class="info-box-title">⚠️ Choose Wisely</div>
@@ -672,175 +670,202 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>🌳 The Five Branches</h2>
-                <p>Each branch focuses on different aspects of demigod life. Every skill has <strong>5 tiers</strong>, with increasing power at each level.</p>
+                <h2>🎯 Major & Minor Specializations</h2>
+                <p>At Tier 3, you must commit to a skill as your <strong>Major</strong> or <strong>Minor</strong> specialization:</p>
                 
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <h4>⚔️ Combat</h4>
-                        <p>Damage, critical hits, and battle prowess</p>
+                        <h4>★ Major Skill</h4>
+                        <p>Can reach <strong>Tier 5 (Mastery)</strong>. You can only have ONE Major.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>💚 Survival</h4>
-                        <p>Health, regeneration, and endurance</p>
+                        <h4>◆ Minor Skill</h4>
+                        <p>Capped at <strong>Tier 4</strong>. You can only have ONE Minor.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>✨ Divine</h4>
-                        <p>God powers and blessing amplification</p>
+                        <h4>○ Dabbling</h4>
+                        <p>All other skills are capped at <strong>Tier 2</strong>.</p>
                     </div>
-                    <div class="feature-card">
-                        <h4>🔨 Crafting</h4>
-                        <p>Resource gathering and item creation</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>👑 Leadership</h4>
-                        <p>Team buffs and cabin bonuses</p>
-                    </div>
+                </div>
+                
+                <p>This means you'll want to specialize! A fully developed demigod has: 1 Major (T5), 1 Minor (T4), and can dabble (T2) in the rest.</p>
+            </div>
+
+            <div class="doc-section">
+                <h2>🌳 The Ten Branches</h2>
+                <p>Each branch focuses on different aspects of demigod life. Effects are cumulative—you keep all bonuses from previous tiers!</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card"><h4>⚔️ Warfare</h4><p>Melee combat mastery</p></div>
+                    <div class="feature-card"><h4>🏹 Marksmanship</h4><p>Ranged combat</p></div>
+                    <div class="feature-card"><h4>⚒️ Forging</h4><p>Mining & crafting</p></div>
+                    <div class="feature-card"><h4>🏃 Athletics</h4><p>Speed & movement</p></div>
+                    <div class="feature-card"><h4>🛡️ Fortitude</h4><p>Defense & health</p></div>
+                    <div class="feature-card"><h4>🌿 Survival</h4><p>Sustenance & nature</p></div>
+                    <div class="feature-card"><h4>🥷 Stealth</h4><p>Shadows & sneaking</p></div>
+                    <div class="feature-card"><h4>✨ Mysticism</h4><p>Magic & fortune</p></div>
+                    <div class="feature-card"><h4>🌊 Seafaring</h4><p>Ocean mastery</p></div>
+                    <div class="feature-card"><h4>👑 Leadership</h4><p>Team buffs & auras</p></div>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>⚔️ Combat Branch</h2>
-                <p>For demigods who live for battle. Enhances your offensive capabilities in Minecraft combat.</p>
+                <h2>⚔️ Warfare Branch</h2>
+                <p><em>"Master of blade and battle"</em> — For demigods who live for melee combat.</p>
                 
-                <div class="game-card">
-                    <h4>🗡️ Weapon Mastery</h4>
-                    <p>Increases melee damage dealt with all weapons.</p>
-                    <span class="game-reward">+4% damage per tier (Max: +20%)</span>
-                </div>
-
-                <div class="game-card">
-                    <h4>💥 Critical Strike</h4>
-                    <p>Chance to deal bonus damage on hit.</p>
-                    <span class="game-reward">+3% crit chance per tier (Max: +15%)</span>
-                </div>
-
-                <div class="game-card">
-                    <h4>📢 Battle Cry</h4>
-                    <p>Gain brief Strength boost when health drops low.</p>
-                    <span class="game-reward">+1 second duration per tier</span>
-                </div>
-
-                <div class="game-card">
-                    <h4>🛡️ Last Stand</h4>
-                    <p>Gain Resistance when below 20% health.</p>
-                    <span class="game-reward">+0.5 seconds per tier (Max: 2.5s)</span>
+                <div class="game-card"><h4>T1: Squire</h4><p>+1 Attack Damage</p><span class="game-reward">50 XP</span></div>
+                <div class="game-card"><h4>T2: Warrior</h4><p>+5% Attack Speed</p><span class="game-reward">125 XP total</span></div>
+                <div class="game-card"><h4>T3: Champion</h4><p>+1 Attack Damage, +10% Knockback Resistance</p><span class="game-reward">225 XP total</span></div>
+                <div class="game-card"><h4>T4: Warlord</h4><p>+10% Attack Speed, +1 Attack Damage</p><span class="game-reward">400 XP total</span></div>
+                <div class="game-card"><h4>T5: Blade Master</h4><p>+2 Attack Damage, +20% KB Resist, Permanent Strength I</p><span class="game-reward">600 XP total</span></div>
+                
+                <div class="info-box tip">
+                    <div class="info-box-title">⚔️ Mastery Total</div>
+                    <p>+5 Attack Damage, +15% Attack Speed, +30% Knockback Resistance, Strength I</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>💚 Survival Branch</h2>
-                <p>Stay alive longer and recover faster. Essential for dangerous quests and exploration.</p>
+                <h2>🏹 Marksmanship Branch</h2>
+                <p><em>"Every arrow finds its mark"</em> — Master ranged combat and precision.</p>
                 
-                <div class="game-card">
-                    <h4>❤️ Health Boost</h4>
-                    <p>Permanently increases your maximum health.</p>
-                    <span class="game-reward">+1 heart per tier (Max: +5 hearts)</span>
-                </div>
-
-                <div class="game-card">
-                    <h4>💫 Swift Recovery</h4>
-                    <p>Regenerate health faster when not in combat.</p>
-                    <span class="game-reward">Faster regen per tier</span>
-                </div>
-
-                <div class="game-card">
-                    <h4>🍖 Iron Stomach</h4>
-                    <p>Get more saturation from food.</p>
-                    <span class="game-reward">+10% food effectiveness per tier</span>
-                </div>
-
-                <div class="game-card">
-                    <h4>🏃 Endurance</h4>
-                    <p>Reduced hunger drain while sprinting and fighting.</p>
-                    <span class="game-reward">-5% hunger drain per tier</span>
+                <div class="game-card"><h4>T1: Archer</h4><p>+1 Attack Damage (melee backup)</p><span class="game-reward">50 XP</span></div>
+                <div class="game-card"><h4>T2: Sharpshooter</h4><p>+10% Attack Speed</p><span class="game-reward">125 XP total</span></div>
+                <div class="game-card"><h4>T3: Ranger</h4><p>+1 Attack Damage</p><span class="game-reward">225 XP total</span></div>
+                <div class="game-card"><h4>T4: Sniper</h4><p>+15% Attack Speed, +1 Damage</p><span class="game-reward">400 XP total</span></div>
+                <div class="game-card"><h4>T5: Eagle Eye</h4><p>+2 Attack Damage, 10% chance: Double arrow damage</p><span class="game-reward">600 XP total</span></div>
+                
+                <div class="info-box tip">
+                    <div class="info-box-title">🏹 Mastery Total</div>
+                    <p>+5 Attack Damage, +25% Attack Speed, 10% Double Arrow Damage</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>✨ Divine Branch</h2>
-                <p>Strengthen your connection to your godly parent. Amplifies divine blessings and XP gains.</p>
+                <h2>⚒️ Forging Branch</h2>
+                <p><em>"Shape metal with divine precision"</em> — Mining speed, auto-smelting, and resource bonuses.</p>
                 
-                <div class="game-card">
-                    <h4>📚 Olympian Insight</h4>
-                    <p>Gain bonus XP from all sources in Minecraft.</p>
-                    <span class="game-reward">+10% XP per tier (Max: +50%)</span>
-                </div>
-
-                <div class="game-card">
-                    <h4>🛡️ Divine Shield</h4>
-                    <p>Chance to negate incoming damage completely.</p>
-                    <span class="game-reward">+2% block chance per tier</span>
-                </div>
-
-                <div class="game-card">
-                    <h4>⚡ Blessing Amplifier</h4>
-                    <p>Your god parent's potion effect becomes stronger.</p>
-                    <span class="game-reward">+1 amplifier at tier 5</span>
-                </div>
-
-                <div class="game-card">
-                    <h4>🙏 Godly Favor</h4>
-                    <p>Increased Drachma rewards from all activities.</p>
-                    <span class="game-reward">+5% Drachma per tier (Max: +25%)</span>
+                <div class="game-card"><h4>T1: Apprentice</h4><p>Haste I (faster mining)</p><span class="game-reward">50 XP</span></div>
+                <div class="game-card"><h4>T2: Journeyman</h4><p>Haste II</p><span class="game-reward">125 XP total</span></div>
+                <div class="game-card"><h4>T3: Blacksmith</h4><p>Auto-smelt iron/gold/copper ores</p><span class="game-reward">225 XP total</span></div>
+                <div class="game-card"><h4>T4: Master Smith</h4><p>10% chance: Double ore drops</p><span class="game-reward">400 XP total</span></div>
+                <div class="game-card"><h4>T5: Forge Lord</h4><p>Haste III, Permanent Fire Resistance</p><span class="game-reward">600 XP total</span></div>
+                
+                <div class="info-box tip">
+                    <div class="info-box-title">⚒️ Mastery Total</div>
+                    <p>Haste III, Auto-Smelt Ores, 10% Double Ore Drops, Fire Resistance</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>🔨 Crafting Branch</h2>
-                <p>Master the art of creation and resource gathering. Get more from every block you mine.</p>
+                <h2>🏃 Athletics Branch</h2>
+                <p><em>"Swift as Hermes himself"</em> — Movement speed and jump boosts.</p>
                 
-                <div class="game-card">
-                    <h4>🔥 Auto-Smelt</h4>
-                    <p>Ores automatically smelt when mined (iron, gold, etc).</p>
-                    <span class="game-reward">+20% chance per tier (Max: 100%)</span>
+                <div class="game-card"><h4>T1: Runner</h4><p>+5% Movement Speed</p><span class="game-reward">50 XP</span></div>
+                <div class="game-card"><h4>T2: Sprinter</h4><p>+5% Movement Speed, Jump Boost I</p><span class="game-reward">125 XP total</span></div>
+                <div class="game-card"><h4>T3: Athlete</h4><p>+10% Movement Speed, Jump Boost II</p><span class="game-reward">225 XP total</span></div>
+                <div class="game-card"><h4>T4: Olympian</h4><p>+10% Movement Speed, Jump Boost III</p><span class="game-reward">400 XP total</span></div>
+                <div class="game-card"><h4>T5: Speed Demon</h4><p>+10% Movement Speed, Permanent Speed I</p><span class="game-reward">600 XP total</span></div>
+                
+                <div class="info-box tip">
+                    <div class="info-box-title">🏃 Mastery Total</div>
+                    <p>+40% Movement Speed, Jump Boost III, Speed I Effect</p>
                 </div>
+            </div>
 
-                <div class="game-card">
-                    <h4>📦 Double Harvest</h4>
-                    <p>Chance to get double drops from mining and farming.</p>
-                    <span class="game-reward">+4% chance per tier (Max: 20%)</span>
+            <div class="doc-section">
+                <h2>🛡️ Fortitude Branch</h2>
+                <p><em>"Unyielding as mountain stone"</em> — Health, armor, and damage resistance.</p>
+                
+                <div class="game-card"><h4>T1: Tough</h4><p>+2 Max Health (+1 heart)</p><span class="game-reward">50 XP</span></div>
+                <div class="game-card"><h4>T2: Hardy</h4><p>+2 Armor</p><span class="game-reward">125 XP total</span></div>
+                <div class="game-card"><h4>T3: Stalwart</h4><p>+4 Max Health (+2 hearts), +10% KB Resist</p><span class="game-reward">225 XP total</span></div>
+                <div class="game-card"><h4>T4: Ironclad</h4><p>+2 Armor Toughness, +4 Max Health</p><span class="game-reward">400 XP total</span></div>
+                <div class="game-card"><h4>T5: Unbreakable</h4><p>+4 Health, +2 Armor, +20% KB Resist, Resistance I</p><span class="game-reward">600 XP total</span></div>
+                
+                <div class="info-box tip">
+                    <div class="info-box-title">🛡️ Mastery Total</div>
+                    <p>+14 Max Health (+7 hearts), +4 Armor, +2 Armor Toughness, +30% KB Resist, Resistance I</p>
                 </div>
+            </div>
 
-                <div class="game-card">
-                    <h4>⚒️ Master Crafter</h4>
-                    <p>Crafted tools have increased durability.</p>
-                    <span class="game-reward">+10% durability per tier</span>
+            <div class="doc-section">
+                <h2>🌿 Survival Branch</h2>
+                <p><em>"One with the wild"</em> — Sustenance, regeneration, and nature affinity.</p>
+                
+                <div class="game-card"><h4>T1: Forager</h4><p>Saturation I (slower hunger drain)</p><span class="game-reward">50 XP</span></div>
+                <div class="game-card"><h4>T2: Scout</h4><p>Food heals +1 extra heart</p><span class="game-reward">125 XP total</span></div>
+                <div class="game-card"><h4>T3: Ranger</h4><p>Regeneration I</p><span class="game-reward">225 XP total</span></div>
+                <div class="game-card"><h4>T4: Wilderness Expert</h4><p>+4 Max Health, Regeneration II</p><span class="game-reward">400 XP total</span></div>
+                <div class="game-card"><h4>T5: Nature's Chosen</h4><p>+4 Max Health, Hero of the Village effect</p><span class="game-reward">600 XP total</span></div>
+                
+                <div class="info-box tip">
+                    <div class="info-box-title">🌿 Mastery Total</div>
+                    <p>+8 Max Health, Regeneration II, Food Heals Extra, Saturation, Hero of the Village</p>
                 </div>
+            </div>
 
-                <div class="game-card">
-                    <h4>💎 Resource Sense</h4>
-                    <p>Rare ores glow briefly when you're nearby.</p>
-                    <span class="game-reward">+2 block range per tier</span>
+            <div class="doc-section">
+                <h2>🥷 Stealth Branch</h2>
+                <p><em>"Unseen, unheard, unstoppable"</em> — Sneaking, night vision, and shadow powers.</p>
+                
+                <div class="game-card"><h4>T1: Sneaky</h4><p>Speed I while sneaking</p><span class="game-reward">50 XP</span></div>
+                <div class="game-card"><h4>T2: Shadow</h4><p>Speed II while sneaking</p><span class="game-reward">125 XP total</span></div>
+                <div class="game-card"><h4>T3: Ghost</h4><p>Reduced fall damage (7 block buffer)</p><span class="game-reward">225 XP total</span></div>
+                <div class="game-card"><h4>T4: Phantom</h4><p>Permanent Night Vision</p><span class="game-reward">400 XP total</span></div>
+                <div class="game-card"><h4>T5: Shade</h4><p>Invisibility while sneaking, Slow Falling</p><span class="game-reward">600 XP total</span></div>
+                
+                <div class="info-box tip">
+                    <div class="info-box-title">🥷 Mastery Total</div>
+                    <p>Speed II while sneaking, -7 Fall Damage, Night Vision, Invisibility while sneaking, Slow Falling</p>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>✨ Mysticism Branch</h2>
+                <p><em>"Touched by arcane power"</em> — Luck, fortune, and magical effects.</p>
+                
+                <div class="game-card"><h4>T1: Initiate</h4><p>+1 Luck (better loot)</p><span class="game-reward">50 XP</span></div>
+                <div class="game-card"><h4>T2: Acolyte</h4><p>+2 Luck</p><span class="game-reward">125 XP total</span></div>
+                <div class="game-card"><h4>T3: Mystic</h4><p>+2 Luck, Glowing (see through walls)</p><span class="game-reward">225 XP total</span></div>
+                <div class="game-card"><h4>T4: Sorcerer</h4><p>+2 Luck, Luck I Effect</p><span class="game-reward">400 XP total</span></div>
+                <div class="game-card"><h4>T5: Archmage</h4><p>+3 Luck, Luck II Effect, Conduit Power</p><span class="game-reward">600 XP total</span></div>
+                
+                <div class="info-box tip">
+                    <div class="info-box-title">✨ Mastery Total</div>
+                    <p>+10 Luck Attribute, Luck II Effect, Conduit Power, Glowing</p>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>🌊 Seafaring Branch</h2>
+                <p><em>"Child of the endless seas"</em> — Ocean mastery, water breathing, and swimming.</p>
+                
+                <div class="game-card"><h4>T1: Swimmer</h4><p>Dolphin's Grace (faster swimming)</p><span class="game-reward">50 XP</span></div>
+                <div class="game-card"><h4>T2: Diver</h4><p>Water Breathing</p><span class="game-reward">125 XP total</span></div>
+                <div class="game-card"><h4>T3: Sailor</h4><p>Conduit Power (mine underwater)</p><span class="game-reward">225 XP total</span></div>
+                <div class="game-card"><h4>T4: Sea Captain</h4><p>+4 Max Health</p><span class="game-reward">400 XP total</span></div>
+                <div class="game-card"><h4>T5: Ocean Lord</h4><p>Full Conduit Power, Special Trident on first login</p><span class="game-reward">600 XP total</span></div>
+                
+                <div class="info-box tip">
+                    <div class="info-box-title">🌊 Mastery Total</div>
+                    <p>Dolphin's Grace, Water Breathing, Conduit Power, +4 Max Health, Legendary Trident</p>
                 </div>
             </div>
 
             <div class="doc-section">
                 <h2>👑 Leadership Branch</h2>
-                <p>For those who lead their cabin to glory. Buffs that help you and nearby allies.</p>
+                <p><em>"Born to lead, destined to inspire"</em> — Buff auras that help your entire cabin!</p>
                 
-                <div class="game-card">
-                    <h4>📣 Rally Allies</h4>
-                    <p>Nearby cabin members gain slight Speed boost.</p>
-                    <span class="game-reward">+1% speed per tier to nearby allies</span>
-                </div>
-
-                <div class="game-card">
-                    <h4>🧠 Tactical Mind</h4>
-                    <p>See enemy health bars and receive combat tips.</p>
-                    <span class="game-reward">Extended range per tier</span>
-                </div>
-
-                <div class="game-card">
-                    <h4>🏕️ Cabin Unity</h4>
-                    <p>Bonus Divine Favor earned for your cabin.</p>
-                    <span class="game-reward">+5% cabin favor per tier</span>
-                </div>
-
-                <div class="game-card">
-                    <h4>✨ Inspiring Presence</h4>
-                    <p>Cabin members near you regenerate health slowly.</p>
-                    <span class="game-reward">Regen aura radius increases per tier</span>
+                <div class="game-card"><h4>T1: Speaker</h4><p>Cabin aura: 50 block range</p><span class="game-reward">50 XP</span></div>
+                <div class="game-card"><h4>T2: Diplomat</h4><p>Shop discounts, 75 block aura range</p><span class="game-reward">125 XP total</span></div>
+                <div class="game-card"><h4>T3: Commander</h4><p>Cabin aura: Health Boost to allies, 100 block range</p><span class="game-reward">225 XP total</span></div>
+                <div class="game-card"><h4>T4: General</h4><p>Cabin aura: Speed to allies, 150 block range</p><span class="game-reward">400 XP total</span></div>
+                <div class="game-card"><h4>T5: Legendary Leader</h4><p>Cabin aura: Strength + Resistance, 200 block range</p><span class="game-reward">600 XP total</span></div>
+                
+                <div class="info-box tip">
+                    <div class="info-box-title">👑 Mastery Total</div>
+                    <p>200-block cabin aura granting Health Boost, Speed, Strength, and Resistance to allies</p>
                 </div>
             </div>
 
@@ -849,26 +874,34 @@ const PAGES = {
                 
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <h4>⚔️ The Warrior</h4>
-                        <p>Max Combat + Survival for PvP dominance</p>
+                        <h4>⚔️ The Gladiator</h4>
+                        <p><strong>Major:</strong> Warfare<br><strong>Minor:</strong> Fortitude<br>Melee powerhouse with survivability</p>
                     </div>
                     <div class="feature-card">
-                        <h4>⛏️ The Gatherer</h4>
-                        <p>Max Crafting + Divine for resource farming</p>
+                        <h4>⛏️ The Miner</h4>
+                        <p><strong>Major:</strong> Forging<br><strong>Minor:</strong> Mysticism<br>Maximum resource gathering with luck</p>
                     </div>
                     <div class="feature-card">
-                        <h4>👑 The Leader</h4>
-                        <p>Max Leadership + Survival to support your cabin</p>
+                        <h4>🥷 The Assassin</h4>
+                        <p><strong>Major:</strong> Stealth<br><strong>Minor:</strong> Warfare<br>Strike from shadows with deadly force</p>
                     </div>
                     <div class="feature-card">
-                        <h4>⚖️ The Balanced</h4>
-                        <p>Spread XP across all branches evenly</p>
+                        <h4>🌊 The Poseidon Build</h4>
+                        <p><strong>Major:</strong> Seafaring<br><strong>Minor:</strong> Athletics<br>Ocean dominance with land mobility</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>👑 The Commander</h4>
+                        <p><strong>Major:</strong> Leadership<br><strong>Minor:</strong> Fortitude<br>Buff your cabin while staying alive</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🌿 The Survivor</h4>
+                        <p><strong>Major:</strong> Survival<br><strong>Minor:</strong> Fortitude<br>Nearly unkillable regeneration tank</p>
                     </div>
                 </div>
 
                 <div class="info-box tip">
                     <div class="info-box-title">💡 Pro Tip</div>
-                    <p>Focus on one or two branches early. It's better to have a few maxed skills than many weak ones! The Olympian Insight skill in Divine branch helps you earn XP faster.</p>
+                    <p>Decide your Major early! All skills cost the same XP, so pick a path and commit. Dabbling (T2) in multiple trees gives variety, but mastery (T5) gives the best effects.</p>
                 </div>
             </div>
 
@@ -879,8 +912,8 @@ const PAGES = {
                     <li>Your XP levels are deducted in Minecraft</li>
                     <li>Your skill tier is saved to the database</li>
                     <li>Effects sync immediately (or within 30 seconds)</li>
-                    <li>Passive effects apply automatically</li>
-                    <li>Proc effects (like Auto-Smelt) trigger on relevant actions</li>
+                    <li>Passive effects (health, speed, etc.) apply automatically</li>
+                    <li>Proc effects (auto-smelt, double drops) trigger on relevant actions</li>
                 </ol>
                 
                 <p>Use <code>/chbskills</code> in Minecraft to see your active skill effects!</p>
