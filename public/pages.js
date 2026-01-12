@@ -619,6 +619,275 @@ const PAGES = {
         `
     },
 
+        'skills': {
+        icon: '⚔️',
+        title: 'Skill Trees',
+        subtitle: 'Train your demigod abilities',
+        content: `
+            <div class="doc-section">
+                <h2>⚔️ The Skill System</h2>
+                <p>Every demigod can train and improve their abilities through the skill tree system. Spend your <strong>XP Levels</strong> to unlock powerful upgrades that affect both Discord and Minecraft!</p>
+                
+                <div class="info-box tip">
+                    <div class="info-box-title">💡 Cross-Platform Power</div>
+                    <p>Skills upgraded in Discord automatically apply real effects in Minecraft when you're linked via <code>!mclink</code>.</p>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>📊 Accessing Your Skills</h2>
+                
+                <div class="command">
+                    <div class="command-name">!skills</div>
+                    <div class="command-desc">Opens your skill tree interface. View all branches, your current levels, and available upgrades.</div>
+                </div>
+
+                <div class="command">
+                    <div class="command-name">!skills [branch]</div>
+                    <div class="command-desc">View a specific branch. Example: <code>!skills combat</code></div>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>⭐ XP Level Costs</h2>
+                <p>Skills are purchased with your Minecraft XP levels. Higher tiers require more total XP investment:</p>
+                
+                <div class="table-container">
+                    <table>
+                        <tr><th>Tier</th><th>Total XP Required</th><th>Additional Cost</th></tr>
+                        <tr><td>Tier 1</td><td>50 levels</td><td>50 levels</td></tr>
+                        <tr><td>Tier 2</td><td>125 levels</td><td>+75 levels</td></tr>
+                        <tr><td>Tier 3</td><td>225 levels</td><td>+100 levels</td></tr>
+                        <tr><td>Tier 4</td><td>400 levels</td><td>+175 levels</td></tr>
+                        <tr><td>Tier 5</td><td>600 levels</td><td>+200 levels</td></tr>
+                    </table>
+                </div>
+                
+                <p>Maxing a single skill costs <strong>600 XP levels</strong> total. Maxing an entire branch (4 skills) costs <strong>2,400 XP levels</strong>.</p>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Choose Wisely</div>
+                    <p>Skill upgrades are permanent investments. Plan your build before spending! You can't refund XP once allocated.</p>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>🌳 The Five Branches</h2>
+                <p>Each branch focuses on different aspects of demigod life. Every skill has <strong>5 tiers</strong>, with increasing power at each level.</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>⚔️ Combat</h4>
+                        <p>Damage, critical hits, and battle prowess</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>💚 Survival</h4>
+                        <p>Health, regeneration, and endurance</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>✨ Divine</h4>
+                        <p>God powers and blessing amplification</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🔨 Crafting</h4>
+                        <p>Resource gathering and item creation</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>👑 Leadership</h4>
+                        <p>Team buffs and cabin bonuses</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>⚔️ Combat Branch</h2>
+                <p>For demigods who live for battle. Enhances your offensive capabilities in Minecraft combat.</p>
+                
+                <div class="game-card">
+                    <h4>🗡️ Weapon Mastery</h4>
+                    <p>Increases melee damage dealt with all weapons.</p>
+                    <span class="game-reward">+4% damage per tier (Max: +20%)</span>
+                </div>
+
+                <div class="game-card">
+                    <h4>💥 Critical Strike</h4>
+                    <p>Chance to deal bonus damage on hit.</p>
+                    <span class="game-reward">+3% crit chance per tier (Max: +15%)</span>
+                </div>
+
+                <div class="game-card">
+                    <h4>📢 Battle Cry</h4>
+                    <p>Gain brief Strength boost when health drops low.</p>
+                    <span class="game-reward">+1 second duration per tier</span>
+                </div>
+
+                <div class="game-card">
+                    <h4>🛡️ Last Stand</h4>
+                    <p>Gain Resistance when below 20% health.</p>
+                    <span class="game-reward">+0.5 seconds per tier (Max: 2.5s)</span>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>💚 Survival Branch</h2>
+                <p>Stay alive longer and recover faster. Essential for dangerous quests and exploration.</p>
+                
+                <div class="game-card">
+                    <h4>❤️ Health Boost</h4>
+                    <p>Permanently increases your maximum health.</p>
+                    <span class="game-reward">+1 heart per tier (Max: +5 hearts)</span>
+                </div>
+
+                <div class="game-card">
+                    <h4>💫 Swift Recovery</h4>
+                    <p>Regenerate health faster when not in combat.</p>
+                    <span class="game-reward">Faster regen per tier</span>
+                </div>
+
+                <div class="game-card">
+                    <h4>🍖 Iron Stomach</h4>
+                    <p>Get more saturation from food.</p>
+                    <span class="game-reward">+10% food effectiveness per tier</span>
+                </div>
+
+                <div class="game-card">
+                    <h4>🏃 Endurance</h4>
+                    <p>Reduced hunger drain while sprinting and fighting.</p>
+                    <span class="game-reward">-5% hunger drain per tier</span>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>✨ Divine Branch</h2>
+                <p>Strengthen your connection to your godly parent. Amplifies divine blessings and XP gains.</p>
+                
+                <div class="game-card">
+                    <h4>📚 Olympian Insight</h4>
+                    <p>Gain bonus XP from all sources in Minecraft.</p>
+                    <span class="game-reward">+10% XP per tier (Max: +50%)</span>
+                </div>
+
+                <div class="game-card">
+                    <h4>🛡️ Divine Shield</h4>
+                    <p>Chance to negate incoming damage completely.</p>
+                    <span class="game-reward">+2% block chance per tier</span>
+                </div>
+
+                <div class="game-card">
+                    <h4>⚡ Blessing Amplifier</h4>
+                    <p>Your god parent's potion effect becomes stronger.</p>
+                    <span class="game-reward">+1 amplifier at tier 5</span>
+                </div>
+
+                <div class="game-card">
+                    <h4>🙏 Godly Favor</h4>
+                    <p>Increased Drachma rewards from all activities.</p>
+                    <span class="game-reward">+5% Drachma per tier (Max: +25%)</span>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>🔨 Crafting Branch</h2>
+                <p>Master the art of creation and resource gathering. Get more from every block you mine.</p>
+                
+                <div class="game-card">
+                    <h4>🔥 Auto-Smelt</h4>
+                    <p>Ores automatically smelt when mined (iron, gold, etc).</p>
+                    <span class="game-reward">+20% chance per tier (Max: 100%)</span>
+                </div>
+
+                <div class="game-card">
+                    <h4>📦 Double Harvest</h4>
+                    <p>Chance to get double drops from mining and farming.</p>
+                    <span class="game-reward">+4% chance per tier (Max: 20%)</span>
+                </div>
+
+                <div class="game-card">
+                    <h4>⚒️ Master Crafter</h4>
+                    <p>Crafted tools have increased durability.</p>
+                    <span class="game-reward">+10% durability per tier</span>
+                </div>
+
+                <div class="game-card">
+                    <h4>💎 Resource Sense</h4>
+                    <p>Rare ores glow briefly when you're nearby.</p>
+                    <span class="game-reward">+2 block range per tier</span>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>👑 Leadership Branch</h2>
+                <p>For those who lead their cabin to glory. Buffs that help you and nearby allies.</p>
+                
+                <div class="game-card">
+                    <h4>📣 Rally Allies</h4>
+                    <p>Nearby cabin members gain slight Speed boost.</p>
+                    <span class="game-reward">+1% speed per tier to nearby allies</span>
+                </div>
+
+                <div class="game-card">
+                    <h4>🧠 Tactical Mind</h4>
+                    <p>See enemy health bars and receive combat tips.</p>
+                    <span class="game-reward">Extended range per tier</span>
+                </div>
+
+                <div class="game-card">
+                    <h4>🏕️ Cabin Unity</h4>
+                    <p>Bonus Divine Favor earned for your cabin.</p>
+                    <span class="game-reward">+5% cabin favor per tier</span>
+                </div>
+
+                <div class="game-card">
+                    <h4>✨ Inspiring Presence</h4>
+                    <p>Cabin members near you regenerate health slowly.</p>
+                    <span class="game-reward">Regen aura radius increases per tier</span>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>💡 Build Strategies</h2>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>⚔️ The Warrior</h4>
+                        <p>Max Combat + Survival for PvP dominance</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>⛏️ The Gatherer</h4>
+                        <p>Max Crafting + Divine for resource farming</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>👑 The Leader</h4>
+                        <p>Max Leadership + Survival to support your cabin</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>⚖️ The Balanced</h4>
+                        <p>Spread XP across all branches evenly</p>
+                    </div>
+                </div>
+
+                <div class="info-box tip">
+                    <div class="info-box-title">💡 Pro Tip</div>
+                    <p>Focus on one or two branches early. It's better to have a few maxed skills than many weak ones! The Olympian Insight skill in Divine branch helps you earn XP faster.</p>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>🔄 How Effects Apply</h2>
+                <p>When you upgrade a skill in Discord:</p>
+                <ol>
+                    <li>Your XP levels are deducted in Minecraft</li>
+                    <li>Your skill tier is saved to the database</li>
+                    <li>Effects sync immediately (or within 30 seconds)</li>
+                    <li>Passive effects apply automatically</li>
+                    <li>Proc effects (like Auto-Smelt) trigger on relevant actions</li>
+                </ol>
+                
+                <p>Use <code>/chbskills</code> in Minecraft to see your active skill effects!</p>
+            </div>
+        `
+    },
+
     'events': {
         icon: '📅',
         title: 'Events & Timeline',
