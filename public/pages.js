@@ -1844,7 +1844,10 @@ const PAGES = {
                     <div class="feature-card"><h4>👑 Leadership</h4><p>200-block cabin buff aura</p></div>
                 </div>
                 
-                <p><em>Visit the full Skill Tree Details page for complete tier breakdowns!</em></p>
+                <div class="info-box tip">
+                    <div class="info-box-title">📖 Want Full Details?</div>
+                    <p>See the <a href="#" onclick="showPage('skill-tree'); return false;" style="color: var(--lightning);">Complete Skill Tree Guide</a> for tier-by-tier breakdowns of all 10 branches!</p>
+                </div>
             </div>
 
             <div class="doc-section">
@@ -1870,6 +1873,291 @@ const PAGES = {
                 </div>
             </div>
         `
+    },
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // SKILL TREE DETAILS - COMPLETE TIER BREAKDOWNS
+    // ═══════════════════════════════════════════════════════════════════════
+
+    'skill-tree': {
+        icon: '🌳',
+        title: 'Skill Tree Details',
+        subtitle: 'Complete tier-by-tier breakdown of all abilities',
+        content: \`
+            <div class="doc-section">
+                <h2>🌳 Complete Skill Reference</h2>
+                <p>This page contains detailed tier breakdowns for all 10 skill branches. Each tier shows exactly what effects you'll gain in Minecraft.</p>
+                
+                <div class="info-box tip">
+                    <div class="info-box-title">💡 Quick Reference</div>
+                    <p><strong>XP Costs:</strong> T1 = 50 | T2 = 125 | T3 = 225 | T4 = 400 | T5 = 600 total levels</p>
+                    <p><strong>Limits:</strong> 1 Major (T5 cap) | 1 Minor (T4 cap) | Others (T2 cap)</p>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>⚔️ Warfare — Melee Combat</h2>
+                <p>Master the blade and become a devastating melee fighter.</p>
+                
+                <div class="table-container">
+                    <table>
+                        <tr><th>Tier</th><th>Cost</th><th>Effects</th></tr>
+                        <tr><td><strong>T1</strong></td><td>50 XP</td><td>+1 Attack Damage</td></tr>
+                        <tr><td><strong>T2</strong></td><td>+75 XP</td><td>+5% Attack Speed</td></tr>
+                        <tr><td><strong>T3</strong></td><td>+100 XP</td><td>+1 Attack Damage, +10% Knockback Resistance</td></tr>
+                        <tr><td><strong>T4</strong></td><td>+175 XP</td><td>+10% Attack Speed, +1 Damage</td></tr>
+                        <tr><td><strong>T5</strong></td><td>+200 XP</td><td>+2 Attack Damage, +20% KB Resist, <span style="color: var(--success);">Strength I</span></td></tr>
+                    </table>
+                </div>
+                
+                <p><strong>Total at T5:</strong> +5 Attack Damage, +15% Attack Speed, +30% KB Resist, Strength I</p>
+            </div>
+
+            <div class="doc-section">
+                <h2>🏹 Marksmanship — Ranged Combat</h2>
+                <p>Perfect your aim and deal devastating ranged damage.</p>
+                
+                <div class="table-container">
+                    <table>
+                        <tr><th>Tier</th><th>Cost</th><th>Effects</th></tr>
+                        <tr><td><strong>T1</strong></td><td>50 XP</td><td>+1 Attack Damage (melee backup)</td></tr>
+                        <tr><td><strong>T2</strong></td><td>+75 XP</td><td>+10% Attack Speed</td></tr>
+                        <tr><td><strong>T3</strong></td><td>+100 XP</td><td>+1 Attack Damage</td></tr>
+                        <tr><td><strong>T4</strong></td><td>+175 XP</td><td>+15% Attack Speed, +1 Damage</td></tr>
+                        <tr><td><strong>T5</strong></td><td>+200 XP</td><td>+2 Damage, <span style="color: var(--success);">10% chance for double arrow damage</span></td></tr>
+                    </table>
+                </div>
+                
+                <p><strong>Total at T5:</strong> +5 Attack Damage, +25% Attack Speed, 10% Double Arrow Proc</p>
+            </div>
+
+            <div class="doc-section">
+                <h2>⚒️ Forging — Crafting & Mining</h2>
+                <p>Mine faster, smelt automatically, and multiply your ore yields.</p>
+                
+                <div class="table-container">
+                    <table>
+                        <tr><th>Tier</th><th>Cost</th><th>Effects</th></tr>
+                        <tr><td><strong>T1</strong></td><td>50 XP</td><td><span style="color: var(--success);">Haste I</span> (faster mining)</td></tr>
+                        <tr><td><strong>T2</strong></td><td>+75 XP</td><td><span style="color: var(--success);">Haste II</span></td></tr>
+                        <tr><td><strong>T3</strong></td><td>+100 XP</td><td><span style="color: var(--lightning);">Auto-smelt ores</span> when mined</td></tr>
+                        <tr><td><strong>T4</strong></td><td>+175 XP</td><td><span style="color: var(--lightning);">10% chance double ore drops</span></td></tr>
+                        <tr><td><strong>T5</strong></td><td>+200 XP</td><td><span style="color: var(--success);">Haste III, Fire Resistance</span></td></tr>
+                    </table>
+                </div>
+                
+                <p><strong>Total at T5:</strong> Haste III, Auto-Smelt, 10% Double Ore, Fire Resistance</p>
+                
+                <div class="info-box tip">
+                    <div class="info-box-title">⛏️ Best for Mining</div>
+                    <p>Auto-smelt at T3 instantly converts iron/gold/copper ore to ingots. Combined with double drops at T4, this is the ultimate mining build!</p>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>🏃 Athletics — Movement & Speed</h2>
+                <p>Outrun any monster and leap across chasms with ease.</p>
+                
+                <div class="table-container">
+                    <table>
+                        <tr><th>Tier</th><th>Cost</th><th>Effects</th></tr>
+                        <tr><td><strong>T1</strong></td><td>50 XP</td><td>+5% Movement Speed</td></tr>
+                        <tr><td><strong>T2</strong></td><td>+75 XP</td><td>+5% Speed, reduced sprint hunger</td></tr>
+                        <tr><td><strong>T3</strong></td><td>+100 XP</td><td>+10% Speed, <span style="color: var(--success);">Jump Boost I</span></td></tr>
+                        <tr><td><strong>T4</strong></td><td>+175 XP</td><td>+15% Speed, <span style="color: var(--success);">Jump Boost II</span></td></tr>
+                        <tr><td><strong>T5</strong></td><td>+200 XP</td><td>+20% Speed, <span style="color: var(--success);">Jump Boost III, Speed I</span></td></tr>
+                    </table>
+                </div>
+                
+                <p><strong>Total at T5:</strong> +55% Movement Speed (with Speed I), Jump Boost III</p>
+            </div>
+
+            <div class="doc-section">
+                <h2>🛡️ Fortitude — Defense & Health</h2>
+                <p>Become an unstoppable tank that can withstand any assault.</p>
+                
+                <div class="table-container">
+                    <table>
+                        <tr><th>Tier</th><th>Cost</th><th>Effects</th></tr>
+                        <tr><td><strong>T1</strong></td><td>50 XP</td><td>+2 Max Health (+1 heart)</td></tr>
+                        <tr><td><strong>T2</strong></td><td>+75 XP</td><td>+2 Armor</td></tr>
+                        <tr><td><strong>T3</strong></td><td>+100 XP</td><td>+4 Health, +10% Knockback Resistance</td></tr>
+                        <tr><td><strong>T4</strong></td><td>+175 XP</td><td>+2 Armor Toughness, +4 Health</td></tr>
+                        <tr><td><strong>T5</strong></td><td>+200 XP</td><td>+4 Health, +2 Armor, +20% KB, <span style="color: var(--success);">Resistance I</span></td></tr>
+                    </table>
+                </div>
+                
+                <p><strong>Total at T5:</strong> +14 Health (+7 hearts), +4 Armor, +2 Armor Toughness, +30% KB Resist, Resistance I</p>
+            </div>
+
+            <div class="doc-section">
+                <h2>🌿 Survival — Sustenance & Nature</h2>
+                <p>Live off the land and regenerate health naturally.</p>
+                
+                <div class="table-container">
+                    <table>
+                        <tr><th>Tier</th><th>Cost</th><th>Effects</th></tr>
+                        <tr><td><strong>T1</strong></td><td>50 XP</td><td>Slower hunger drain</td></tr>
+                        <tr><td><strong>T2</strong></td><td>+75 XP</td><td>Food heals +1 extra heart</td></tr>
+                        <tr><td><strong>T3</strong></td><td>+100 XP</td><td><span style="color: var(--success);">Regeneration I</span></td></tr>
+                        <tr><td><strong>T4</strong></td><td>+175 XP</td><td>+4 Max Health</td></tr>
+                        <tr><td><strong>T5</strong></td><td>+200 XP</td><td><span style="color: var(--success);">Regeneration II, Saturation</span>, +4 Health</td></tr>
+                    </table>
+                </div>
+                
+                <p><strong>Total at T5:</strong> +8 Health, Regeneration II, Saturation, Bonus Food Healing</p>
+            </div>
+
+            <div class="doc-section">
+                <h2>🥷 Stealth — Sneaking & Shadows</h2>
+                <p>Move unseen and strike from the darkness.</p>
+                
+                <div class="table-container">
+                    <table>
+                        <tr><th>Tier</th><th>Cost</th><th>Effects</th></tr>
+                        <tr><td><strong>T1</strong></td><td>50 XP</td><td>Faster sneaking speed</td></tr>
+                        <tr><td><strong>T2</strong></td><td>+75 XP</td><td>Shadow cloak (harder to detect)</td></tr>
+                        <tr><td><strong>T3</strong></td><td>+100 XP</td><td>Even faster sneaking, reduced fall damage</td></tr>
+                        <tr><td><strong>T4</strong></td><td>+175 XP</td><td><span style="color: var(--success);">Night Vision</span></td></tr>
+                        <tr><td><strong>T5</strong></td><td>+200 XP</td><td><span style="color: var(--lightning);">Invisibility while sneaking</span></td></tr>
+                    </table>
+                </div>
+                
+                <p><strong>Total at T5:</strong> Fast Sneak, Night Vision, Invisibility (while crouching)</p>
+                
+                <div class="info-box tip">
+                    <div class="info-box-title">🥷 Stealth Tactics</div>
+                    <p>T5 Invisibility only activates while sneaking — perfect for ambushes and escapes!</p>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>✨ Mysticism — Magic & Fortune</h2>
+                <p>Bend luck in your favor and find better loot everywhere.</p>
+                
+                <div class="table-container">
+                    <table>
+                        <tr><th>Tier</th><th>Cost</th><th>Effects</th></tr>
+                        <tr><td><strong>T1</strong></td><td>50 XP</td><td>+1 Luck (better loot tables)</td></tr>
+                        <tr><td><strong>T2</strong></td><td>+75 XP</td><td>+2 Luck</td></tr>
+                        <tr><td><strong>T3</strong></td><td>+100 XP</td><td>+3 Luck, better enchanting results</td></tr>
+                        <tr><td><strong>T4</strong></td><td>+175 XP</td><td>+4 Luck</td></tr>
+                        <tr><td><strong>T5</strong></td><td>+200 XP</td><td>+5 Luck, <span style="color: var(--success);">Luck II, Conduit Power</span></td></tr>
+                    </table>
+                </div>
+                
+                <p><strong>Total at T5:</strong> +10 Luck (massively better loot!), Luck II, Conduit Power</p>
+                
+                <div class="info-box tip">
+                    <div class="info-box-title">🎣 Luck Explained</div>
+                    <p>Luck affects fishing loot, chest loot tables, and mob drops. High luck = more rare items!</p>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>🌊 Seafaring — Water & Ocean</h2>
+                <p>Rule the seas and explore underwater without limits.</p>
+                
+                <div class="table-container">
+                    <table>
+                        <tr><th>Tier</th><th>Cost</th><th>Effects</th></tr>
+                        <tr><td><strong>T1</strong></td><td>50 XP</td><td>Faster swimming</td></tr>
+                        <tr><td><strong>T2</strong></td><td>+75 XP</td><td>Longer breath underwater</td></tr>
+                        <tr><td><strong>T3</strong></td><td>+100 XP</td><td><span style="color: var(--success);">Water Breathing</span></td></tr>
+                        <tr><td><strong>T4</strong></td><td>+175 XP</td><td><span style="color: var(--success);">Dolphin's Grace</span> (super fast swimming)</td></tr>
+                        <tr><td><strong>T5</strong></td><td>+200 XP</td><td><span style="color: var(--success);">Conduit Power</span> + Special Trident</td></tr>
+                    </table>
+                </div>
+                
+                <p><strong>Total at T5:</strong> Water Breathing, Dolphin's Grace, Conduit Power, Legendary Trident</p>
+                
+                <div class="info-box tip">
+                    <div class="info-box-title">🔱 Poseidon's Children</div>
+                    <p>Combine with Poseidon god effects for the ultimate underwater build!</p>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>👑 Leadership — Buff Aura</h2>
+                <p>Inspire your cabin members with powerful proximity buffs.</p>
+                
+                <div class="table-container">
+                    <table>
+                        <tr><th>Tier</th><th>Cost</th><th>Effects</th></tr>
+                        <tr><td><strong>T1</strong></td><td>50 XP</td><td>Cabin buff aura (50 block range)</td></tr>
+                        <tr><td><strong>T2</strong></td><td>+75 XP</td><td>Diplomat tag (shop discounts)</td></tr>
+                        <tr><td><strong>T3</strong></td><td>+100 XP</td><td><span style="color: var(--success);">Health Boost aura</span>, 75 block range</td></tr>
+                        <tr><td><strong>T4</strong></td><td>+175 XP</td><td><span style="color: var(--success);">Speed aura</span>, 125 block range</td></tr>
+                        <tr><td><strong>T5</strong></td><td>+200 XP</td><td><span style="color: var(--success);">Strength + Resistance aura</span>, 200 block range</td></tr>
+                    </table>
+                </div>
+                
+                <p><strong>Total at T5:</strong> 200-block aura giving Health Boost, Speed, Strength, and Resistance to cabin members</p>
+                
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Cabin Required</div>
+                    <p>Leadership auras only affect players in YOUR cabin. Join or create a cabin first!</p>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>📊 Skill Comparison</h2>
+                <p>Quick comparison of all branches at max tier:</p>
+                
+                <div class="table-container">
+                    <table>
+                        <tr><th>Skill</th><th>Best For</th><th>Key T5 Perk</th></tr>
+                        <tr><td>⚔️ Warfare</td><td>PvP, Boss Fights</td><td>Strength I + huge damage</td></tr>
+                        <tr><td>🏹 Marksmanship</td><td>Ranged Combat</td><td>10% double arrow damage</td></tr>
+                        <tr><td>⚒️ Forging</td><td>Mining, Resource Gathering</td><td>Auto-smelt + double ore</td></tr>
+                        <tr><td>🏃 Athletics</td><td>Exploration, Escaping</td><td>Jump III + Speed I</td></tr>
+                        <tr><td>🛡️ Fortitude</td><td>Tanking, Survival</td><td>+7 hearts + Resistance</td></tr>
+                        <tr><td>🌿 Survival</td><td>Long Expeditions</td><td>Regen II + Saturation</td></tr>
+                        <tr><td>🥷 Stealth</td><td>Ambushes, Scouting</td><td>Invisibility while sneaking</td></tr>
+                        <tr><td>✨ Mysticism</td><td>Loot, Fishing, Enchanting</td><td>+10 Luck + Conduit</td></tr>
+                        <tr><td>🌊 Seafaring</td><td>Ocean Monuments, Underwater</td><td>Conduit Power + Trident</td></tr>
+                        <tr><td>👑 Leadership</td><td>Group Play, Cabin Events</td><td>200-block team buff aura</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>💡 Recommended Builds</h2>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>⚔️ The Gladiator</h4>
+                        <p><strong>Major:</strong> Warfare<br><strong>Minor:</strong> Fortitude<br><strong>Dabble:</strong> Athletics</p>
+                        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Maximum melee damage with tankiness.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>⛏️ The Prospector</h4>
+                        <p><strong>Major:</strong> Forging<br><strong>Minor:</strong> Mysticism<br><strong>Dabble:</strong> Fortitude</p>
+                        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Auto-smelt + double ore + luck = infinite resources.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🥷 The Assassin</h4>
+                        <p><strong>Major:</strong> Stealth<br><strong>Minor:</strong> Warfare<br><strong>Dabble:</strong> Athletics</p>
+                        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Invisibility + high damage = deadly strikes.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>👑 The Commander</h4>
+                        <p><strong>Major:</strong> Leadership<br><strong>Minor:</strong> Fortitude<br><strong>Dabble:</strong> Warfare</p>
+                        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Buff your entire cabin with powerful auras.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🌊 The Aquanaut</h4>
+                        <p><strong>Major:</strong> Seafaring<br><strong>Minor:</strong> Survival<br><strong>Dabble:</strong> Athletics</p>
+                        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Rule the oceans with unlimited water breathing.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🏃 The Scout</h4>
+                        <p><strong>Major:</strong> Athletics<br><strong>Minor:</strong> Stealth<br><strong>Dabble:</strong> Survival</p>
+                        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Maximum speed + jump + night vision for exploration.</p>
+                    </div>
+                </div>
+            </div>
+        \`
     },
 
     'mc-quests': {
