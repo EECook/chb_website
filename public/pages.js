@@ -1883,7 +1883,7 @@ const PAGES = {
         icon: '🌳',
         title: 'Skill Tree Details',
         subtitle: 'Complete tier-by-tier breakdown of all abilities',
-        content: \`
+        content: `
             <div class="doc-section">
                 <h2>🌳 Complete Skill Reference</h2>
                 <p>This page contains detailed tier breakdowns for all 10 skill branches. Each tier shows exactly what effects you'll gain in Minecraft.</p>
@@ -2157,7 +2157,7 @@ const PAGES = {
                     </div>
                 </div>
             </div>
-        \`
+        `
     },
 
     'mc-quests': {
