@@ -2119,6 +2119,300 @@ const PAGES = {
         `
     },
 
+    // ═══════════════════════════════════════════════════════════════════════
+// ADD THIS TO YOUR pages.js FILE
+// Insert this in the PAGES object, after the 'skills' page entry
+// ═══════════════════════════════════════════════════════════════════════
+
+'shrines': {
+    icon: '🏛️',
+    title: 'Divine Shrines',
+    subtitle: 'Build monuments for cabin-wide buffs',
+    content: `
+        <div class="doc-section">
+            <h2>🏛️ Shrine System</h2>
+            <p>Build shrines to the gods and receive powerful cabin-wide buffs! Each shrine grants unique effects to all cabin members within range.</p>
+            
+            <div class="info-box warning">
+                <div class="info-box-title">⚠️ Cabin Feature</div>
+                <p>Shrines are a <strong>cabin feature</strong>. You must be in a cabin to build and benefit from shrines!</p>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2>🏗️ Building Shrines</h2>
+            <p>Each cabin can build up to <strong>2 shrines</strong>.</p>
+            
+            <div class="steps">
+                <div class="step-item">
+                    <h4>Choose Your God</h4>
+                    <p>Pick from 19 Olympian gods, each with unique effects.</p>
+                </div>
+                <div class="step-item">
+                    <h4>Place Core Block</h4>
+                    <p>Each god requires a specific core block (e.g., Diamond Block for Zeus).</p>
+                </div>
+                <div class="step-item">
+                    <h4>Register in Minecraft</h4>
+                    <p>Stand ON the core block and use <code>/shrine register [god]</code></p>
+                </div>
+                <div class="step-item">
+                    <h4>Pay the Cost</h4>
+                    <p>1000 💰 Drachma to register the shrine.</p>
+                </div>
+                <div class="step-item">
+                    <h4>Build Around It</h4>
+                    <p>Decorate your shrine however you want!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2>⚡ Fuel System</h2>
+            <p>Shrines require <strong>fuel</strong> to stay active:</p>
+            <ul>
+                <li>🟢 <strong>Start at 100%</strong> fuel when built</li>
+                <li>⏱️ <strong>Drain every 30 minutes</strong> based on shrine power</li>
+                <li>🎁 <strong>Refuel with offerings</strong> (throw items near shrine)</li>
+                <li>⚫ <strong>Dormant at 0%</strong> (effects stop)</li>
+            </ul>
+
+            <div class="command">
+                <div class="command-name">/shrine status</div>
+                <div class="command-desc">Check fuel level of nearest shrine (within 50 blocks).</div>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2>🎁 Making Offerings</h2>
+            <p>Restore shrine fuel by throwing accepted items:</p>
+            <ol>
+                <li>Stand <strong>within 3 blocks</strong> of shrine core</li>
+                <li><strong>Drop items</strong> (press Q) near the shrine</li>
+                <li>Items <strong>vanish with particles</strong> → fuel restored!</li>
+            </ol>
+            
+            <p>Check <code>!shrine info [god]</code> in Discord to see accepted offerings and fuel values!</p>
+        </div>
+
+        <div class="doc-section">
+            <h2>💬 Discord Commands</h2>
+            
+            <div class="command">
+                <div class="command-name">!shrines list</div>
+                <div class="command-desc">View all 19 shrine templates with their effects.</div>
+            </div>
+
+            <div class="command">
+                <div class="command-name">!shrine info [god]</div>
+                <div class="command-desc">Detailed info: effects, offerings, core block, cost. Example: <code>!shrine info zeus</code></div>
+            </div>
+
+            <div class="command">
+                <div class="command-name">!shrines cabin</div>
+                <div class="command-desc">View YOUR cabin's shrines, fuel levels, and active synergies.</div>
+            </div>
+
+            <div class="command">
+                <div class="command-name">!shrine locate [god]</div>
+                <div class="command-desc">Get coordinates of your cabin's shrine.</div>
+            </div>
+
+            <div class="command">
+                <div class="command-name">!shrine history [god]</div>
+                <div class="command-desc">View offering history and who contributed fuel.</div>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2>✨ Shrine Effects</h2>
+            <p>Effects apply to <strong>all cabin members within 50 blocks</strong> of the shrine:</p>
+            
+            <div class="table-container">
+                <table>
+                    <tr><th>God</th><th>Effect</th><th>Drain/30min</th></tr>
+                    <tr><td>⚡ Zeus</td><td>Lightning strikes hostiles</td><td>1%</td></tr>
+                    <tr><td>🔱 Poseidon</td><td>Water Breathing + Dolphin's Grace</td><td>0.5%</td></tr>
+                    <tr><td>💀 Hades</td><td>Hostiles take damage over time</td><td>1%</td></tr>
+                    <tr><td>🦉 Athena</td><td>+25% XP from all sources</td><td>0.75%</td></tr>
+                    <tr><td>☀️ Apollo</td><td>Regeneration I</td><td>0.75%</td></tr>
+                    <tr><td>🏹 Artemis</td><td>+20% bow damage, see crouchers</td><td>0.75%</td></tr>
+                    <tr><td>⚔️ Ares</td><td>Strength I + Resistance I</td><td>1%</td></tr>
+                    <tr><td>💕 Aphrodite</td><td>Animals attracted, breed faster</td><td>0.5%</td></tr>
+                    <tr><td>🔨 Hephaestus</td><td>Fire Res + 20% tool durability</td><td>0.75%</td></tr>
+                    <tr><td>👟 Hermes</td><td>Speed II + Jump Boost I</td><td>0.5%</td></tr>
+                    <tr><td>🌾 Demeter</td><td>Crops grow 50% faster</td><td>0.5%</td></tr>
+                    <tr><td>🍇 Dionysus</td><td>Luck I + 2x food saturation</td><td>0.5%</td></tr>
+                    <tr><td>👑 Hera</td><td>Absorption II + knockback resist</td><td>1%</td></tr>
+                    <tr><td>🌙 Hecate</td><td>See invisible + enchanting +3</td><td>0.75%</td></tr>
+                    <tr><td>😴 Hypnos</td><td>Sleep w/ monsters + heal sleep</td><td>0.5%</td></tr>
+                    <tr><td>🏆 Nike</td><td>+50% mob XP + crit chance</td><td>1%</td></tr>
+                    <tr><td>⚖️ Nemesis</td><td>&lt;30% HP: Str III + Speed II</td><td>0.5%</td></tr>
+                    <tr><td>🌈 Iris</td><td>See cabin through walls + fall dmg</td><td>0.5%</td></tr>
+                    <tr><td>🎲 Tyche</td><td>Fortune II + 10% rare drops</td><td>1%</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2>✨ Dual Shrine Synergies</h2>
+            <p>Build <strong>2 compatible shrines</strong> for bonus effects! Both must have fuel (>0%) and you must be in both radii.</p>
+            
+            <div class="table-container">
+                <table>
+                    <tr><th>Shrine Combo</th><th>Synergy Name</th><th>Bonus Effect</th></tr>
+                    <tr><td>⚡🔱 Zeus + Poseidon</td><td>Tempest Unleashed</td><td>2x lightning in rain, Speed III swimming</td></tr>
+                    <tr><td>⚔️🦉 Ares + Athena</td><td>Strategic Warfare</td><td>Hero of Village, +50% crit damage</td></tr>
+                    <tr><td>☀️🏹 Apollo + Artemis</td><td>Twin Lights</td><td>Regen II, +40% bow damage</td></tr>
+                    <tr><td>🔨⚔️ Hephaestus + Ares</td><td>Arsenal of War</td><td>Zero durability loss, fire immunity</td></tr>
+                    <tr><td>🌾🍇 Demeter + Dionysus</td><td>Festival of Abundance</td><td>2x crop growth, food = regen</td></tr>
+                    <tr><td>💀🌙 Hades + Hecate</td><td>Shadow Sorcery</td><td>Crouch invisibility, +5 enchanting</td></tr>
+                    <tr><td>👑💕 Hera + Aphrodite</td><td>Divine Grace</td><td>Absorption IV, auto-tame animals</td></tr>
+                    <tr><td>👟🏆 Hermes + Nike</td><td>Blitz Champion</td><td>Speed III, Jump II, +75% XP</td></tr>
+                    <tr><td>🎲🌈 Tyche + Iris</td><td>Fortune's Eye</td><td>Fortune III, 100% fall immunity</td></tr>
+                    <tr><td>😴⚖️ Hypnos + Nemesis</td><td>Dream Vengeance</td><td>Mobs drowsy when sleeping, wake buffs</td></tr>
+                    <tr><td>💀⚡ Hades + Zeus</td><td>Wrath of Olympus</td><td>Lightning applies Wither II, 2x loot</td></tr>
+                    <tr><td>🦉🌙 Athena + Hecate</td><td>Arcane Scholar</td><td>+7 enchanting, 50% XP bonus</td></tr>
+                    <tr><td>🔱🌾 Poseidon + Demeter</td><td>Bountiful Waters</td><td>Instant kelp growth, 3x crops in rain</td></tr>
+                </table>
+            </div>
+
+            <div class="info-box tip">
+                <div class="info-box-title">💡 Strategy</div>
+                <p>Plan your 2 shrines carefully! Synergies can make your cabin incredibly powerful. Check Discord with <code>!shrines cabin</code> to see active synergies!</p>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2>🏛️ All 19 Shrine Core Blocks</h2>
+            
+            <div class="table-container">
+                <table>
+                    <tr><th>God</th><th>Core Block</th><th>Where to Find</th></tr>
+                    <tr><td>⚡ Zeus</td><td>Diamond Block</td><td>Craft 9 diamonds</td></tr>
+                    <tr><td>🔱 Poseidon</td><td>Dark Prismarine</td><td>Ocean monuments</td></tr>
+                    <tr><td>💀 Hades</td><td>Crying Obsidian</td><td>Nether, bastion remnants</td></tr>
+                    <tr><td>🦉 Athena</td><td>Chiseled Bookshelf</td><td>Craft w/ planks + slab</td></tr>
+                    <tr><td>☀️ Apollo</td><td>Glowstone</td><td>Nether ceiling</td></tr>
+                    <tr><td>🏹 Artemis</td><td>Quartz Pillar</td><td>Craft nether quartz</td></tr>
+                    <tr><td>⚔️ Ares</td><td>Netherite Block</td><td>Craft 9 netherite ingots</td></tr>
+                    <tr><td>💕 Aphrodite</td><td>Pink Glazed Terracotta</td><td>Smelt pink terracotta</td></tr>
+                    <tr><td>🔨 Hephaestus</td><td>Anvil</td><td>Craft w/ iron</td></tr>
+                    <tr><td>👟 Hermes</td><td>Lapis Block</td><td>Craft 9 lapis lazuli</td></tr>
+                    <tr><td>🌾 Demeter</td><td>Hay Block</td><td>Craft 9 wheat</td></tr>
+                    <tr><td>🍇 Dionysus</td><td>Purpur Pillar</td><td>Craft end stone</td></tr>
+                    <tr><td>👑 Hera</td><td>Purpur Block</td><td>Craft end stone</td></tr>
+                    <tr><td>🌙 Hecate</td><td>Obsidian</td><td>Water + lava</td></tr>
+                    <tr><td>😴 Hypnos</td><td>White Bed</td><td>Craft w/ wool + planks</td></tr>
+                    <tr><td>🏆 Nike</td><td>Gold Block</td><td>Craft 9 gold ingots</td></tr>
+                    <tr><td>⚖️ Nemesis</td><td>Polished Deepslate</td><td>Craft deepslate</td></tr>
+                    <tr><td>🌈 Iris</td><td>Beacon</td><td>Craft w/ nether star</td></tr>
+                    <tr><td>🎲 Tyche</td><td>Emerald Block</td><td>Craft 9 emeralds</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2>📋 Quick Reference</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🏗️ Building</h4>
+                    <p>2 shrines max per cabin<br>1000 💰 cost<br>Requires core block</p>
+                </div>
+                <div class="feature-card">
+                    <h4>⚡ Fuel</h4>
+                    <p>Starts at 100%<br>Drains every 30min<br>Refuel with offerings</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📏 Range</h4>
+                    <p>Effects: 50 blocks<br>Offerings: 3 blocks<br>Cabin members only</p>
+                </div>
+                <div class="feature-card">
+                    <h4>✨ Synergies</h4>
+                    <p>13 dual combos<br>Both need fuel<br>Must be in both radii</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2>🎯 Tips & Strategies</h2>
+            <ul>
+                <li>💬 <strong>Coordinate with cabin!</strong> Discuss which 2 shrines to build for best synergy</li>
+                <li>🎁 <strong>Stockpile offerings</strong> before building to keep shrines fueled</li>
+                <li>📍 <strong>Build centrally</strong> so members benefit while at cabin base</li>
+                <li>⚖️ <strong>Balance offense/defense</strong> — one combat shrine, one utility shrine</li>
+                <li>🔔 <strong>Watch mail</strong> for low fuel and dormant warnings</li>
+                <li>📊 <strong>Check history</strong> with <code>!shrine history</code> to see who's contributing</li>
+                <li>🏛️ <strong>Popular combos:</strong> Zeus+Poseidon (combat), Hephaestus+Ares (crafting), Athena+Hecate (XP farming)</li>
+            </ul>
+        </div>
+
+        <div class="doc-section">
+            <h2>⛏️ Minecraft Commands</h2>
+            
+            <div class="command">
+                <div class="command-name">/shrine register [god]</div>
+                <div class="command-desc">Register a new shrine. Stand ON core block. Example: <code>/shrine register zeus</code></div>
+            </div>
+
+            <div class="command">
+                <div class="command-name">/shrine status</div>
+                <div class="command-desc">Check fuel level of nearest shrine (within 50 blocks).</div>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2>❓ FAQ</h2>
+            
+            <details>
+                <summary><strong>Can I move a shrine?</strong></summary>
+                <p>No, shrines are permanent once registered. Choose your location carefully!</p>
+            </details>
+            
+            <details>
+                <summary><strong>What happens if my cabin tries to build a 3rd shrine?</strong></summary>
+                <p>Registration will fail with a message saying you already have 2 shrines.</p>
+            </details>
+            
+            <details>
+                <summary><strong>Can other cabins use my shrine?</strong></summary>
+                <p>No! Shrine effects only apply to members of the cabin that built it.</p>
+            </details>
+            
+            <details>
+                <summary><strong>What if I leave my cabin?</strong></summary>
+                <p>You lose access to your old cabin's shrines. If you join a new cabin, you gain access to theirs.</p>
+            </details>
+            
+            <details>
+                <summary><strong>Can I break the core block?</strong></summary>
+                <p>Yes, but the shrine will still exist in the database. Only admins can remove shrines.</p>
+            </details>
+            
+            <details>
+                <summary><strong>Do synergies stack with god parent effects?</strong></summary>
+                <p>Yes! All effects are cumulative. A child of Poseidon in a Poseidon shrine gets double water breathing!</p>
+            </details>
+
+            <details>
+                <summary><strong>What happens when fuel hits 0%?</strong></summary>
+                <p>The shrine goes dormant, effects stop immediately, and all cabin members receive mail notification.</p>
+            </details>
+
+            <details>
+                <summary><strong>Can we build duplicate god shrines?</strong></summary>
+                <p>No, each cabin can only have one shrine per god. You can't have 2 Zeus shrines.</p>
+            </details>
+
+            <details>
+                <summary><strong>Do I need to be online for my shrine to work?</strong></summary>
+                <p>No! Shrines work 24/7 as long as they have fuel, whether you're online or not.</p>
+            </details>
+        </div>
+    `
+},
+    
     'mc-quests': {
         icon: '📜',
         title: 'Questlines',
