@@ -893,11 +893,11 @@ const PAGES = {
             <div class="table-container">
                 <table>
                     <tr><th>Arena</th><th>Theme</th><th>Team Size</th><th>Duration</th></tr>
-                    <tr><td>🎃 FNAF</td><td>Survival Horror</td><td>1-4</td><td>8 min</td></tr>
-                    <tr><td>🧟 Zombie Horde</td><td>Undead Apocalypse</td><td>1-4</td><td>10 min</td></tr>
+                    <tr><td>🧟 Zombie Horde</td><td>Undead Apocalypse</td><td>1-4</td><td>15 min</td></tr>
                     <tr><td>🔥 Nether Assault</td><td>Demonic Invasion</td><td>1-4</td><td>12 min</td></tr>
                     <tr><td>🌊 Deep Waters</td><td>Aquatic Terror</td><td>1-4</td><td>10 min</td></tr>
                     <tr><td>🦖 Jurassic Park</td><td>Prehistoric Rampage</td><td>1-4</td><td>12 min</td></tr>
+                    <tr><td>🎃 FNAF</td><td>Survival Horror</td><td>1-4</td><td>8 min</td></tr>
                 </table>
             </div>
             
@@ -925,14 +925,15 @@ const PAGES = {
             <div class="feature-grid">
                 <div class="feature-card">
                     <h4>🧟 Zombie Horde</h4>
-                    <p>Waves of undead including zombies, husks, drowned, and a fearsome giant!</p>
+                    <p>15-minute survival against the undead! Mobs from vanilla, The Undergarden, Luminous World, and Alex's Mobs.</p>
                     <ul>
-                        <li>Wave 1: 15 zombies</li>
-                        <li>Wave 2: 35 mixed undead</li>
-                        <li>Wave 3: 50 undead</li>
-                        <li>Wave 4: 70 undead horde</li>
-                        <li>Wave 5: 90+ with Giant!</li>
+                        <li>Wave 1: Zombies, baby zombies, chicken jockeys</li>
+                        <li>Wave 2: + Husks, zombie villagers, rotlings & rotwalkers</li>
+                        <li>Wave 3: + Miner/swamp zombies, rotbeasts</li>
+                        <li>Wave 4: + Frigid/dark oak zombies, forgotten guardians</li>
+                        <li>Wave 5: + Warped Moscos!</li>
                     </ul>
+                    <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Rewards:</strong> 150💰 + random item (zombie head, raygun, throwing bomb, pistol, or gold rounds)</p>
                 </div>
                 <div class="feature-card">
                     <h4>🔥 Nether Assault</h4>
@@ -972,6 +973,23 @@ const PAGES = {
             <div class="info-box warning">
                 <div class="info-box-title">🎃 FNAF Arena</div>
                 <p>The FNAF arena is currently in <strong>survival mode</strong> - no mobs spawn. Special FNAF animatronics coming soon!</p>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2>❤️ Life System (PvE)</h2>
+            <p>PvE battles use a unique life system:</p>
+            <ul>
+                <li>Each player starts with <strong>1 life</strong> (♥ icon)</li>
+                <li>When you die, you lose your life (☠ icon) but can <strong>respawn and keep fighting</strong></li>
+                <li><strong>WIN:</strong> Timer runs out = team survived!</li>
+                <li><strong>LOSS:</strong> All players have lost their life AND all are currently dead</li>
+            </ul>
+            <p>If 3 of 4 players have died, they can respawn to protect the last player standing until the timer ends!</p>
+            
+            <div class="info-box tip">
+                <div class="info-box-title">📊 Kill Tracking</div>
+                <p>Your kills and deaths are tracked in the actionbar during battle and shown in the final Discord results!</p>
             </div>
         </div>
 
@@ -1022,7 +1040,7 @@ const PAGES = {
             <h2>🏆 Victory Conditions</h2>
             <ul>
                 <li><strong>PvP:</strong> Team/player with fewest deaths wins</li>
-                <li><strong>PvE:</strong> Survive all 5 waves to win! Team loses if everyone dies</li>
+                <li><strong>PvE:</strong> Survive until the timer runs out! Team loses if all players are dead with no lives remaining</li>
                 <li><strong>Boss:</strong> Defeat the boss before time expires</li>
             </ul>
         </div>
