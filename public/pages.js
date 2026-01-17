@@ -856,102 +856,217 @@ const PAGES = {
         `
     },
 
-    'arena': {
-        icon: '⚔️',
-        title: 'Arena Battles',
-        subtitle: 'PvP, PvE, and boss fights with betting',
-        content: `
-            <div class="doc-section">
-                <h2>⚔️ The Arena</h2>
-                <p>The ultimate test of demigod combat! Battle other players, fight monster waves, or challenge legendary bosses—all with an integrated betting system.</p>
-                
-                <div class="command">
-                    <div class="command-name">!arena</div>
-                    <div class="command-desc">View arena options and create or join battles.</div>
+'arena': {
+    icon: '⚔️',
+    title: 'Arena Battles',
+    subtitle: 'PvP, PvE wave battles, and boss fights with betting',
+    content: `
+        <div class="doc-section">
+            <h2>⚔️ The Arena</h2>
+            <p>The ultimate test of demigod combat! Battle other players, survive waves of themed monsters, or challenge legendary bosses—all with an integrated betting system.</p>
+            
+            <div class="command">
+                <div class="command-name">!arena</div>
+                <div class="command-desc">View arena options and create or join battles.</div>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2>⚔️ Battle Types</h2>
+            
+            <h3>PvP Battles</h3>
+            <p>Fight against other demigods in skill-based combat!</p>
+            <div class="table-container">
+                <table>
+                    <tr><th>Format</th><th>Players</th><th>Duration</th></tr>
+                    <tr><td>1v1</td><td>2</td><td>5 min</td></tr>
+                    <tr><td>1v1v1</td><td>3</td><td>5 min</td></tr>
+                    <tr><td>1v1v1v1</td><td>4</td><td>5 min</td></tr>
+                    <tr><td>2v2</td><td>4</td><td>7 min</td></tr>
+                    <tr><td>2v2v2</td><td>6</td><td>7 min</td></tr>
+                    <tr><td>2v2v2v2</td><td>8</td><td>7 min</td></tr>
+                </table>
+            </div>
+            
+            <h3>🌊 PvE Wave Battles</h3>
+            <p>Survive 5 increasingly difficult waves of themed monsters! The arena transforms to match each challenge.</p>
+            <div class="table-container">
+                <table>
+                    <tr><th>Arena</th><th>Theme</th><th>Team Size</th><th>Duration</th></tr>
+                    <tr><td>🎃 FNAF</td><td>Survival Horror</td><td>1-4</td><td>8 min</td></tr>
+                    <tr><td>🧟 Zombie Horde</td><td>Undead Apocalypse</td><td>1-4</td><td>10 min</td></tr>
+                    <tr><td>🔥 Nether Assault</td><td>Demonic Invasion</td><td>1-4</td><td>12 min</td></tr>
+                    <tr><td>🌊 Deep Waters</td><td>Aquatic Terror</td><td>1-4</td><td>10 min</td></tr>
+                    <tr><td>🦖 Jurassic Park</td><td>Prehistoric Rampage</td><td>1-4</td><td>12 min</td></tr>
+                </table>
+            </div>
+            
+            <div class="info-box tip">
+                <div class="info-box-title">🏟️ Dynamic Arenas</div>
+                <p>PvE battles feature themed arena sets that paste into the arena before battle! Watch the arena transform to match your challenge.</p>
+            </div>
+            
+            <h3>👹 Boss Battles</h3>
+            <p>Challenge powerful bosses with a partner!</p>
+            <div class="table-container">
+                <table>
+                    <tr><th>Boss</th><th>Team Size</th><th>Duration</th></tr>
+                    <tr><td>🧙 Woodland Witch Doctor</td><td>1-2</td><td>10 min</td></tr>
+                    <tr><td>🦎 Atlatitan</td><td>1-2</td><td>10 min</td></tr>
+                    <tr><td>🦖 Umvuthana Raptor</td><td>1-2</td><td>10 min</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2>🌊 PvE Wave System</h2>
+            <p>Each PvE battle features 5 waves of increasingly difficult enemies:</p>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🧟 Zombie Horde</h4>
+                    <p>Waves of undead including zombies, husks, drowned, and a fearsome giant!</p>
+                    <ul>
+                        <li>Wave 1: 15 zombies</li>
+                        <li>Wave 2: 35 mixed undead</li>
+                        <li>Wave 3: 50 undead</li>
+                        <li>Wave 4: 70 undead horde</li>
+                        <li>Wave 5: 90+ with Giant!</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>🔥 Nether Assault</h4>
+                    <p>Demons from the depths! Piglin brutes, blazes, wither skeletons, and ghasts!</p>
+                    <ul>
+                        <li>Wave 1: Piglin scouts + blazes</li>
+                        <li>Wave 2: Wither skeletons join</li>
+                        <li>Wave 3: Piglin brute assault</li>
+                        <li>Wave 4: Ghast bombardment</li>
+                        <li>Wave 5: Full nether invasion!</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>🌊 Deep Waters</h4>
+                    <p>Terrors from the deep including drowned, guardians, and creatures from Alex's Caves!</p>
+                    <ul>
+                        <li>Wave 1: Drowned + guardians</li>
+                        <li>Wave 2: Elder guardian appears</li>
+                        <li>Wave 3: Guardian swarm</li>
+                        <li>Wave 4: Sea creatures</li>
+                        <li>Wave 5: Grottoceratops!</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>🦖 Jurassic Park</h4>
+                    <p>Prehistoric chaos with Alex's Caves dinosaurs!</p>
+                    <ul>
+                        <li>Wave 1: Vallumraptor pack</li>
+                        <li>Wave 2: Subterranodons</li>
+                        <li>Wave 3: Grottoceratops</li>
+                        <li>Wave 4: Tremorsaurus!</li>
+                        <li>Wave 5: Dinosaur stampede!</li>
+                    </ul>
                 </div>
             </div>
 
-            <div class="doc-section">
-                <h2>⚔️ Battle Types</h2>
-                
-                <h3>PvP Battles</h3>
-                <div class="table-container">
-                    <table>
-                        <tr><th>Format</th><th>Players</th><th>Duration</th></tr>
-                        <tr><td>1v1</td><td>2</td><td>5 min</td></tr>
-                        <tr><td>1v1v1</td><td>3</td><td>5 min</td></tr>
-                        <tr><td>1v1v1v1</td><td>4</td><td>5 min</td></tr>
-                        <tr><td>2v2</td><td>4</td><td>7 min</td></tr>
-                        <tr><td>2v2v2</td><td>6</td><td>7 min</td></tr>
-                        <tr><td>2v2v2v2</td><td>8</td><td>7 min</td></tr>
-                    </table>
-                </div>
-                
-                <h3>PvE Challenges</h3>
-                <div class="table-container">
-                    <table>
-                        <tr><th>Challenge</th><th>Team Size</th><th>Duration</th></tr>
-                        <tr><td>🎃 FNAF</td><td>1-4</td><td>5 min</td></tr>
-                        <tr><td>🧟 Zombie Horde</td><td>1-4</td><td>5 min</td></tr>
-                        <tr><td>🔥 Nether Assault</td><td>1-4</td><td>7 min</td></tr>
-                        <tr><td>🏛️ Ancient Ruins</td><td>1-4</td><td>7 min</td></tr>
-                        <tr><td>🍍 Bikini Bottom</td><td>1-4</td><td>10 min</td></tr>
-                    </table>
-                </div>
-                
-                <h3>Boss Battles</h3>
-                <div class="table-container">
-                    <table>
-                        <tr><th>Boss</th><th>Team Size</th><th>Duration</th></tr>
-                        <tr><td>🧙 Woodland Witch Doctor</td><td>1-2</td><td>10 min</td></tr>
-                        <tr><td>🦎 Atlatitan</td><td>1-2</td><td>10 min</td></tr>
-                        <tr><td>🦖 Umvuthana Raptor</td><td>1-2</td><td>10 min</td></tr>
-                    </table>
-                </div>
+            <div class="info-box warning">
+                <div class="info-box-title">🎃 FNAF Arena</div>
+                <p>The FNAF arena is currently in <strong>survival mode</strong> - no mobs spawn. Special FNAF animatronics coming soon!</p>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2>📋 How Battles Work</h2>
+            <ol>
+                <li><strong>Creation</strong> — Someone creates a battle with <code>!arena create [type]</code></li>
+                <li><strong>Enrollment</strong> — Players click "Join Battle" (must have linked MC account)</li>
+                <li><strong>Betting Opens</strong> — Once full, spectators can place bets</li>
+                <li><strong>Arena Setup</strong> — For PvE, the themed arena pastes in!</li>
+                <li><strong>Teleport</strong> — Participants are teleported to the arena in Minecraft</li>
+                <li><strong>Fight!</strong> — Battle through waves or until time expires</li>
+                <li><strong>Results</strong> — Winner determined, payouts distributed, arena resets</li>
+            </ol>
+
+            <div class="command">
+                <div class="command-name">!arena create zombie</div>
+                <div class="command-desc">Creates a Zombie Horde PvE battle</div>
             </div>
 
-            <div class="doc-section">
-                <h2>📋 How Battles Work</h2>
-                <ol>
-                    <li><strong>Creation</strong> — Someone creates a battle with <code>!arena create [type]</code></li>
-                    <li><strong>Enrollment</strong> — Players click "Join Battle" (must have linked MC account)</li>
-                    <li><strong>Betting Opens</strong> — Once full, spectators can place bets</li>
-                    <li><strong>Teleport</strong> — Participants are teleported to the arena in Minecraft</li>
-                    <li><strong>Fight!</strong> — Battle until time expires or objectives complete</li>
-                    <li><strong>Results</strong> — Winner determined by deaths, payouts distributed</li>
-                </ol>
+            <div class="command">
+                <div class="command-name">!arena create jurassic @Player1 @Player2</div>
+                <div class="command-desc">Creates a Jurassic Park battle with pre-enrolled players</div>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2>💰 Betting System</h2>
+            <p>Spectators can bet on battles for big rewards!</p>
+            
+            <p><strong>Bet Amounts:</strong> 5, 10, 25, 50, 75, 100, 250, 500, 1000 💰</p>
+            
+            <p><strong>How Payouts Work:</strong></p>
+            <ul>
+                <li>All bets form a pool</li>
+                <li>Winners split the pool proportionally based on bet size</li>
+                <li>If your side loses, you lose your bet</li>
+                <li>Ties refund all bets!</li>
+            </ul>
+            
+            <div class="info-box tip">
+                <div class="info-box-title">💡 Smart Betting</div>
+                <p>Bet early when odds are unclear for potentially bigger payouts. Late bets on favorites return less!</p>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2>🏆 Victory Conditions</h2>
+            <ul>
+                <li><strong>PvP:</strong> Team/player with fewest deaths wins</li>
+                <li><strong>PvE:</strong> Survive all 5 waves to win! Team loses if everyone dies</li>
+                <li><strong>Boss:</strong> Defeat the boss before time expires</li>
+            </ul>
+        </div>
+
+        <div class="doc-section">
+            <h2>⌨️ Commands Reference</h2>
+            
+            <div class="command">
+                <div class="command-name">!arena create [type] [@players]</div>
+                <div class="command-desc">Create a battle. Types: 1v1, 2v2, zombie, nether, water, jurassic, fnaf, woodland_witch_doctor, atlatitan, umvuthana_raptor</div>
             </div>
 
-            <div class="doc-section">
-                <h2>💰 Betting System</h2>
-                <p>Spectators can bet on battles for big rewards!</p>
-                
-                <p><strong>Bet Amounts:</strong> 5, 10, 25, 50, 75, 100, 250, 500, 1000 💰</p>
-                
-                <p><strong>How Payouts Work:</strong></p>
-                <ul>
-                    <li>All bets form a pool</li>
-                    <li>Winners split the pool proportionally based on bet size</li>
-                    <li>If your side loses, you lose your bet</li>
-                    <li>Ties refund all bets!</li>
-                </ul>
-                
-                <div class="info-box tip">
-                    <div class="info-box-title">💡 Smart Betting</div>
-                    <p>Bet early when odds are unclear for potentially bigger payouts. Late bets on favorites return less!</p>
-                </div>
+            <div class="command">
+                <div class="command-name">!arena start [id]</div>
+                <div class="command-desc">Skip enrollment and start betting phase</div>
             </div>
 
-            <div class="doc-section">
-                <h2>🏆 Victory Conditions</h2>
-                <ul>
-                    <li><strong>PvP:</strong> Team/player with fewest deaths wins</li>
-                    <li><strong>PvE:</strong> Survive all waves without party wipe</li>
-                    <li><strong>Boss:</strong> Defeat the boss before time expires</li>
-                </ul>
+            <div class="command">
+                <div class="command-name">!arena fight [id]</div>
+                <div class="command-desc">Skip betting and start battle immediately</div>
             </div>
-        `
-    },
+
+            <div class="command">
+                <div class="command-name">!arena cancel [id]</div>
+                <div class="command-desc">Cancel a pending battle (refunds all bets)</div>
+            </div>
+
+            <div class="command">
+                <div class="command-name">!arena types</div>
+                <div class="command-desc">List all available battle types</div>
+            </div>
+
+            <div class="command">
+                <div class="command-name">!arena stats [@player]</div>
+                <div class="command-desc">View arena statistics</div>
+            </div>
+
+            <div class="command">
+                <div class="command-name">!arena leaderboard</div>
+                <div class="command-desc">View top arena fighters</div>
+            </div>
+        </div>
+    `
+},
 
     'daily': {
         icon: '📅',
