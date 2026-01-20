@@ -1,12 +1,9 @@
-// ══════════════════════════════════════════════════════════════════════════
-// CAMP HALF-BLOOD - ALL PAGE CONTENT (COMPLETE)
-// ══════════════════════════════════════════════════════════════════════════
+/*
+ * Camp Half-Blood - Page Content
+ * All documentation pages for the site
+ */
 
 const PAGES = {
-
-    // ═══════════════════════════════════════════════════════════════════════
-    // HOME PAGE
-    // ═══════════════════════════════════════════════════════════════════════
 
     'home': {
         icon: '🏛️',
@@ -14,62 +11,62 @@ const PAGES = {
         subtitle: 'Where legends train',
         content: `
             <div class="doc-section">
-                <h2>⚡ Welcome, Demigod</h2>
-                <p>You've found <strong>Camp Half-Blood</strong> — a sanctuary for demigods like yourself. Here, children of the gods train, form alliances, complete quests, and prove their worth across two realms: <strong>Discord</strong> and <strong>Minecraft</strong>.</p>
+                <h2>Welcome, Demigod</h2>
+                <p>You've found <strong>Camp Half-Blood</strong> - a sanctuary for demigods like yourself. Here, children of the gods train, form alliances, complete quests, and prove their worth across two realms: <strong>Discord</strong> and <strong>Minecraft</strong>.</p>
                 
                 <p>Whether you're a child of Zeus wielding lightning or a cunning offspring of Athena, your journey begins now.</p>
             </div>
 
             <div class="doc-section">
-                <h2>🌐 Two Realms, One Camp</h2>
+                <h2>Two Realms, One Camp</h2>
                 <p>Camp Half-Blood exists across two connected platforms:</p>
                 
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <h4>💬 Discord</h4>
+                        <h4>Discord</h4>
                         <p>Get claimed by a god, join a cabin, play games, earn Drachma, manage your profile, and coordinate with fellow demigods.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>⛏️ Minecraft</h4>
+                        <h4>Minecraft</h4>
                         <p>Explore camp, build your cabin, battle monsters, complete quests, and spend your Drachma on gear and items.</p>
                     </div>
                 </div>
                 
                 <div class="info-box tip">
-                    <div class="info-box-title">💡 Linked Experience</div>
+                    <div class="info-box-title">Linked Experience</div>
                     <p>Link your accounts with <code>!mclink</code> to sync your Drachma, god effects, skills, and more between Discord and Minecraft!</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>🎯 Quick Start</h2>
+                <h2>Quick Start</h2>
                 <ol>
-                    <li><strong>Join Discord</strong> — Enter our server and introduce yourself</li>
-                    <li><strong>Get Claimed</strong> — Use <code>!claim</code> to discover your godly parent</li>
-                    <li><strong>Link Minecraft</strong> — Use <code>!mclink YourUsername</code> to connect accounts</li>
-                    <li><strong>Join a Cabin</strong> — Team up with siblings or form your own group</li>
-                    <li><strong>Start Training</strong> — Play games, complete quests, upgrade skills!</li>
+                    <li><strong>Join Discord</strong> - Enter our server and introduce yourself</li>
+                    <li><strong>Get Claimed</strong> - Use <code>!claim</code> to discover your godly parent</li>
+                    <li><strong>Link Minecraft</strong> - Use <code>!mclink YourUsername</code> to connect accounts</li>
+                    <li><strong>Join a Cabin</strong> - Team up with siblings or form your own group</li>
+                    <li><strong>Start Training</strong> - Play games, complete quests, upgrade skills!</li>
                 </ol>
             </div>
 
             <div class="doc-section">
-                <h2>📊 What Can You Do?</h2>
+                <h2>What Can You Do?</h2>
                 
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <h4>💰 Economy</h4>
+                        <h4>Economy</h4>
                         <p>Earn Drachma through games, dailies, and quests. Spend it in shops or trade with others.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>⚔️ Battles</h4>
-                        <p>Fight in the Arena — PvP duels, PvE challenges, and epic boss battles with betting.</p>
+                        <h4>Battles</h4>
+                        <p>Fight in the Arena - PvP duels, PvE challenges, and epic boss battles with betting.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🎮 Mini-Games</h4>
+                        <h4>Mini-Games</h4>
                         <p>15+ mythology-themed games from trivia to gambling. Earn Drachma while having fun!</p>
                     </div>
                     <div class="feature-card">
-                        <h4>📈 Progression</h4>
+                        <h4>Progression</h4>
                         <p>Upgrade 10 skill branches, unlock powerful effects, and become a legendary hero.</p>
                     </div>
                 </div>
@@ -77,22 +74,18 @@ const PAGES = {
         `
     },
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // NEW PLAYER GUIDE
-    // ═══════════════════════════════════════════════════════════════════════
-
     'new-player': {
         icon: '📖',
         title: 'New Camper Guide',
         subtitle: 'Everything you need to get started',
         content: `
             <div class="doc-section">
-                <h2>👋 Welcome to Camp!</h2>
-                <p>So you've discovered you're a demigod — half mortal, half god. Don't worry, we'll help you figure out the rest. This guide covers everything you need to know as a new camper.</p>
+                <h2>Welcome to Camp!</h2>
+                <p>So you've discovered you're a demigod - half mortal, half god. Don't worry, we'll help you figure out the rest. This guide covers everything you need to know as a new camper.</p>
             </div>
 
             <div class="doc-section">
-                <h2>📋 Step 1: Get Claimed</h2>
+                <h2>Step 1: Get Claimed</h2>
                 <p>Every demigod has a godly parent. Discover yours through the claiming ceremony!</p>
                 
                 <div class="command">
@@ -102,20 +95,20 @@ const PAGES = {
                 
                 <p>Your god parent determines:</p>
                 <ul>
-                    <li>🎨 Your <strong>name color</strong> in Minecraft</li>
-                    <li>✨ Unique <strong>potion effects</strong> while playing</li>
-                    <li>📬 A personal <strong>welcome letter</strong> from your godly parent</li>
-                    <li>🏕️ Which cabin you can join</li>
+                    <li>Your <strong>name color</strong> in Minecraft</li>
+                    <li>Unique <strong>potion effects</strong> while playing</li>
+                    <li>A personal <strong>welcome letter</strong> from your godly parent</li>
+                    <li>Which cabin you can join</li>
                 </ul>
                 
                 <div class="info-box tip">
-                    <div class="info-box-title">💡 Can't Decide?</div>
+                    <div class="info-box-title">Can't Decide?</div>
                     <p>You can retake the quiz anytime with <code>!claim</code> to change your god parent!</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>🔗 Step 2: Link Your Minecraft Account</h2>
+                <h2>Step 2: Link Your Minecraft Account</h2>
                 <p>To get the full Camp Half-Blood experience, link your Discord to Minecraft:</p>
                 
                 <div class="command">
@@ -125,15 +118,15 @@ const PAGES = {
                 
                 <p>Once linked, you'll receive:</p>
                 <ul>
-                    <li>💰 <strong>Synced Drachma</strong> — Earn in Discord, spend in Minecraft (and vice versa)</li>
-                    <li>⚡ <strong>God Effects</strong> — Your parent's blessing follows you in-game</li>
-                    <li>📦 <strong>Item Delivery</strong> — Buy items in Discord, claim them in Minecraft</li>
-                    <li>📊 <strong>Skill Sync</strong> — Upgrade skills in Discord, get effects in Minecraft</li>
+                    <li><strong>Synced Drachma</strong> - Earn in Discord, spend in Minecraft (and vice versa)</li>
+                    <li><strong>God Effects</strong> - Your parent's blessing follows you in-game</li>
+                    <li><strong>Item Delivery</strong> - Buy items in Discord, claim them in Minecraft</li>
+                    <li><strong>Skill Sync</strong> - Upgrade skills in Discord, get effects in Minecraft</li>
                 </ul>
             </div>
 
             <div class="doc-section">
-                <h2>👤 Step 3: Set Up Your Profile</h2>
+                <h2>Step 3: Set Up Your Profile</h2>
                 <p>Your profile is your central hub for everything:</p>
                 
                 <div class="command">
@@ -143,16 +136,16 @@ const PAGES = {
                 
                 <p>From your profile you can:</p>
                 <ul>
-                    <li>📬 Check your <strong>mail</strong> for messages and invites</li>
-                    <li>🎒 View your <strong>inventory</strong> and use items</li>
-                    <li>🎮 Quick-access the <strong>games menu</strong></li>
-                    <li>🛒 Browse the <strong>shop</strong></li>
-                    <li>🏕️ See your <strong>cabin</strong> info</li>
+                    <li>Check your <strong>mail</strong> for messages and invites</li>
+                    <li>View your <strong>inventory</strong> and use items</li>
+                    <li>Quick-access the <strong>games menu</strong></li>
+                    <li>Browse the <strong>shop</strong></li>
+                    <li>See your <strong>cabin</strong> info</li>
                 </ul>
             </div>
 
             <div class="doc-section">
-                <h2>💰 Step 4: Earn Your First Drachma</h2>
+                <h2>Step 4: Earn Your First Drachma</h2>
                 <p>Drachma is the currency of Camp Half-Blood. Here's how to start earning:</p>
                 
                 <div class="command">
@@ -168,22 +161,22 @@ const PAGES = {
                 <div class="table-container">
                     <table>
                         <tr><th>Activity</th><th>Reward</th><th>Cooldown</th></tr>
-                        <tr><td>!daily</td><td>2-10 💰</td><td>23 hours</td></tr>
-                        <tr><td>Mini-Games</td><td>1-25 💰</td><td>5 minutes each</td></tr>
-                        <tr><td>Casino Games</td><td>Up to 200 💰</td><td>Varies</td></tr>
+                        <tr><td>!daily</td><td>2-10</td><td>23 hours</td></tr>
+                        <tr><td>Mini-Games</td><td>1-25</td><td>5 minutes each</td></tr>
+                        <tr><td>Casino Games</td><td>Up to 200</td><td>Varies</td></tr>
                         <tr><td>Arena Wins</td><td>Betting payouts</td><td>None</td></tr>
                     </table>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>🏕️ Step 5: Join a Cabin</h2>
+                <h2>Step 5: Join a Cabin</h2>
                 <p>Cabins are teams of demigods who work together. Benefits include:</p>
                 <ul>
-                    <li>👥 Private Discord channel for coordination</li>
-                    <li>🛡️ Leadership skill auras that buff nearby members</li>
-                    <li>🏆 Team-based events and competitions</li>
-                    <li>🤝 Community and roleplay opportunities</li>
+                    <li>Private Discord channel for coordination</li>
+                    <li>Leadership skill auras that buff nearby members</li>
+                    <li>Team-based events and competitions</li>
+                    <li>Community and roleplay opportunities</li>
                 </ul>
                 
                 <div class="command">
@@ -195,7 +188,7 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>📚 Essential Commands Cheatsheet</h2>
+                <h2>Essential Commands Cheatsheet</h2>
                 
                 <div class="table-container">
                     <table>
@@ -215,24 +208,24 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>🎯 What's Next?</h2>
+                <h2>What's Next?</h2>
                 <p>Once you're set up, explore these features:</p>
                 
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <h4>⚔️ Arena Battles</h4>
+                        <h4>Arena Battles</h4>
                         <p>PvP duels, PvE challenges, and boss fights with betting</p>
                     </div>
                     <div class="feature-card">
-                        <h4>📊 Skill Trees</h4>
+                        <h4>Skill Trees</h4>
                         <p>10 branches with real Minecraft effects</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🏪 Player Shops</h4>
+                        <h4>Player Shops</h4>
                         <p>Buy a permit and sell items to other players</p>
                     </div>
                     <div class="feature-card">
-                        <h4>📜 Quests</h4>
+                        <h4>Quests</h4>
                         <p>Request custom quests for your demigod journey</p>
                     </div>
                 </div>
@@ -240,17 +233,13 @@ const PAGES = {
         `
     },
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // DISCORD PAGES
-    // ═══════════════════════════════════════════════════════════════════════
-
     'profile': {
         icon: '👤',
         title: 'Profile & Mail',
         subtitle: 'Your demigod identity and communications',
         content: `
             <div class="doc-section">
-                <h2>👤 Your Demigod Profile</h2>
+                <h2>Your Demigod Profile</h2>
                 <p>Your profile is the central hub for everything at Camp Half-Blood. It displays your stats, provides quick access to all features, and tracks your progression.</p>
                 
                 <div class="command">
@@ -277,44 +266,44 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>🧭 Navigation Buttons</h2>
+                <h2>Navigation Buttons</h2>
                 <p>Your profile includes quick-access buttons:</p>
                 
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <h4>📬 Mail</h4>
+                        <h4>Mail</h4>
                         <p>Read messages, cabin invites, and divine letters</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🎒 Inventory</h4>
+                        <h4>Inventory</h4>
                         <p>View and use your items</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🎮 Games</h4>
+                        <h4>Games</h4>
                         <p>Quick access to mini-games</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🛒 Shop</h4>
+                        <h4>Shop</h4>
                         <p>Browse and buy items</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🏕️ Cabin</h4>
+                        <h4>Cabin</h4>
                         <p>Cabin management</p>
                     </div>
                     <div class="feature-card">
-                        <h4>⚔️ Skills</h4>
+                        <h4>Skills</h4>
                         <p>View/upgrade skill trees</p>
                     </div>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>📬 Mail System</h2>
+                <h2>Mail System</h2>
                 <p>The mail system keeps you informed about everything happening at camp.</p>
                 
                 <div class="command">
                     <div class="command-name">!mail</div>
-                    <div class="command-desc">Opens your mailbox. Unread messages marked with 🔵. Select messages from dropdown to read.</div>
+                    <div class="command-desc">Opens your mailbox. Unread messages marked with blue dot. Select messages from dropdown to read.</div>
                 </div>
 
                 <h3>Mail Types</h3>
@@ -333,13 +322,13 @@ const PAGES = {
                 </div>
                 
                 <div class="info-box tip">
-                    <div class="info-box-title">💡 Compose Mail</div>
-                    <p>Click the "✉️ Compose" button in your mailbox to send a message to another player!</p>
+                    <div class="info-box-title">Compose Mail</div>
+                    <p>Click the "Compose" button in your mailbox to send a message to another player!</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>🎒 Inventory</h2>
+                <h2>Inventory</h2>
                 
                 <div class="command">
                     <div class="command-name">!inventory</div>
@@ -349,19 +338,19 @@ const PAGES = {
 
                 <h3>Item Markers</h3>
                 <ul>
-                    <li><strong>✨ Redeemable:</strong> Can be delivered to Minecraft</li>
-                    <li><strong>🏪 Shop Permit:</strong> Use to create your own shop</li>
-                    <li><strong>🧪 Consumable:</strong> Use for temporary effects</li>
+                    <li><strong>Redeemable:</strong> Can be delivered to Minecraft</li>
+                    <li><strong>Shop Permit:</strong> Use to create your own shop</li>
+                    <li><strong>Consumable:</strong> Use for temporary effects</li>
                 </ul>
 
                 <div class="info-box tip">
-                    <div class="info-box-title">💡 Auto-Delivery</div>
+                    <div class="info-box-title">Auto-Delivery</div>
                     <p>Minecraft items are automatically queued when purchased. Use <code>/chbpending</code> in MC to receive them!</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>📋 Related Commands</h2>
+                <h2>Related Commands</h2>
                 
                 <div class="command">
                     <div class="command-name">!invites</div>
@@ -382,8 +371,8 @@ const PAGES = {
         subtitle: 'Discover your divine heritage',
         content: `
             <div class="doc-section">
-                <h2>⚡ The Claiming Ceremony</h2>
-                <p>Every demigod has one divine parent. The claiming ceremony reveals which Olympian god is yours through a personality quiz—or you can choose directly!</p>
+                <h2>The Claiming Ceremony</h2>
+                <p>Every demigod has one divine parent. The claiming ceremony reveals which Olympian god is yours through a personality quiz - or you can choose directly!</p>
                 
                 <div class="command">
                     <div class="command-name">!claim</div>
@@ -403,22 +392,22 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>📝 Two Ways to Claim</h2>
+                <h2>Two Ways to Claim</h2>
                 
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <h4>🎯 Personality Quiz</h4>
+                        <h4>Personality Quiz</h4>
                         <p>Answer questions about your personality and values. The quiz analyzes your responses to match you with the most fitting god parent.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>📋 Direct Selection</h4>
+                        <h4>Direct Selection</h4>
                         <p>Already know who your parent is? Skip the quiz and choose directly from the dropdown menu.</p>
                     </div>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>🏛️ The 19 Olympian Gods</h2>
+                <h2>The 19 Olympian Gods</h2>
                 
                 <div class="god-grid">
                     <div class="god-card"><div class="god-emoji">⚡</div><div class="god-name">Zeus</div><div class="god-domain">Sky & Thunder</div></div>
@@ -444,17 +433,17 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>🎁 What You Receive</h2>
+                <h2>What You Receive</h2>
                 <p>When claimed, you get:</p>
                 <ul>
-                    <li>🎨 <strong>Name Color</strong> — Your god's color displays in Minecraft</li>
-                    <li>✨ <strong>Potion Effects</strong> — Passive buffs based on your parent</li>
-                    <li>📬 <strong>Divine Letter</strong> — A personal welcome message from your godly parent</li>
-                    <li>🏕️ <strong>Cabin Eligibility</strong> — Join cabins aligned with your heritage</li>
+                    <li><strong>Name Color</strong> - Your god's color displays in Minecraft</li>
+                    <li><strong>Potion Effects</strong> - Passive buffs based on your parent</li>
+                    <li><strong>Divine Letter</strong> - A personal welcome message from your godly parent</li>
+                    <li><strong>Cabin Eligibility</strong> - Join cabins aligned with your heritage</li>
                 </ul>
                 
                 <div class="info-box tip">
-                    <div class="info-box-title">💡 Change Anytime</div>
+                    <div class="info-box-title">Change Anytime</div>
                     <p>You can retake the claiming ceremony anytime with <code>!claim</code> to choose a different god parent!</p>
                 </div>
             </div>
@@ -467,7 +456,7 @@ const PAGES = {
         subtitle: 'Join forces with fellow demigods',
         content: `
             <div class="doc-section">
-                <h2>🏕️ The Cabin System</h2>
+                <h2>The Cabin System</h2>
                 <p>Cabins are teams of demigods working together. Each cabin gets a private Discord channel, and members with Leadership skills can buff nearby teammates in Minecraft!</p>
                 
                 <div class="command">
@@ -482,51 +471,51 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>🎁 Cabin Benefits</h2>
+                <h2>Cabin Benefits</h2>
                 
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <h4>💬 Private Channel</h4>
+                        <h4>Private Channel</h4>
                         <p>Every cabin gets a private Discord channel for coordination, visible only to members.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>👑 Leadership Auras</h4>
+                        <h4>Leadership Auras</h4>
                         <p>Members with Leadership skills buff nearby cabin mates in Minecraft!</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🏆 Team Events</h4>
+                        <h4>Team Events</h4>
                         <p>Participate in cabin vs cabin competitions and tournaments.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>✨ Divine Favor</h4>
+                        <h4>Divine Favor</h4>
                         <p>High favor grants Drachma bonuses to all members!</p>
                     </div>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>✨ Divine Favor</h2>
+                <h2>Divine Favor</h2>
                 <p>Your cabin's standing with the gods affects Drachma earnings!</p>
                 
                 <div class="table-container">
                     <table>
                         <tr><th>Status</th><th>Favor</th><th>Modifier</th></tr>
-                        <tr><td>✨ Blessed</td><td>80+</td><td style="color: var(--success);">+25%</td></tr>
-                        <tr><td>⬆️ Favored</td><td>50-79</td><td style="color: var(--success);">+10%</td></tr>
-                        <tr><td>⚖️ Neutral</td><td>0-49</td><td>Normal</td></tr>
-                        <tr><td>⬇️ Disfavored</td><td>-30 to -1</td><td style="color: var(--error);">-10%</td></tr>
-                        <tr><td>💀 Cursed</td><td>Below -60</td><td style="color: var(--error);">-25%</td></tr>
+                        <tr><td>Blessed</td><td>80+</td><td style="color: var(--success);">+25%</td></tr>
+                        <tr><td>Favored</td><td>50-79</td><td style="color: var(--success);">+10%</td></tr>
+                        <tr><td>Neutral</td><td>0-49</td><td>Normal</td></tr>
+                        <tr><td>Disfavored</td><td>-30 to -1</td><td style="color: var(--error);">-10%</td></tr>
+                        <tr><td>Cursed</td><td>Below -60</td><td style="color: var(--error);">-25%</td></tr>
                     </table>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>📥 Joining a Cabin</h2>
+                <h2>Joining a Cabin</h2>
                 <p>There are two ways to join an existing cabin:</p>
                 
                 <ol>
-                    <li><strong>Receive an Invite</strong> — Check your <code>!mail</code> for cabin invitations. Accept directly from the mail!</li>
-                    <li><strong>Ask a Leader</strong> — Contact a cabin leader and ask them to invite you.</li>
+                    <li><strong>Receive an Invite</strong> - Check your <code>!mail</code> for cabin invitations. Accept directly from the mail!</li>
+                    <li><strong>Ask a Leader</strong> - Contact a cabin leader and ask them to invite you.</li>
                 </ol>
                 
                 <div class="command">
@@ -536,7 +525,7 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>🏗️ Creating & Managing</h2>
+                <h2>Creating & Managing</h2>
                 
                 <div class="command">
                     <div class="command-name">!cabin create [Name]</div>
@@ -572,7 +561,7 @@ const PAGES = {
         subtitle: 'Earn and spend golden Drachma',
         content: `
             <div class="doc-section">
-                <h2>💰 Golden Drachma</h2>
+                <h2>Golden Drachma</h2>
                 <p>Drachma is the universal currency of Camp Half-Blood, accepted in both Discord and Minecraft. Earn it, spend it, or transfer it to friends!</p>
                 
                 <div class="command">
@@ -593,14 +582,14 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>📈 Ways to Earn</h2>
+                <h2>Ways to Earn</h2>
                 
                 <div class="table-container">
                     <table>
                         <tr><th>Activity</th><th>Reward</th><th>Details</th></tr>
-                        <tr><td>!daily</td><td>2-10 💰</td><td>Mythology trivia bonus</td></tr>
-                        <tr><td>Mini-Games</td><td>1-25 💰</td><td>10 free mythology games</td></tr>
-                        <tr><td>Casino</td><td>Up to 200 💰</td><td>5 gambling games (costs to play)</td></tr>
+                        <tr><td>!daily</td><td>2-10</td><td>Mythology trivia bonus</td></tr>
+                        <tr><td>Mini-Games</td><td>1-25</td><td>10 free mythology games</td></tr>
+                        <tr><td>Casino</td><td>Up to 200</td><td>5 gambling games (costs to play)</td></tr>
                         <tr><td>Arena Betting</td><td>Varies</td><td>Bet on battles, win big!</td></tr>
                         <tr><td>Minecraft</td><td>Varies</td><td>Mob kills, mining, quests</td></tr>
                         <tr><td>Player Shop</td><td>Varies</td><td>Sell items to others</td></tr>
@@ -609,7 +598,7 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>🛒 Camp Store</h2>
+                <h2>Camp Store</h2>
                 
                 <div class="command">
                     <div class="command-name">!shop</div>
@@ -618,21 +607,21 @@ const PAGES = {
 
                 <p><strong>Shop Categories:</strong></p>
                 <ul>
-                    <li>⚔️ <strong>Weapons</strong> — Swords, bows, and celestial bronze gear</li>
-                    <li>🛡️ <strong>Armor</strong> — Protection for your adventures</li>
-                    <li>🧪 <strong>Consumables</strong> — Potions and food items</li>
-                    <li>✨ <strong>Divine Blessings</strong> — Golden Touch multiplier and more</li>
-                    <li>📜 <strong>Permits</strong> — Shop Permit to run your own store</li>
+                    <li><strong>Weapons</strong> - Swords, bows, and celestial bronze gear</li>
+                    <li><strong>Armor</strong> - Protection for your adventures</li>
+                    <li><strong>Consumables</strong> - Potions and food items</li>
+                    <li><strong>Divine Blessings</strong> - Golden Touch multiplier and more</li>
+                    <li><strong>Permits</strong> - Shop Permit to run your own store</li>
                 </ul>
 
                 <div class="info-box tip">
-                    <div class="info-box-title">💡 Minecraft Delivery</div>
+                    <div class="info-box-title">Minecraft Delivery</div>
                     <p>Items purchased in the shop are queued for pickup. Use <code>/chbpending</code> in Minecraft to receive them!</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>💸 Transferring Drachma</h2>
+                <h2>Transferring Drachma</h2>
                 
                 <div class="command">
                     <div class="command-name">!transfer @user [amount]</div>
@@ -651,11 +640,11 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>✨ Golden Touch Multiplier</h2>
+                <h2>Golden Touch Multiplier</h2>
                 <p>Want to earn Drachma faster? Purchase a Golden Touch from the shop!</p>
                 
                 <ul>
-                    <li>💫 <strong>2x Drachma</strong> on all earnings for 24 hours</li>
+                    <li><strong>2x Drachma</strong> on all earnings for 24 hours</li>
                     <li>Applies to games, daily rewards, and other sources</li>
                     <li>Buy another to extend the duration</li>
                 </ul>
@@ -669,7 +658,7 @@ const PAGES = {
         subtitle: 'Mythology-themed games for Drachma',
         content: `
             <div class="doc-section">
-                <h2>🎮 Mini-Games Arcade</h2>
+                <h2>Mini-Games Arcade</h2>
                 <p>10 unique mythology-themed games with different mechanics and rewards! All games are free to play.</p>
                 
                 <div class="command">
@@ -679,76 +668,76 @@ const PAGES = {
                 </div>
 
                 <div class="info-box tip">
-                    <div class="info-box-title">💡 Cooldowns</div>
+                    <div class="info-box-title">Cooldowns</div>
                     <p>Each game has a 5-minute cooldown after playing. Rotate through games to maximize earnings!</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>⚔️ Adventure Games</h2>
+                <h2>Adventure Games</h2>
 
                 <div class="game-card">
-                    <h4>⚔️ Godly Trials</h4>
+                    <h4>Godly Trials</h4>
                     <p>Face 3 mythological encounters! Each choice has different success odds. Win 2/3 rounds to earn rewards.</p>
-                    <span class="game-reward">3 💰</span>
+                    <span class="game-reward">3 Drachma</span>
                 </div>
 
                 <div class="game-card">
-                    <h4>🏛️ Labyrinth Escape</h4>
-                    <p>Navigate Daedalus's maze! Avoid monsters (🐂), walls (🧱), and hidden traps. Reach the exit (🚪) in 3 rounds.</p>
-                    <span class="game-reward">5 💰</span>
+                    <h4>Labyrinth Escape</h4>
+                    <p>Navigate Daedalus's maze! Avoid monsters, walls, and hidden traps. Reach the exit in 3 rounds.</p>
+                    <span class="game-reward">5 Drachma</span>
                 </div>
 
                 <div class="game-card">
-                    <h4>🐕 Cerberus Dodge</h4>
+                    <h4>Cerberus Dodge</h4>
                     <p>Dodge Cerberus's three heads! Quick reactions required as each head snaps at you.</p>
-                    <span class="game-reward">1-5 💰</span>
+                    <span class="game-reward">1-5 Drachma</span>
                 </div>
 
                 <div class="game-card">
-                    <h4>🏇 Chariot Race</h4>
+                    <h4>Chariot Race</h4>
                     <p>Race your chariot to victory! Choose when to push ahead, play it safe, or sabotage opponents.</p>
-                    <span class="game-reward">4 💰</span>
+                    <span class="game-reward">4 Drachma</span>
                 </div>
 
                 <div class="game-card">
-                    <h4>🦄 Pegasus Flight</h4>
+                    <h4>Pegasus Flight</h4>
                     <p>Fly Pegasus to Mount Olympus! Manage stamina, dodge obstacles, and catch wind currents.</p>
-                    <span class="game-reward">5 💰</span>
+                    <span class="game-reward">5 Drachma</span>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>🧠 Skill Games</h2>
+                <h2>Skill Games</h2>
 
                 <div class="game-card">
-                    <h4>🏹 Olympian Archery</h4>
+                    <h4>Olympian Archery</h4>
                     <p>Test your aim with 5 arrow shots. Time your release perfectly for bullseyes!</p>
                     <span class="game-reward">Variable</span>
                 </div>
 
                 <div class="game-card">
-                    <h4>🐉 Hydra Strike</h4>
+                    <h4>Hydra Strike</h4>
                     <p>Cut the Hydra's heads before they regenerate! Wrong cuts spawn more heads.</p>
-                    <span class="game-reward">4-6 💰</span>
+                    <span class="game-reward">4-6 Drachma</span>
                 </div>
 
                 <div class="game-card">
-                    <h4>🔮 Oracle's Vision</h4>
+                    <h4>Oracle's Vision</h4>
                     <p>Memory matching game! Find all symbol pairs before time runs out.</p>
-                    <span class="game-reward">4-7 💰</span>
+                    <span class="game-reward">4-7 Drachma</span>
                 </div>
 
                 <div class="game-card">
-                    <h4>🎵 Siren's Song</h4>
+                    <h4>Siren's Song</h4>
                     <p>Resist the Siren! Memorize and repeat increasingly complex sequences.</p>
                     <span class="game-reward">Variable</span>
                 </div>
 
                 <div class="game-card">
-                    <h4>⚡ Lightning Roulette</h4>
+                    <h4>Lightning Roulette</h4>
                     <p>Risk vs reward! Keep spinning for bigger multipliers, but Zeus might strike you down...</p>
-                    <span class="game-reward">2-25 💰</span>
+                    <span class="game-reward">2-25 Drachma</span>
                 </div>
             </div>
         `
@@ -760,57 +749,56 @@ const PAGES = {
         subtitle: "Vi's high-stakes gambling games",
         content: `
             <div class="doc-section">
-                <h2>🎰 Vi's Casino</h2>
+                <h2>Vi's Casino</h2>
                 <p><strong>Vi (VianiteGMG)</strong> runs the camp casino with real Drachma gambling! These 5 games cost Drachma to play but offer bigger rewards.</p>
                 
                 <div class="info-box warning">
-                    <div class="info-box-title">⚠️ Gambling Warning</div>
-                    <p>Casino games require <strong>real Drachma</strong> to play. You can lose your bet! Maximum win per game is capped at 200 💰. Play responsibly!</p>
+                    <div class="info-box-title">Gambling Warning</div>
+                    <p>Casino games require <strong>real Drachma</strong> to play. You can lose your bet! Maximum win per game is capped at 200. Play responsibly!</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>🎰 Olympus Slots</h2>
+                <h2>Olympus Slots</h2>
                 <p>Classic 3-reel slot machine with Olympic symbols!</p>
                 
                 <div class="table-container">
                     <table>
                         <tr><th>Cost</th><th>Max Win</th><th>Jackpot</th></tr>
-                        <tr><td>10 💰</td><td>200 💰</td><td>💎💎💎 = 100x</td></tr>
+                        <tr><td>10</td><td>200</td><td>Three diamonds = 100x</td></tr>
                     </table>
                 </div>
                 
-                <p><strong>Symbols:</strong> ⚡ 🔱 🏹 ⚔️ 🔥 💎 🍇 👑</p>
                 <p>Match 3 symbols for payouts. Three diamonds is the jackpot!</p>
             </div>
 
             <div class="doc-section">
-                <h2>🎡 Hermes Roulette</h2>
+                <h2>Hermes Roulette</h2>
                 <p>The trickster god's wheel of fortune!</p>
                 
                 <div class="table-container">
                     <table>
                         <tr><th>Cost</th><th>Max Win</th></tr>
-                        <tr><td>15 💰</td><td>200 💰</td></tr>
+                        <tr><td>15</td><td>200</td></tr>
                     </table>
                 </div>
                 
                 <p><strong>Bet Types:</strong></p>
                 <ul>
-                    <li>🔴 Red / ⚫ Black — 2x payout</li>
-                    <li>🔢 Odd / Even — 2x payout</li>
-                    <li>🎯 Exact Number — 35x payout</li>
+                    <li>Red / Black - 2x payout</li>
+                    <li>Odd / Even - 2x payout</li>
+                    <li>Exact Number - 35x payout</li>
                 </ul>
             </div>
 
             <div class="doc-section">
-                <h2>🃏 Athena's Blackjack</h2>
+                <h2>Athena's Blackjack</h2>
                 <p>Beat the dealer with strategy and luck!</p>
                 
                 <div class="table-container">
                     <table>
                         <tr><th>Cost</th><th>Max Win</th><th>Blackjack</th></tr>
-                        <tr><td>20 💰</td><td>200 💰</td><td>1.5x payout</td></tr>
+                        <tr><td>20</td><td>200</td><td>1.5x payout</td></tr>
                     </table>
                 </div>
                 
@@ -818,31 +806,31 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>🎲 Apollo's Dice</h2>
+                <h2>Apollo's Dice</h2>
                 <p>Predict the dice roll outcome!</p>
                 
                 <div class="table-container">
                     <table>
                         <tr><th>Cost</th><th>Max Win</th></tr>
-                        <tr><td>5 💰</td><td>200 💰</td></tr>
+                        <tr><td>5</td><td>200</td></tr>
                     </table>
                 </div>
                 
                 <p><strong>Bet Options:</strong></p>
                 <ul>
-                    <li>High (8-12) or Low (2-6) — 2x</li>
-                    <li>Exact sum — Up to 30x!</li>
+                    <li>High (8-12) or Low (2-6) - 2x</li>
+                    <li>Exact sum - Up to 30x!</li>
                 </ul>
             </div>
 
             <div class="doc-section">
-                <h2>🪙 Tyche's Coin Flip</h2>
+                <h2>Tyche's Coin Flip</h2>
                 <p>Simple double-or-nothing with the goddess of fortune!</p>
                 
                 <div class="table-container">
                     <table>
                         <tr><th>Cost</th><th>Win</th><th>Loss</th></tr>
-                        <tr><td>25 💰</td><td>50 💰</td><td>0 💰</td></tr>
+                        <tr><td>25</td><td>50</td><td>0</td></tr>
                     </table>
                 </div>
                 
@@ -850,7 +838,7 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>🏦 The House</h2>
+                <h2>The House</h2>
                 <p>The casino is run by Vi, who collects <strong>50% of player losses</strong>. When you lose, half goes to the house. When you win, it's all yours (up to the 200 cap)!</p>
             </div>
         `
@@ -862,8 +850,8 @@ const PAGES = {
     subtitle: 'PvP, PvE wave battles, and boss fights with betting',
     content: `
         <div class="doc-section">
-            <h2>⚔️ The Arena</h2>
-            <p>The ultimate test of demigod combat! Battle other players, survive waves of themed monsters, or challenge legendary bosses—all with an integrated betting system.</p>
+            <h2>The Arena</h2>
+            <p>The ultimate test of demigod combat! Battle other players, survive waves of themed monsters, or challenge legendary bosses - all with an integrated betting system.</p>
             
             <div class="command">
                 <div class="command-name">!arena</div>
@@ -872,7 +860,7 @@ const PAGES = {
         </div>
 
         <div class="doc-section">
-            <h2>⚔️ Battle Types</h2>
+            <h2>Battle Types</h2>
             
             <h3>PvP Battles</h3>
             <p>Fight against other demigods in skill-based combat!</p>
@@ -888,43 +876,43 @@ const PAGES = {
                 </table>
             </div>
             
-            <h3>🌊 PvE Wave Battles</h3>
+            <h3>PvE Wave Battles</h3>
             <p>Survive 5 increasingly difficult waves of themed monsters! The arena transforms to match each challenge.</p>
             <div class="table-container">
                 <table>
                     <tr><th>Arena</th><th>Theme</th><th>Team Size</th><th>Duration</th></tr>
-                    <tr><td>🧟 Zombie Horde</td><td>Undead Apocalypse</td><td>1-4</td><td>15 min</td></tr>
-                    <tr><td>🔥 Nether Assault</td><td>Demonic Invasion</td><td>1-4</td><td>12 min</td></tr>
-                    <tr><td>🌊 Deep Waters</td><td>Aquatic Terror</td><td>1-4</td><td>10 min</td></tr>
-                    <tr><td>🦖 Jurassic Park</td><td>Prehistoric Rampage</td><td>1-4</td><td>12 min</td></tr>
-                    <tr><td>🎃 FNAF</td><td>Survival Horror</td><td>1-4</td><td>8 min</td></tr>
+                    <tr><td>Zombie Horde</td><td>Undead Apocalypse</td><td>1-4</td><td>15 min</td></tr>
+                    <tr><td>Nether Assault</td><td>Demonic Invasion</td><td>1-4</td><td>12 min</td></tr>
+                    <tr><td>Deep Waters</td><td>Aquatic Terror</td><td>1-4</td><td>10 min</td></tr>
+                    <tr><td>Jurassic Park</td><td>Prehistoric Rampage</td><td>1-4</td><td>12 min</td></tr>
+                    <tr><td>FNAF</td><td>Survival Horror</td><td>1-4</td><td>8 min</td></tr>
                 </table>
             </div>
             
             <div class="info-box tip">
-                <div class="info-box-title">🏟️ Dynamic Arenas</div>
+                <div class="info-box-title">Dynamic Arenas</div>
                 <p>PvE battles feature themed arena sets that paste into the arena before battle! Watch the arena transform to match your challenge.</p>
             </div>
             
-            <h3>👹 Boss Battles</h3>
+            <h3>Boss Battles</h3>
             <p>Challenge powerful bosses with a partner!</p>
             <div class="table-container">
                 <table>
                     <tr><th>Boss</th><th>Team Size</th><th>Duration</th></tr>
-                    <tr><td>🧙 Woodland Witch Doctor</td><td>1-2</td><td>10 min</td></tr>
-                    <tr><td>🦎 Atlatitan</td><td>1-2</td><td>10 min</td></tr>
-                    <tr><td>🦖 Umvuthana Raptor</td><td>1-2</td><td>10 min</td></tr>
+                    <tr><td>Woodland Witch Doctor</td><td>1-2</td><td>10 min</td></tr>
+                    <tr><td>Atlatitan</td><td>1-2</td><td>10 min</td></tr>
+                    <tr><td>Umvuthana Raptor</td><td>1-2</td><td>10 min</td></tr>
                 </table>
             </div>
         </div>
 
         <div class="doc-section">
-            <h2>🌊 PvE Wave System</h2>
+            <h2>PvE Wave System</h2>
             <p>Each PvE battle features 5 waves of increasingly difficult enemies:</p>
             
             <div class="feature-grid">
                 <div class="feature-card">
-                    <h4>🧟 Zombie Horde</h4>
+                    <h4>Zombie Horde</h4>
                     <p>15-minute survival against the undead! Mobs from vanilla, The Undergarden, Luminous World, and Alex's Mobs.</p>
                     <ul>
                         <li>Wave 1: Zombies, baby zombies, chicken jockeys</li>
@@ -933,10 +921,10 @@ const PAGES = {
                         <li>Wave 4: + Frigid/dark oak zombies, forgotten guardians</li>
                         <li>Wave 5: + Warped Moscos!</li>
                     </ul>
-                    <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Rewards:</strong> 150💰 + random item (zombie head, raygun, throwing bomb, pistol, or gold rounds)</p>
+                    <p style="margin-top: 0.5rem; font-size: 0.85rem;"><strong>Rewards:</strong> 150 Drachma + random item (zombie head, raygun, throwing bomb, pistol, or gold rounds)</p>
                 </div>
                 <div class="feature-card">
-                    <h4>🔥 Nether Assault</h4>
+                    <h4>Nether Assault</h4>
                     <p>Demons from the depths! Piglin brutes, blazes, wither skeletons, and ghasts!</p>
                     <ul>
                         <li>Wave 1: Piglin scouts + blazes</li>
@@ -947,7 +935,7 @@ const PAGES = {
                     </ul>
                 </div>
                 <div class="feature-card">
-                    <h4>🌊 Deep Waters</h4>
+                    <h4>Deep Waters</h4>
                     <p>Terrors from the deep including drowned, guardians, and creatures from Alex's Caves!</p>
                     <ul>
                         <li>Wave 1: Drowned + guardians</li>
@@ -958,7 +946,7 @@ const PAGES = {
                     </ul>
                 </div>
                 <div class="feature-card">
-                    <h4>🦖 Jurassic Park</h4>
+                    <h4>Jurassic Park</h4>
                     <p>Prehistoric chaos with Alex's Caves dinosaurs!</p>
                     <ul>
                         <li>Wave 1: Vallumraptor pack</li>
@@ -971,38 +959,38 @@ const PAGES = {
             </div>
 
             <div class="info-box warning">
-                <div class="info-box-title">🎃 FNAF Arena</div>
+                <div class="info-box-title">FNAF Arena</div>
                 <p>The FNAF arena is currently in <strong>survival mode</strong> - no mobs spawn. Special FNAF animatronics coming soon!</p>
             </div>
         </div>
 
         <div class="doc-section">
-            <h2>❤️ Life System (PvE)</h2>
+            <h2>Life System (PvE)</h2>
             <p>PvE battles use a unique life system:</p>
             <ul>
-                <li>Each player starts with <strong>1 life</strong> (♥ icon)</li>
-                <li>When you die, you lose your life (☠ icon) but can <strong>respawn and keep fighting</strong></li>
+                <li>Each player starts with <strong>1 life</strong></li>
+                <li>When you die, you lose your life but can <strong>respawn and keep fighting</strong></li>
                 <li><strong>WIN:</strong> Timer runs out = team survived!</li>
                 <li><strong>LOSS:</strong> All players have lost their life AND all are currently dead</li>
             </ul>
             <p>If 3 of 4 players have died, they can respawn to protect the last player standing until the timer ends!</p>
             
             <div class="info-box tip">
-                <div class="info-box-title">📊 Kill Tracking</div>
+                <div class="info-box-title">Kill Tracking</div>
                 <p>Your kills and deaths are tracked in the actionbar during battle and shown in the final Discord results!</p>
             </div>
         </div>
 
         <div class="doc-section">
-            <h2>📋 How Battles Work</h2>
+            <h2>How Battles Work</h2>
             <ol>
-                <li><strong>Creation</strong> — Someone creates a battle with <code>!arena create [type]</code></li>
-                <li><strong>Enrollment</strong> — Players click "Join Battle" (must have linked MC account)</li>
-                <li><strong>Betting Opens</strong> — Once full, spectators can place bets</li>
-                <li><strong>Arena Setup</strong> — For PvE, the themed arena pastes in!</li>
-                <li><strong>Teleport</strong> — Participants are teleported to the arena in Minecraft</li>
-                <li><strong>Fight!</strong> — Battle through waves or until time expires</li>
-                <li><strong>Results</strong> — Winner determined, payouts distributed, arena resets</li>
+                <li><strong>Creation</strong> - Someone creates a battle with <code>!arena create [type]</code></li>
+                <li><strong>Enrollment</strong> - Players click "Join Battle" (must have linked MC account)</li>
+                <li><strong>Betting Opens</strong> - Once full, spectators can place bets</li>
+                <li><strong>Arena Setup</strong> - For PvE, the themed arena pastes in!</li>
+                <li><strong>Teleport</strong> - Participants are teleported to the arena in Minecraft</li>
+                <li><strong>Fight!</strong> - Battle through waves or until time expires</li>
+                <li><strong>Results</strong> - Winner determined, payouts distributed, arena resets</li>
             </ol>
 
             <div class="command">
@@ -1017,10 +1005,10 @@ const PAGES = {
         </div>
 
         <div class="doc-section">
-            <h2>💰 Betting System</h2>
+            <h2>Betting System</h2>
             <p>Spectators can bet on battles for big rewards!</p>
             
-            <p><strong>Bet Amounts:</strong> 5, 10, 25, 50, 75, 100, 250, 500, 1000 💰</p>
+            <p><strong>Bet Amounts:</strong> 5, 10, 25, 50, 75, 100, 250, 500, 1000</p>
             
             <p><strong>How Payouts Work:</strong></p>
             <ul>
@@ -1031,13 +1019,13 @@ const PAGES = {
             </ul>
             
             <div class="info-box tip">
-                <div class="info-box-title">💡 Smart Betting</div>
+                <div class="info-box-title">Smart Betting</div>
                 <p>Bet early when odds are unclear for potentially bigger payouts. Late bets on favorites return less!</p>
             </div>
         </div>
 
         <div class="doc-section">
-            <h2>🏆 Victory Conditions</h2>
+            <h2>Victory Conditions</h2>
             <ul>
                 <li><strong>PvP:</strong> Team/player with fewest deaths wins</li>
                 <li><strong>PvE:</strong> Survive until the timer runs out! Team loses if all players are dead with no lives remaining</li>
@@ -1046,7 +1034,7 @@ const PAGES = {
         </div>
 
         <div class="doc-section">
-            <h2>⌨️ Commands Reference</h2>
+            <h2>Commands Reference</h2>
             
             <div class="command">
                 <div class="command-name">!arena create [type] [@players]</div>
@@ -1092,7 +1080,7 @@ const PAGES = {
         subtitle: 'Mythology trivia for daily rewards',
         content: `
             <div class="doc-section">
-                <h2>📅 Daily Prompts</h2>
+                <h2>Daily Prompts</h2>
                 <p>Each day, the gods present you with a mythological challenge. Answer correctly for bonus Drachma!</p>
                 
                 <div class="command">
@@ -1102,50 +1090,50 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>🎭 Daily Interactions</h2>
+                <h2>Daily Interactions</h2>
                 <p>You might encounter:</p>
                 
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <h4>🐍 The Serpent's Riddle</h4>
+                        <h4>The Serpent's Riddle</h4>
                         <p>A serpent blocks your path with a riddle...</p>
                     </div>
                     <div class="feature-card">
-                        <h4>⚖️ Athena's Test</h4>
+                        <h4>Athena's Test</h4>
                         <p>An owl brings a challenge from the goddess of wisdom...</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🎲 Hermes' Gambit</h4>
+                        <h4>Hermes' Gambit</h4>
                         <p>The trickster god shuffles three cups...</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🔥 Hephaestus' Forge</h4>
+                        <h4>Hephaestus' Forge</h4>
                         <p>The smith god tests your knowledge of crafting...</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🌊 Poseidon's Wave</h4>
+                        <h4>Poseidon's Wave</h4>
                         <p>The sea god questions your knowledge of his domain...</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🏹 Artemis' Hunt</h4>
+                        <h4>Artemis' Hunt</h4>
                         <p>Silver tracks lead to a test from the huntress...</p>
                     </div>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>💰 Rewards</h2>
+                <h2>Rewards</h2>
                 
                 <div class="table-container">
                     <table>
                         <tr><th>Result</th><th>Reward</th></tr>
-                        <tr><td>✅ Correct Answer</td><td>4-10 💰 (varies by challenge)</td></tr>
-                        <tr><td>❌ Wrong Answer</td><td>2-3 💰 (consolation)</td></tr>
+                        <tr><td>Correct Answer</td><td>4-10 Drachma (varies by challenge)</td></tr>
+                        <tr><td>Wrong Answer</td><td>2-3 Drachma (consolation)</td></tr>
                     </table>
                 </div>
                 
                 <div class="info-box tip">
-                    <div class="info-box-title">💡 Study Up!</div>
+                    <div class="info-box-title">Study Up!</div>
                     <p>Brush up on Greek mythology to maximize your daily rewards. The gods respect those who know their history!</p>
                 </div>
             </div>
@@ -1158,7 +1146,7 @@ const PAGES = {
         subtitle: 'Weekly godly favors',
         content: `
             <div class="doc-section">
-                <h2>✨ Divine Blessings</h2>
+                <h2>Divine Blessings</h2>
                 <p>Every 7 days, you receive <strong>2 divine blessings</strong> from your godly parent. Use them wisely!</p>
                 
                 <div class="command">
@@ -1168,22 +1156,22 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>🎁 What Blessings Do</h2>
+                <h2>What Blessings Do</h2>
                 <p>Blessings can be spent on special divine favors:</p>
                 <ul>
-                    <li>⚡ <strong>Temporary buffs</strong> in Minecraft</li>
-                    <li>🛡️ <strong>Protection</strong> from certain effects</li>
-                    <li>✨ <strong>Special abilities</strong> based on your god parent</li>
+                    <li><strong>Temporary buffs</strong> in Minecraft</li>
+                    <li><strong>Protection</strong> from certain effects</li>
+                    <li><strong>Special abilities</strong> based on your god parent</li>
                 </ul>
                 
                 <div class="info-box tip">
-                    <div class="info-box-title">💡 Use It or Lose It</div>
+                    <div class="info-box-title">Use It or Lose It</div>
                     <p>Blessings reset every 7 days whether you use them or not. Don't let them go to waste!</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>🔄 Sync with Minecraft</h2>
+                <h2>Sync with Minecraft</h2>
                 <p>Your blessing count syncs to Minecraft:</p>
                 <ul>
                     <li>Stored in the <code>chb_blessings</code> scoreboard</li>
@@ -1200,8 +1188,8 @@ const PAGES = {
         subtitle: 'Request custom adventures',
         content: `
             <div class="doc-section">
-                <h2>📜 Quest System</h2>
-                <p>True demigods don't wait for adventure—they seek it! Request custom quests for your character's journey.</p>
+                <h2>Quest System</h2>
+                <p>True demigods don't wait for adventure - they seek it! Request custom quests for your character's journey.</p>
                 
                 <div class="command">
                     <div class="command-name">!requestquest</div>
@@ -1210,22 +1198,22 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>📝 Submitting a Quest</h2>
+                <h2>Submitting a Quest</h2>
                 <p>When requesting a quest, provide:</p>
                 <ul>
-                    <li><strong>Quest Name</strong> — A title for your adventure</li>
-                    <li><strong>Description</strong> — What do you want to do? (20-500 characters)</li>
-                    <li><strong>Participants</strong> — Solo or list other players joining</li>
+                    <li><strong>Quest Name</strong> - A title for your adventure</li>
+                    <li><strong>Description</strong> - What do you want to do? (20-500 characters)</li>
+                    <li><strong>Participants</strong> - Solo or list other players joining</li>
                 </ul>
                 
                 <div class="info-box tip">
-                    <div class="info-box-title">💡 Good Quest Ideas</div>
+                    <div class="info-box-title">Good Quest Ideas</div>
                     <p>Tie your quest to mythology! Retrieve a legendary item, defeat a monster, explore a dangerous location, or help an NPC in need.</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>✅ Approval Process</h2>
+                <h2>Approval Process</h2>
                 <ol>
                     <li>Submit your quest request</li>
                     <li>Admins review and discuss</li>
@@ -1237,13 +1225,13 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>🏆 Quest Rewards</h2>
+                <h2>Quest Rewards</h2>
                 <p>Completed quests may reward:</p>
                 <ul>
-                    <li>💰 <strong>Drachma</strong> based on difficulty</li>
-                    <li>🎒 <strong>Special items</strong> not found in shops</li>
-                    <li>📜 <strong>Timeline entry</strong> commemorating your deeds</li>
-                    <li>✨ <strong>Titles or recognition</strong> in the community</li>
+                    <li><strong>Drachma</strong> based on difficulty</li>
+                    <li><strong>Special items</strong> not found in shops</li>
+                    <li><strong>Timeline entry</strong> commemorating your deeds</li>
+                    <li><strong>Titles or recognition</strong> in the community</li>
                 </ul>
             </div>
         `
@@ -1255,8 +1243,8 @@ const PAGES = {
         subtitle: 'Camp activities and scheduling',
         content: `
             <div class="doc-section">
-                <h2>🎭 Camp Events</h2>
-                <p>Camp Half-Blood hosts regular events—from chariot races to capture the flag, theatrical performances to tournaments!</p>
+                <h2>Camp Events</h2>
+                <p>Camp Half-Blood hosts regular events - from chariot races to capture the flag, theatrical performances to tournaments!</p>
                 
                 <div class="command">
                     <div class="command-name">!events</div>
@@ -1265,38 +1253,38 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>📅 Event Types</h2>
+                <h2>Event Types</h2>
                 
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <h4>🏇 Chariot Races</h4>
-                        <p>1st: 50💰, 2nd: 30💰, 3rd: 15💰</p>
+                        <h4>Chariot Races</h4>
+                        <p>1st: 50, 2nd: 30, 3rd: 15</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🚩 Capture the Flag</h4>
-                        <p>Winners: 40💰, MVP: +20💰</p>
+                        <h4>Capture the Flag</h4>
+                        <p>Winners: 40, MVP: +20</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🐉 Monster Hunts</h4>
-                        <p>Completion: 60💰</p>
+                        <h4>Monster Hunts</h4>
+                        <p>Completion: 60</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🏅 Olympian Games</h4>
-                        <p>Gold: 75💰, Silver: 50💰, Bronze: 25💰</p>
+                        <h4>Olympian Games</h4>
+                        <p>Gold: 75, Silver: 50, Bronze: 25</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🎭 Theater Shows</h4>
-                        <p>Participation: 10💰, Best Actor: 30💰</p>
+                        <h4>Theater Shows</h4>
+                        <p>Participation: 10, Best Actor: 30</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🔥 Campfires</h4>
+                        <h4>Campfires</h4>
                         <p>Social gatherings with stories and songs</p>
                     </div>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>📋 Creating Events</h2>
+                <h2>Creating Events</h2>
                 <p>Staff and cabin leaders can create events:</p>
                 
                 <div class="command">
@@ -1308,12 +1296,12 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>✋ RSVPing</h2>
+                <h2>RSVPing</h2>
                 <p>When viewing events, click to RSVP:</p>
                 <ul>
-                    <li>✅ <strong>Attending</strong> — You plan to participate</li>
-                    <li>❔ <strong>Maybe</strong> — You might make it</li>
-                    <li>❌ <strong>Not Attending</strong> — Can't make it</li>
+                    <li><strong>Attending</strong> - You plan to participate</li>
+                    <li><strong>Maybe</strong> - You might make it</li>
+                    <li><strong>Not Attending</strong> - Can't make it</li>
                 </ul>
             </div>
         `
@@ -1325,58 +1313,58 @@ const PAGES = {
         subtitle: 'Words from the gods',
         content: `
             <div class="doc-section">
-                <h2>🏛️ Divine Messages</h2>
+                <h2>Divine Messages</h2>
                 <p>The gods watch over Camp Half-Blood and occasionally share their wisdom (or complaints) with demigods!</p>
             </div>
 
             <div class="doc-section">
-                <h2>⛈️ Weather Messages</h2>
+                <h2>Weather Messages</h2>
                 <p>When weather changes in Minecraft, the gods might comment:</p>
                 <ul>
-                    <li>🌧️ <strong>Rain starts</strong> — Zeus, Poseidon, Demeter, or Iris may speak</li>
-                    <li>☀️ <strong>Rain stops</strong> — Apollo often takes credit</li>
-                    <li>⚡ <strong>Thunder</strong> — Zeus asserts his dominance</li>
+                    <li><strong>Rain starts</strong> - Zeus, Poseidon, Demeter, or Iris may speak</li>
+                    <li><strong>Rain stops</strong> - Apollo often takes credit</li>
+                    <li><strong>Thunder</strong> - Zeus asserts his dominance</li>
                 </ul>
             </div>
 
             <div class="doc-section">
-                <h2>🌅 Time-Based Messages</h2>
+                <h2>Time-Based Messages</h2>
                 <p>At certain times of day:</p>
                 <ul>
-                    <li>🌅 <strong>Dawn (6 AM)</strong> — Apollo, Eos, Artemis</li>
-                    <li>☀️ <strong>Noon (12 PM)</strong> — Apollo at his peak</li>
-                    <li>🌆 <strong>Dusk (6 PM)</strong> — Artemis, Hecate</li>
-                    <li>🌙 <strong>Midnight</strong> — Hecate, Hypnos, Hades, Nyx</li>
+                    <li><strong>Dawn (6 AM)</strong> - Apollo, Eos, Artemis</li>
+                    <li><strong>Noon (12 PM)</strong> - Apollo at his peak</li>
+                    <li><strong>Dusk (6 PM)</strong> - Artemis, Hecate</li>
+                    <li><strong>Midnight</strong> - Hecate, Hypnos, Hades, Nyx</li>
                 </ul>
             </div>
 
             <div class="doc-section">
-                <h2>📬 Divine Mail</h2>
+                <h2>Divine Mail</h2>
                 <p>Sometimes gods send personal messages to demigods!</p>
                 
                 <p>Message types include:</p>
                 <ul>
-                    <li>😄 <strong>Funny</strong> — Gods being their dramatic selves</li>
-                    <li>🧐 <strong>Serious</strong> — Actual wisdom and advice</li>
-                    <li>⚔️ <strong>Challenges</strong> — Tasks from your godly parent</li>
+                    <li><strong>Funny</strong> - Gods being their dramatic selves</li>
+                    <li><strong>Serious</strong> - Actual wisdom and advice</li>
+                    <li><strong>Challenges</strong> - Tasks from your godly parent</li>
                 </ul>
                 
                 <div class="info-box tip">
-                    <div class="info-box-title">💡 Be Interesting!</div>
+                    <div class="info-box-title">Be Interesting!</div>
                     <p>The more active you are, the more likely the gods are to notice you and send mail!</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>📖 Sample Messages</h2>
+                <h2>Sample Messages</h2>
                 <blockquote>
-                    <p>⚡ <strong>Zeus:</strong> "I saw what you did yesterday. Don't think I didn't notice. I notice EVERYTHING. Mostly because I'm bored."</p>
+                    <p><strong>Zeus:</strong> "I saw what you did yesterday. Don't think I didn't notice. I notice EVERYTHING. Mostly because I'm bored."</p>
                 </blockquote>
                 <blockquote>
-                    <p>☀️ <strong>Apollo:</strong> "Sun rises slowly / I am very beautiful / Please clap for me now"</p>
+                    <p><strong>Apollo:</strong> "Sun rises slowly / I am very beautiful / Please clap for me now"</p>
                 </blockquote>
                 <blockquote>
-                    <p>🦉 <strong>Athena:</strong> "Your cabin is disorganized. This is unacceptable. I've prepared a 47-page organization guide."</p>
+                    <p><strong>Athena:</strong> "Your cabin is disorganized. This is unacceptable. I've prepared a 47-page organization guide."</p>
                 </blockquote>
             </div>
         `
@@ -1388,8 +1376,8 @@ const PAGES = {
         subtitle: 'Record camp history',
         content: `
             <div class="doc-section">
-                <h2>📜 Camp Timeline</h2>
-                <p>The timeline records the history of Camp Half-Blood—battles won, quests completed, events held, and more!</p>
+                <h2>Camp Timeline</h2>
+                <p>The timeline records the history of Camp Half-Blood - battles won, quests completed, events held, and more!</p>
                 
                 <div class="command">
                     <div class="command-name">!timeline</div>
@@ -1403,22 +1391,22 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>🏷️ Categories</h2>
+                <h2>Categories</h2>
                 
                 <div class="feature-grid">
-                    <div class="feature-card"><h4>📅 Event</h4><p>Camp events and celebrations</p></div>
-                    <div class="feature-card"><h4>⚔️ Quest</h4><p>Quest completions</p></div>
-                    <div class="feature-card"><h4>🏆 Tournament</h4><p>Competition results</p></div>
-                    <div class="feature-card"><h4>🤝 Interaction</h4><p>Notable character moments</p></div>
-                    <div class="feature-card"><h4>🔮 Discovery</h4><p>Revelations and findings</p></div>
-                    <div class="feature-card"><h4>⚡ Battle</h4><p>Combat encounters</p></div>
-                    <div class="feature-card"><h4>🏛️ Ceremony</h4><p>Rituals and ceremonies</p></div>
-                    <div class="feature-card"><h4>📝 Other</h4><p>Everything else</p></div>
+                    <div class="feature-card"><h4>Event</h4><p>Camp events and celebrations</p></div>
+                    <div class="feature-card"><h4>Quest</h4><p>Quest completions</p></div>
+                    <div class="feature-card"><h4>Tournament</h4><p>Competition results</p></div>
+                    <div class="feature-card"><h4>Interaction</h4><p>Notable character moments</p></div>
+                    <div class="feature-card"><h4>Discovery</h4><p>Revelations and findings</p></div>
+                    <div class="feature-card"><h4>Battle</h4><p>Combat encounters</p></div>
+                    <div class="feature-card"><h4>Ceremony</h4><p>Rituals and ceremonies</p></div>
+                    <div class="feature-card"><h4>Other</h4><p>Everything else</p></div>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>➕ Adding Entries</h2>
+                <h2>Adding Entries</h2>
                 <p>Click "Add Entry" in the timeline view to record your own history!</p>
                 <ol>
                     <li>Select a <strong>category</strong> for your entry</li>
@@ -1428,18 +1416,18 @@ const PAGES = {
                 </ol>
                 
                 <div class="info-box tip">
-                    <div class="info-box-title">💡 Make History!</div>
+                    <div class="info-box-title">Make History!</div>
                     <p>Did something epic? Record it! The timeline is a living history of our camp.</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>✏️ Editing & Deleting</h2>
+                <h2>Editing & Deleting</h2>
                 <p>Select one of your entries to:</p>
                 <ul>
-                    <li>✏️ <strong>Edit</strong> — Update details or fix typos</li>
-                    <li>🏷️ <strong>Change Category</strong> — Recategorize the entry</li>
-                    <li>🗑️ <strong>Delete</strong> — Remove the entry entirely</li>
+                    <li><strong>Edit</strong> - Update details or fix typos</li>
+                    <li><strong>Change Category</strong> - Recategorize the entry</li>
+                    <li><strong>Delete</strong> - Remove the entry entirely</li>
                 </ul>
                 <p>You can only modify your own entries (admins can modify all).</p>
             </div>
@@ -1452,26 +1440,26 @@ const PAGES = {
         subtitle: 'Run your own business',
         content: `
             <div class="doc-section">
-                <h2>🏪 Player-Run Shops</h2>
+                <h2>Player-Run Shops</h2>
                 <p>Own a piece of Camp Half-Blood's economy! Player shops let you sell Minecraft items to other campers for Drachma.</p>
                 
                 <div class="info-box warning">
-                    <div class="info-box-title">⚠️ Requirement</div>
-                    <p>You need a <strong>Shop Permit</strong> (500💰) from <code>!shop</code> → Permits.</p>
+                    <div class="info-box-title">Requirement</div>
+                    <p>You need a <strong>Shop Permit</strong> (500 Drachma) from <code>!shop</code> -> Permits.</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>📝 Opening Your Shop</h2>
+                <h2>Opening Your Shop</h2>
                 
                 <div class="steps">
                     <div class="step-item">
                         <h4>Buy a Shop Permit</h4>
-                        <p>Use <code>!shop</code> → Permits → Shop Permit (500💰)</p>
+                        <p>Use <code>!shop</code> -> Permits -> Shop Permit (500)</p>
                     </div>
                     <div class="step-item">
                         <h4>Use the Permit</h4>
-                        <p><code>!inventory</code> → Select Permit → "Create My Shop"</p>
+                        <p><code>!inventory</code> -> Select Permit -> "Create My Shop"</p>
                     </div>
                     <div class="step-item">
                         <h4>Name Your Shop</h4>
@@ -1485,7 +1473,7 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>🛠️ Managing Your Shop</h2>
+                <h2>Managing Your Shop</h2>
                 
                 <div class="command">
                     <div class="command-name">!myshop</div>
@@ -1500,25 +1488,25 @@ const PAGES = {
                 
                 <p><strong>From management panel:</strong></p>
                 <ul>
-                    <li>➕ <strong>Add Listing</strong> — List a new item (max 5)</li>
-                    <li>📋 <strong>View Listings</strong> — See your active items</li>
-                    <li>📦 <strong>Pending Deliveries</strong> — Orders to fulfill</li>
-                    <li>✏️ <strong>Edit Shop</strong> — Change name/description</li>
+                    <li><strong>Add Listing</strong> - List a new item (max 5)</li>
+                    <li><strong>View Listings</strong> - See your active items</li>
+                    <li><strong>Pending Deliveries</strong> - Orders to fulfill</li>
+                    <li><strong>Edit Shop</strong> - Change name/description</li>
                 </ul>
             </div>
 
             <div class="doc-section">
-                <h2>📦 Order Fulfillment</h2>
+                <h2>Order Fulfillment</h2>
                 <p>When someone buys from you:</p>
                 <ol>
                     <li>You get <strong>mail</strong> with buyer's MC username</li>
                     <li>Meet them in Minecraft and trade items</li>
-                    <li><code>!myshop</code> → Pending → Mark Complete</li>
+                    <li><code>!myshop</code> -> Pending -> Mark Complete</li>
                     <li>Payment released to you!</li>
                 </ol>
 
                 <div class="info-box tip">
-                    <div class="info-box-title">💡 Security</div>
+                    <div class="info-box-title">Security</div>
                     <p>Payment is held in escrow until you confirm delivery!</p>
                 </div>
             </div>
@@ -1531,17 +1519,17 @@ const PAGES = {
         subtitle: 'Yu-Gi-Oh style card battles',
         content: `
             <div class="doc-section">
-                <h2>🃏 Shadow Realm Dueling</h2>
+                <h2>Shadow Realm Dueling</h2>
                 <p>A special card game where demigods can be challenged to Yu-Gi-Oh style duels!</p>
                 
                 <div class="info-box warning">
-                    <div class="info-box-title">⚠️ Special Feature</div>
+                    <div class="info-box-title">Special Feature</div>
                     <p>Shadow Duels can only be initiated by a specific designated duelist. If challenged, you can accept or decline!</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>⚔️ How Duels Work</h2>
+                <h2>How Duels Work</h2>
                 <ol>
                     <li>The duelist challenges you with <code>!duel @user</code></li>
                     <li>You have 5 minutes to accept or decline</li>
@@ -1553,57 +1541,55 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>🎴 Card Types</h2>
+                <h2>Card Types</h2>
                 
                 <h3>Monster Cards</h3>
                 <p>Summon monsters to attack! Higher ATK means more damage.</p>
                 <ul>
-                    <li>🧙 Dark Magician (2500 ATK)</li>
-                    <li>🐉 Blue-Eyes White Dragon (3000 ATK)</li>
-                    <li>🔴 Red-Eyes Black Dragon (2400 ATK)</li>
-                    <li>💀 Summoned Skull (2500 ATK)</li>
-                    <li>✨ Dark Magician Girl (2000 ATK)</li>
-                    <li>⚫ Black Luster Soldier (3000 ATK)</li>
+                    <li>Dark Magician (2500 ATK)</li>
+                    <li>Blue-Eyes White Dragon (3000 ATK)</li>
+                    <li>Red-Eyes Black Dragon (2400 ATK)</li>
+                    <li>Summoned Skull (2500 ATK)</li>
+                    <li>Dark Magician Girl (2000 ATK)</li>
+                    <li>Black Luster Soldier (3000 ATK)</li>
                 </ul>
                 
                 <h3>Spell Cards</h3>
                 <p>Powerful one-time effects:</p>
                 <ul>
-                    <li>🗡️ Swords of Revealing Light — Opponent skips turn</li>
-                    <li>♻️ Monster Reborn — Restore 500 LP</li>
-                    <li>🏺 Pot of Greed — Draw 2 cards</li>
-                    <li>⚫ Dark Hole — Destroy opponent's monster</li>
-                    <li>⚡ Raigeki — Deal 800 direct damage</li>
+                    <li>Swords of Revealing Light - Opponent skips turn</li>
+                    <li>Monster Reborn - Restore 500 LP</li>
+                    <li>Pot of Greed - Draw 2 cards</li>
+                    <li>Dark Hole - Destroy opponent's monster</li>
+                    <li>Raigeki - Deal 800 direct damage</li>
                 </ul>
                 
                 <h3>Trap Cards</h3>
                 <p>Defensive surprises:</p>
                 <ul>
-                    <li>🪞 Mirror Force — Reflect attack damage</li>
-                    <li>🎯 Magic Cylinder — Negate attack + 1000 damage</li>
-                    <li>🪤 Trap Hole — Destroy attacking monster</li>
-                    <li>🚫 Negate Attack — Cancel the attack</li>
+                    <li>Mirror Force - Reflect attack damage</li>
+                    <li>Magic Cylinder - Negate attack + 1000 damage</li>
+                    <li>Trap Hole - Destroy attacking monster</li>
+                    <li>Negate Attack - Cancel the attack</li>
                 </ul>
             </div>
 
             <div class="doc-section">
-                <h2>💰 Rewards</h2>
+                <h2>Rewards</h2>
                 
                 <div class="table-container">
                     <table>
                         <tr><th>Outcome</th><th>Reward</th></tr>
-                        <tr><td>🏆 Win the duel</td><td>25 💰</td></tr>
-                        <tr><td>😴 Opponent doesn't respond</td><td>10 💰 (forfeit)</td></tr>
-                        <tr><td>❌ Lose the duel</td><td>0 💰</td></tr>
+                        <tr><td>Win the duel</td><td>25 Drachma</td></tr>
+                        <tr><td>Opponent doesn't respond</td><td>10 Drachma (forfeit)</td></tr>
+                        <tr><td>Lose the duel</td><td>0 Drachma</td></tr>
                     </table>
                 </div>
             </div>
         `
     },
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // MINECRAFT PAGES
-    // ═══════════════════════════════════════════════════════════════════════
+    // Minecraft pages
 
     'mclink': {
         icon: '🔗',
@@ -1611,31 +1597,31 @@ const PAGES = {
         subtitle: 'Connect Discord and Minecraft',
         content: `
             <div class="doc-section">
-                <h2>🔗 Why Link Your Accounts?</h2>
+                <h2>Why Link Your Accounts?</h2>
                 <p>Linking your Discord and Minecraft accounts unlocks the full Camp Half-Blood experience:</p>
                 
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <h4>💰 Synced Economy</h4>
+                        <h4>Synced Economy</h4>
                         <p>Drachma earned anywhere is available everywhere</p>
                     </div>
                     <div class="feature-card">
-                        <h4>⚡ God Effects</h4>
+                        <h4>God Effects</h4>
                         <p>Your godly parent's blessing follows you in-game</p>
                     </div>
                     <div class="feature-card">
-                        <h4>📊 Skill Effects</h4>
+                        <h4>Skill Effects</h4>
                         <p>Upgrade skills in Discord, get buffs in Minecraft</p>
                     </div>
                     <div class="feature-card">
-                        <h4>📦 Item Delivery</h4>
+                        <h4>Item Delivery</h4>
                         <p>Buy items in Discord, receive them in-game</p>
                     </div>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>🔗 How to Link</h2>
+                <h2>How to Link</h2>
                 
                 <div class="command">
                     <div class="command-name">!mclink [MinecraftUsername]</div>
@@ -1658,25 +1644,25 @@ const PAGES = {
                 </div>
                 
                 <div class="info-box warning">
-                    <div class="info-box-title">⚠️ Exact Username Required</div>
+                    <div class="info-box-title">Exact Username Required</div>
                     <p>Use your exact Minecraft username (case-sensitive). Java Edition usernames are 3-16 characters.</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>✅ After Linking</h2>
+                <h2>After Linking</h2>
                 <p>Once linked, the following happens automatically:</p>
                 <ul>
-                    <li>🔄 <strong>Sync runs every 30 seconds</strong> when you're online in MC</li>
-                    <li>⚡ <strong>God effects apply</strong> based on your claimed parent</li>
-                    <li>🎨 <strong>Name color</strong> updates to your god's color</li>
-                    <li>💰 <strong>Drachma syncs</strong> between platforms</li>
-                    <li>📊 <strong>Skills apply</strong> their bonuses</li>
+                    <li><strong>Sync runs every 30 seconds</strong> when you're online in MC</li>
+                    <li><strong>God effects apply</strong> based on your claimed parent</li>
+                    <li><strong>Name color</strong> updates to your god's color</li>
+                    <li><strong>Drachma syncs</strong> between platforms</li>
+                    <li><strong>Skills apply</strong> their bonuses</li>
                 </ul>
             </div>
 
             <div class="doc-section">
-                <h2>🔄 How Sync Works</h2>
+                <h2>How Sync Works</h2>
                 <ul>
                     <li><strong>Discord is Source:</strong> Your Discord balance is the master</li>
                     <li><strong>Deposits Add:</strong> <code>/chbdeposit</code> in MC adds to Discord</li>
@@ -1693,17 +1679,17 @@ const PAGES = {
         subtitle: 'In-game command reference',
         content: `
             <div class="doc-section">
-                <h2>⛏️ Minecraft Commands</h2>
+                <h2>Minecraft Commands</h2>
                 <p>Available when your account is linked via <code>!mclink</code>.</p>
                 
                 <div class="info-box warning">
-                    <div class="info-box-title">⚠️ Link Required</div>
+                    <div class="info-box-title">Link Required</div>
                     <p>Use <code>!mclink YourName</code> on Discord first!</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>👤 Profile Commands</h2>
+                <h2>Profile Commands</h2>
                 
                 <div class="command">
                     <div class="command-name">/chbprofile</div>
@@ -1727,7 +1713,7 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>💰 Economy Commands</h2>
+                <h2>Economy Commands</h2>
                 
                 <div class="command">
                     <div class="command-name">/chbdeposit</div>
@@ -1746,7 +1732,7 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>✨ Other Commands</h2>
+                <h2>Other Commands</h2>
                 
                 <div class="command">
                     <div class="command-name">/trigger blessing</div>
@@ -1777,12 +1763,12 @@ const PAGES = {
         subtitle: 'Managing Drachma between platforms',
         content: `
             <div class="doc-section">
-                <h2>🔄 Two-Way Economy</h2>
+                <h2>Two-Way Economy</h2>
                 <p>Move Drachma between Discord and Minecraft as physical items!</p>
             </div>
 
             <div class="doc-section">
-                <h2>💰 Depositing</h2>
+                <h2>Depositing</h2>
                 
                 <div class="command">
                     <div class="command-name">/chbdeposit</div>
@@ -1799,7 +1785,7 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>💸 Withdrawing</h2>
+                <h2>Withdrawing</h2>
                 
                 <div class="command">
                     <div class="command-name">/chbwithdraw [amount]</div>
@@ -1807,13 +1793,13 @@ const PAGES = {
                 </div>
 
                 <div class="info-box warning">
-                    <div class="info-box-title">⚠️ Caution</div>
+                    <div class="info-box-title">Caution</div>
                     <p>Physical Drachma can be lost if you die! Only withdraw what you need.</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>📦 Receiving Purchases</h2>
+                <h2>Receiving Purchases</h2>
                 
                 <div class="command">
                     <div class="command-name">/chbpending</div>
@@ -1831,61 +1817,61 @@ const PAGES = {
         subtitle: 'Nametag colors & potion effects',
         content: `
             <div class="doc-section">
-                <h2>✨ Divine Blessings</h2>
+                <h2>Divine Blessings</h2>
                 <p>Your god parent grants nametag colors and permanent potion effects in Minecraft!</p>
             </div>
 
             <div class="doc-section">
-                <h2>🎨 Nametag Colors</h2>
+                <h2>Nametag Colors</h2>
                 
                 <div class="table-container">
                     <table>
                         <tr><th>God</th><th>Color</th></tr>
-                        <tr><td>⚡ Zeus</td><td style="color: yellow;">Yellow</td></tr>
-                        <tr><td>🔱 Poseidon</td><td style="color: aqua;">Aqua</td></tr>
-                        <tr><td>💀 Hades</td><td style="color: gray;">Dark Gray</td></tr>
-                        <tr><td>🦉 Athena</td><td style="color: silver;">Silver</td></tr>
-                        <tr><td>☀️ Apollo</td><td style="color: gold;">Gold</td></tr>
-                        <tr><td>🏹 Artemis</td><td style="color: white;">White</td></tr>
-                        <tr><td>⚔️ Ares</td><td style="color: darkred;">Dark Red</td></tr>
-                        <tr><td>💕 Aphrodite</td><td style="color: pink;">Pink</td></tr>
-                        <tr><td>🔨 Hephaestus</td><td style="color: orangered;">Orange</td></tr>
-                        <tr><td>👟 Hermes</td><td style="color: lime;">Green</td></tr>
-                        <tr><td>🌾 Demeter</td><td style="color: green;">Dark Green</td></tr>
-                        <tr><td>🍇 Dionysus</td><td style="color: purple;">Purple</td></tr>
-                        <tr><td>🌙 Hecate</td><td style="color: darkviolet;">Dark Purple</td></tr>
+                        <tr><td>Zeus</td><td style="color: yellow;">Yellow</td></tr>
+                        <tr><td>Poseidon</td><td style="color: aqua;">Aqua</td></tr>
+                        <tr><td>Hades</td><td style="color: gray;">Dark Gray</td></tr>
+                        <tr><td>Athena</td><td style="color: silver;">Silver</td></tr>
+                        <tr><td>Apollo</td><td style="color: gold;">Gold</td></tr>
+                        <tr><td>Artemis</td><td style="color: white;">White</td></tr>
+                        <tr><td>Ares</td><td style="color: darkred;">Dark Red</td></tr>
+                        <tr><td>Aphrodite</td><td style="color: pink;">Pink</td></tr>
+                        <tr><td>Hephaestus</td><td style="color: orangered;">Orange</td></tr>
+                        <tr><td>Hermes</td><td style="color: lime;">Green</td></tr>
+                        <tr><td>Demeter</td><td style="color: green;">Dark Green</td></tr>
+                        <tr><td>Dionysus</td><td style="color: purple;">Purple</td></tr>
+                        <tr><td>Hecate</td><td style="color: darkviolet;">Dark Purple</td></tr>
                     </table>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>🧪 Permanent Effects</h2>
+                <h2>Permanent Effects</h2>
                 
                 <div class="table-container">
                     <table>
                         <tr><th>God</th><th>Effect</th></tr>
-                        <tr><td>⚡ Zeus</td><td>Jump Boost I, Lightning resistance</td></tr>
-                        <tr><td>🔱 Poseidon</td><td>Water Breathing, Dolphin's Grace</td></tr>
-                        <tr><td>💀 Hades</td><td>Fire Resistance, Night Vision</td></tr>
-                        <tr><td>🦉 Athena</td><td>Haste I, Enhanced XP</td></tr>
-                        <tr><td>☀️ Apollo</td><td>Regeneration I</td></tr>
-                        <tr><td>🏹 Artemis</td><td>Speed I, Night Vision</td></tr>
-                        <tr><td>⚔️ Ares</td><td>Strength I</td></tr>
-                        <tr><td>🔨 Hephaestus</td><td>Fire Resistance, Haste</td></tr>
-                        <tr><td>🌙 Hecate</td><td>Night Vision</td></tr>
-                        <tr><td>🎲 Tyche</td><td>Luck</td></tr>
-                        <tr><td>👟 Hermes</td><td>Speed I, Luck</td></tr>
+                        <tr><td>Zeus</td><td>Jump Boost I, Lightning resistance</td></tr>
+                        <tr><td>Poseidon</td><td>Water Breathing, Dolphin's Grace</td></tr>
+                        <tr><td>Hades</td><td>Fire Resistance, Night Vision</td></tr>
+                        <tr><td>Athena</td><td>Haste I, Enhanced XP</td></tr>
+                        <tr><td>Apollo</td><td>Regeneration I</td></tr>
+                        <tr><td>Artemis</td><td>Speed I, Night Vision</td></tr>
+                        <tr><td>Ares</td><td>Strength I</td></tr>
+                        <tr><td>Hephaestus</td><td>Fire Resistance, Haste</td></tr>
+                        <tr><td>Hecate</td><td>Night Vision</td></tr>
+                        <tr><td>Tyche</td><td>Luck</td></tr>
+                        <tr><td>Hermes</td><td>Speed I, Luck</td></tr>
                     </table>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>⚙️ How Effects Apply</h2>
+                <h2>How Effects Apply</h2>
                 <ul>
                     <li>Effects apply automatically when you join (if linked)</li>
                     <li>They refresh every 30 seconds during sync</li>
                     <li>Changing your god parent in Discord updates MC on next sync</li>
-                    <li>Effects are permanent while online—no potion needed!</li>
+                    <li>Effects are permanent while online - no potion needed!</li>
                 </ul>
             </div>
         `
@@ -1897,17 +1883,17 @@ const PAGES = {
         subtitle: 'Complete guide to demigod abilities',
         content: `
             <div class="doc-section">
-                <h2>⚔️ The Skill System</h2>
+                <h2>The Skill System</h2>
                 <p>Every demigod can train and improve their abilities through the skill tree system. Spend your <strong>Minecraft XP Levels</strong> to unlock powerful upgrades that grant real effects in-game!</p>
                 
                 <div class="info-box tip">
-                    <div class="info-box-title">💡 Cross-Platform Power</div>
+                    <div class="info-box-title">Cross-Platform Power</div>
                     <p>Skills are upgraded via <strong>Discord</strong> but apply real effects in <strong>Minecraft</strong>. You must link your accounts with <code>!mclink</code> first!</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>💬 Discord Commands</h2>
+                <h2>Discord Commands</h2>
                 
                 <div class="command">
                     <div class="command-name">!skills</div>
@@ -1923,7 +1909,7 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>⭐ XP Level Costs</h2>
+                <h2>XP Level Costs</h2>
                 <p>Skills are purchased with your Minecraft XP levels. You must be <strong>online in Minecraft</strong> to upgrade!</p>
                 
                 <div class="table-container">
@@ -1938,26 +1924,26 @@ const PAGES = {
                 </div>
 
                 <div class="info-box warning">
-                    <div class="info-box-title">⚠️ Choose Wisely</div>
+                    <div class="info-box-title">Choose Wisely</div>
                     <p>Skill upgrades are <strong>permanent</strong>. Plan your build before spending! Total cost for one T5 skill: 600 XP levels.</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>🎯 Major & Minor Specializations</h2>
+                <h2>Major & Minor Specializations</h2>
                 <p>At <strong>Tier 3</strong>, you must commit to a skill as your Major or Minor. This determines how far you can progress:</p>
                 
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <h4>★ Major Skill</h4>
+                        <h4>Major Skill</h4>
                         <p>Can reach <strong>Tier 5</strong> (Mastery). You get <strong>ONE</strong> Major.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>◆ Minor Skill</h4>
+                        <h4>Minor Skill</h4>
                         <p>Capped at <strong>Tier 4</strong>. You get <strong>ONE</strong> Minor.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>○ Dabbling</h4>
+                        <h4>Dabbling</h4>
                         <p>All other skills capped at <strong>Tier 2</strong>.</p>
                     </div>
                 </div>
@@ -1965,11 +1951,8 @@ const PAGES = {
                 <p>This means you can have: 1 skill at T5, 1 skill at T4, and up to 8 skills at T2.</p>
             </div>
 
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
-            <!-- WARFARE -->
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
             <div class="doc-section">
-                <h2>⚔️ Warfare — Master of Blade and Battle</h2>
+                <h2>Warfare - Master of Blade and Battle</h2>
                 <p>Become a devastating melee combatant with increased damage, attack speed, and the Strength effect.</p>
                 
                 <div class="table-container">
@@ -1982,14 +1965,11 @@ const PAGES = {
                         <tr><td>T5</td><td>Blade Master</td><td>200</td><td>+2 Attack Damage, +20% KB Resist, <span style="color: #44ff44;">Strength I</span></td></tr>
                     </table>
                 </div>
-                <p><strong>🏆 God of War (T5 Total):</strong> +5 Damage, +15% Attack Speed, +30% KB Resist, Permanent Strength I</p>
+                <p><strong>God of War (T5 Total):</strong> +5 Damage, +15% Attack Speed, +30% KB Resist, Permanent Strength I</p>
             </div>
 
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
-            <!-- MARKSMANSHIP -->
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
             <div class="doc-section">
-                <h2>🏹 Marksmanship — Every Arrow Finds Its Mark</h2>
+                <h2>Marksmanship - Every Arrow Finds Its Mark</h2>
                 <p>Perfect your ranged combat with damage bonuses and a chance for devastating critical shots.</p>
                 
                 <div class="table-container">
@@ -2002,14 +1982,11 @@ const PAGES = {
                         <tr><td>T5</td><td>Eagle Eye</td><td>200</td><td>+2 Attack Damage, <span style="color: #ffd700;">10% Double Arrow Damage</span></td></tr>
                     </table>
                 </div>
-                <p><strong>🏆 Legendary Hunter (T5 Total):</strong> +5 Damage, +25% Attack Speed, 10% chance for double arrow damage</p>
+                <p><strong>Legendary Hunter (T5 Total):</strong> +5 Damage, +25% Attack Speed, 10% chance for double arrow damage</p>
             </div>
 
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
-            <!-- FORGING -->
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
             <div class="doc-section">
-                <h2>⚒️ Forging — Shape Metal with Divine Precision</h2>
+                <h2>Forging - Shape Metal with Divine Precision</h2>
                 <p>Mine faster, auto-smelt ores, and get bonus drops. The ultimate resource gatherer.</p>
                 
                 <div class="table-container">
@@ -2022,19 +1999,16 @@ const PAGES = {
                         <tr><td>T5</td><td>Forge Lord</td><td>200</td><td><span style="color: #44ff44;">Haste III, Fire Resistance</span></td></tr>
                     </table>
                 </div>
-                <p><strong>🏆 Divine Craftsman (T5 Total):</strong> Haste III, Auto-Smelt Ores, 10% Double Drops, Fire Resistance</p>
+                <p><strong>Divine Craftsman (T5 Total):</strong> Haste III, Auto-Smelt Ores, 10% Double Drops, Fire Resistance</p>
                 
                 <div class="info-box tip">
-                    <div class="info-box-title">⛏️ Mining Pro Tip</div>
+                    <div class="info-box-title">Mining Pro Tip</div>
                     <p>Auto-smelt at T3 instantly converts raw ores to ingots when mined. Combined with 10% double drops at T4, you'll be swimming in resources!</p>
                 </div>
             </div>
 
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
-            <!-- ATHLETICS -->
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
             <div class="doc-section">
-                <h2>🏃 Athletics — Swift as Hermes Himself</h2>
+                <h2>Athletics - Swift as Hermes Himself</h2>
                 <p>Outrun any monster and leap across chasms. Maximum mobility for exploration.</p>
                 
                 <div class="table-container">
@@ -2047,14 +2021,11 @@ const PAGES = {
                         <tr><td>T5</td><td>Speed Demon</td><td>200</td><td>+10% Movement Speed, <span style="color: #44ff44;">Permanent Speed I</span></td></tr>
                     </table>
                 </div>
-                <p><strong>🏆 Wind Walker (T5 Total):</strong> +40% Movement Speed, Jump Boost III, Speed I Effect</p>
+                <p><strong>Wind Walker (T5 Total):</strong> +40% Movement Speed, Jump Boost III, Speed I Effect</p>
             </div>
 
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
-            <!-- FORTITUDE -->
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
             <div class="doc-section">
-                <h2>🛡️ Fortitude — Unyielding as Mountain Stone</h2>
+                <h2>Fortitude - Unyielding as Mountain Stone</h2>
                 <p>Become an unstoppable tank with bonus health, armor, and damage resistance.</p>
                 
                 <div class="table-container">
@@ -2067,14 +2038,11 @@ const PAGES = {
                         <tr><td>T5</td><td>Unbreakable</td><td>200</td><td>+4 Health, +2 Armor, +20% KB Resist, <span style="color: #44ff44;">Resistance I</span></td></tr>
                     </table>
                 </div>
-                <p><strong>🏆 Living Fortress (T5 Total):</strong> +14 Health (+7 hearts), +4 Armor, +2 Toughness, +30% KB Resist, Resistance I</p>
+                <p><strong>Living Fortress (T5 Total):</strong> +14 Health (+7 hearts), +4 Armor, +2 Toughness, +30% KB Resist, Resistance I</p>
             </div>
 
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
-            <!-- SURVIVAL -->
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
             <div class="doc-section">
-                <h2>🌿 Survival — One with the Wild</h2>
+                <h2>Survival - One with the Wild</h2>
                 <p>Live off the land with enhanced healing, regeneration, and sustenance effects.</p>
                 
                 <div class="table-container">
@@ -2087,14 +2055,11 @@ const PAGES = {
                         <tr><td>T5</td><td>Nature's Chosen</td><td>200</td><td>+4 Max Health, <span style="color: #44ff44;">Hero of the Village</span></td></tr>
                     </table>
                 </div>
-                <p><strong>🏆 Wild Heart (T5 Total):</strong> +8 Max Health, Regeneration II, Saturation, Food Heal Bonus, Hero of the Village</p>
+                <p><strong>Wild Heart (T5 Total):</strong> +8 Max Health, Regeneration II, Saturation, Food Heal Bonus, Hero of the Village</p>
             </div>
 
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
-            <!-- STEALTH -->
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
             <div class="doc-section">
-                <h2>🥷 Stealth — Unseen, Unheard, Unstoppable</h2>
+                <h2>Stealth - Unseen, Unheard, Unstoppable</h2>
                 <p>Move through shadows with fast sneaking, night vision, and invisibility.</p>
                 
                 <div class="table-container">
@@ -2107,19 +2072,16 @@ const PAGES = {
                         <tr><td>T5</td><td>Shade</td><td>200</td><td><span style="color: #ffd700;">Invisibility while sneaking</span>, <span style="color: #44ff44;">Slow Falling</span></td></tr>
                     </table>
                 </div>
-                <p><strong>🏆 Living Shadow (T5 Total):</strong> Fast Sneak (Speed II), 7-block Fall Buffer, Night Vision, Sneak Invisibility, Slow Falling</p>
+                <p><strong>Living Shadow (T5 Total):</strong> Fast Sneak (Speed II), 7-block Fall Buffer, Night Vision, Sneak Invisibility, Slow Falling</p>
                 
                 <div class="info-box tip">
-                    <div class="info-box-title">🥷 Assassin Tactics</div>
-                    <p>T5 Invisibility only activates while crouching — perfect for setting up ambushes or escaping danger!</p>
+                    <div class="info-box-title">Assassin Tactics</div>
+                    <p>T5 Invisibility only activates while crouching - perfect for setting up ambushes or escaping danger!</p>
                 </div>
             </div>
 
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
-            <!-- MYSTICISM -->
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
             <div class="doc-section">
-                <h2>✨ Mysticism — Touched by Arcane Power</h2>
+                <h2>Mysticism - Touched by Arcane Power</h2>
                 <p>Bend luck in your favor for better loot drops, fishing, and rare finds.</p>
                 
                 <div class="table-container">
@@ -2132,19 +2094,16 @@ const PAGES = {
                         <tr><td>T5</td><td>Archmage</td><td>200</td><td>+3 Luck, <span style="color: #44ff44;">Luck II Effect, Conduit Power</span></td></tr>
                     </table>
                 </div>
-                <p><strong>🏆 Fate Weaver (T5 Total):</strong> +10 Luck Attribute, Luck II Effect, Conduit Power, Glowing</p>
+                <p><strong>Fate Weaver (T5 Total):</strong> +10 Luck Attribute, Luck II Effect, Conduit Power, Glowing</p>
                 
                 <div class="info-box tip">
-                    <div class="info-box-title">🎣 What Does Luck Do?</div>
+                    <div class="info-box-title">What Does Luck Do?</div>
                     <p>Luck affects fishing loot quality, chest loot tables, and certain mob drops. +10 Luck means significantly more rare items!</p>
                 </div>
             </div>
 
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
-            <!-- SEAFARING -->
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
             <div class="doc-section">
-                <h2>🌊 Seafaring — Child of the Endless Seas</h2>
+                <h2>Seafaring - Child of the Endless Seas</h2>
                 <p>Rule the oceans with water breathing, fast swimming, and underwater power.</p>
                 
                 <div class="table-container">
@@ -2157,19 +2116,16 @@ const PAGES = {
                         <tr><td>T5</td><td>Ocean Lord</td><td>200</td><td>Full Conduit Power, <span style="color: #ffd700;">Special Trident</span> on first login</td></tr>
                     </table>
                 </div>
-                <p><strong>🏆 Poseidon's Heir (T5 Total):</strong> Dolphin's Grace, Water Breathing, Conduit Power, +4 Health, Legendary Trident</p>
+                <p><strong>Poseidon's Heir (T5 Total):</strong> Dolphin's Grace, Water Breathing, Conduit Power, +4 Health, Legendary Trident</p>
                 
                 <div class="info-box tip">
-                    <div class="info-box-title">🔱 Ocean Synergy</div>
-                    <p>Children of Poseidon get Water Breathing from their god parent — combine with Seafaring for ultimate aquatic dominance!</p>
+                    <div class="info-box-title">Ocean Synergy</div>
+                    <p>Children of Poseidon get Water Breathing from their god parent - combine with Seafaring for ultimate aquatic dominance!</p>
                 </div>
             </div>
 
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
-            <!-- LEADERSHIP -->
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
             <div class="doc-section">
-                <h2>👑 Leadership — Born to Lead, Destined to Inspire</h2>
+                <h2>Leadership - Born to Lead, Destined to Inspire</h2>
                 <p>Grant powerful buff auras to nearby cabin members. The ultimate support build.</p>
                 
                 <div class="table-container">
@@ -2182,68 +2138,65 @@ const PAGES = {
                         <tr><td>T5</td><td>Legendary Leader</td><td>200</td><td><span style="color: #44ff44;">Strength + Resistance aura</span>, 200 block range</td></tr>
                     </table>
                 </div>
-                <p><strong>🏆 Heroic Commander (T5 Total):</strong> 200-block aura granting Health Boost, Speed, Strength, and Resistance to cabin members</p>
+                <p><strong>Heroic Commander (T5 Total):</strong> 200-block aura granting Health Boost, Speed, Strength, and Resistance to cabin members</p>
                 
                 <div class="info-box warning">
-                    <div class="info-box-title">⚠️ Cabin Required</div>
+                    <div class="info-box-title">Cabin Required</div>
                     <p>Leadership auras <strong>only affect members of YOUR cabin</strong>. You must join or create a cabin first!</p>
                 </div>
             </div>
 
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
-            <!-- COMPARISON & BUILDS -->
-            <!-- ═══════════════════════════════════════════════════════════════════ -->
             <div class="doc-section">
-                <h2>📊 Skill Comparison Chart</h2>
+                <h2>Skill Comparison Chart</h2>
                 
                 <div class="table-container">
                     <table>
                         <tr><th>Skill</th><th>Best For</th><th>Key T5 Perk</th></tr>
-                        <tr><td>⚔️ Warfare</td><td>PvP, Boss Fights</td><td>Strength I + huge damage</td></tr>
-                        <tr><td>🏹 Marksmanship</td><td>Ranged Combat</td><td>10% double arrow damage</td></tr>
-                        <tr><td>⚒️ Forging</td><td>Mining, Resources</td><td>Auto-smelt + double ore</td></tr>
-                        <tr><td>🏃 Athletics</td><td>Exploration, Escape</td><td>Jump III + Speed I</td></tr>
-                        <tr><td>🛡️ Fortitude</td><td>Tanking, Survival</td><td>+7 hearts + Resistance</td></tr>
-                        <tr><td>🌿 Survival</td><td>Long Expeditions</td><td>Regen II + Hero of Village</td></tr>
-                        <tr><td>🥷 Stealth</td><td>Ambushes, Scouting</td><td>Sneak Invisibility</td></tr>
-                        <tr><td>✨ Mysticism</td><td>Loot, Fishing</td><td>+10 Luck + Conduit</td></tr>
-                        <tr><td>🌊 Seafaring</td><td>Ocean Content</td><td>Conduit + Trident</td></tr>
-                        <tr><td>👑 Leadership</td><td>Group/Cabin Play</td><td>200-block team buffs</td></tr>
+                        <tr><td>Warfare</td><td>PvP, Boss Fights</td><td>Strength I + huge damage</td></tr>
+                        <tr><td>Marksmanship</td><td>Ranged Combat</td><td>10% double arrow damage</td></tr>
+                        <tr><td>Forging</td><td>Mining, Resources</td><td>Auto-smelt + double ore</td></tr>
+                        <tr><td>Athletics</td><td>Exploration, Escape</td><td>Jump III + Speed I</td></tr>
+                        <tr><td>Fortitude</td><td>Tanking, Survival</td><td>+7 hearts + Resistance</td></tr>
+                        <tr><td>Survival</td><td>Long Expeditions</td><td>Regen II + Hero of Village</td></tr>
+                        <tr><td>Stealth</td><td>Ambushes, Scouting</td><td>Sneak Invisibility</td></tr>
+                        <tr><td>Mysticism</td><td>Loot, Fishing</td><td>+10 Luck + Conduit</td></tr>
+                        <tr><td>Seafaring</td><td>Ocean Content</td><td>Conduit + Trident</td></tr>
+                        <tr><td>Leadership</td><td>Group/Cabin Play</td><td>200-block team buffs</td></tr>
                     </table>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>💡 Recommended Builds</h2>
+                <h2>Recommended Builds</h2>
                 
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <h4>⚔️ The Gladiator</h4>
+                        <h4>The Gladiator</h4>
                         <p><strong>Major:</strong> Warfare<br><strong>Minor:</strong> Fortitude<br><strong>Dabble:</strong> Athletics T2</p>
                         <p style="font-size: 0.85rem; margin-top: 0.5rem;">Maximum melee damage with tankiness to survive fights.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>⛏️ The Prospector</h4>
+                        <h4>The Prospector</h4>
                         <p><strong>Major:</strong> Forging<br><strong>Minor:</strong> Mysticism<br><strong>Dabble:</strong> Fortitude T2</p>
                         <p style="font-size: 0.85rem; margin-top: 0.5rem;">Auto-smelt + double ore + high luck = infinite resources.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🥷 The Assassin</h4>
+                        <h4>The Assassin</h4>
                         <p><strong>Major:</strong> Stealth<br><strong>Minor:</strong> Warfare<br><strong>Dabble:</strong> Athletics T2</p>
                         <p style="font-size: 0.85rem; margin-top: 0.5rem;">Invisibility + high damage = deadly ambush strikes.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>👑 The Commander</h4>
+                        <h4>The Commander</h4>
                         <p><strong>Major:</strong> Leadership<br><strong>Minor:</strong> Fortitude<br><strong>Dabble:</strong> Warfare T2</p>
                         <p style="font-size: 0.85rem; margin-top: 0.5rem;">Buff your entire cabin while staying alive in combat.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🌊 The Aquanaut</h4>
+                        <h4>The Aquanaut</h4>
                         <p><strong>Major:</strong> Seafaring<br><strong>Minor:</strong> Survival<br><strong>Dabble:</strong> Mysticism T2</p>
                         <p style="font-size: 0.85rem; margin-top: 0.5rem;">Rule the oceans with unlimited breathing and fast swimming.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🏃 The Scout</h4>
+                        <h4>The Scout</h4>
                         <p><strong>Major:</strong> Athletics<br><strong>Minor:</strong> Stealth<br><strong>Dabble:</strong> Survival T2</p>
                         <p style="font-size: 0.85rem; margin-top: 0.5rem;">Maximum speed + jump + night vision for exploration.</p>
                     </div>
@@ -2252,28 +2205,23 @@ const PAGES = {
         `
     },
 
-    // ═══════════════════════════════════════════════════════════════════════
-// ADD THIS TO YOUR pages.js FILE
-// Insert this in the PAGES object, after the 'skills' page entry
-// ═══════════════════════════════════════════════════════════════════════
-
 'shrines': {
     icon: '🏛️',
     title: 'Divine Shrines',
     subtitle: 'Build monuments for cabin-wide buffs',
     content: `
         <div class="doc-section">
-            <h2>🏛️ Shrine System</h2>
+            <h2>Shrine System</h2>
             <p>Build shrines to the gods and receive powerful cabin-wide buffs! Each shrine grants unique effects to all cabin members within range.</p>
             
             <div class="info-box warning">
-                <div class="info-box-title">⚠️ Cabin Feature</div>
+                <div class="info-box-title">Cabin Feature</div>
                 <p>Shrines are a <strong>cabin feature</strong>. You must be in a cabin to build and benefit from shrines!</p>
             </div>
         </div>
 
         <div class="doc-section">
-            <h2>🏗️ Building Shrines</h2>
+            <h2>Building Shrines</h2>
             <p>Each cabin can build up to <strong>2 shrines</strong>.</p>
             
             <div class="steps">
@@ -2291,7 +2239,7 @@ const PAGES = {
                 </div>
                 <div class="step-item">
                     <h4>Pay the Cost</h4>
-                    <p>1000 💰 Drachma to register the shrine.</p>
+                    <p>1000 Drachma to register the shrine.</p>
                 </div>
                 <div class="step-item">
                     <h4>Build Around It</h4>
@@ -2301,13 +2249,13 @@ const PAGES = {
         </div>
 
         <div class="doc-section">
-            <h2>⚡ Fuel System</h2>
+            <h2>Fuel System</h2>
             <p>Shrines require <strong>fuel</strong> to stay active:</p>
             <ul>
-                <li>🟢 <strong>Start at 100%</strong> fuel when built</li>
-                <li>⏱️ <strong>Drain every 30 minutes</strong> based on shrine power</li>
-                <li>🎁 <strong>Refuel with offerings</strong> (throw items near shrine)</li>
-                <li>⚫ <strong>Dormant at 0%</strong> (effects stop)</li>
+                <li><strong>Start at 100%</strong> fuel when built</li>
+                <li><strong>Drain every 30 minutes</strong> based on shrine power</li>
+                <li><strong>Refuel with offerings</strong> (throw items near shrine)</li>
+                <li><strong>Dormant at 0%</strong> (effects stop)</li>
             </ul>
 
             <div class="command">
@@ -2317,19 +2265,19 @@ const PAGES = {
         </div>
 
         <div class="doc-section">
-            <h2>🎁 Making Offerings</h2>
+            <h2>Making Offerings</h2>
             <p>Restore shrine fuel by throwing accepted items:</p>
             <ol>
                 <li>Stand <strong>within 3 blocks</strong> of shrine core</li>
                 <li><strong>Drop items</strong> (press Q) near the shrine</li>
-                <li>Items <strong>vanish with particles</strong> → fuel restored!</li>
+                <li>Items <strong>vanish with particles</strong> = fuel restored!</li>
             </ol>
             
             <p>Check <code>!shrine info [god]</code> in Discord to see accepted offerings and fuel values!</p>
         </div>
 
         <div class="doc-section">
-            <h2>💬 Discord Commands</h2>
+            <h2>Discord Commands</h2>
             
             <div class="command">
                 <div class="command-name">!shrines list</div>
@@ -2358,131 +2306,131 @@ const PAGES = {
         </div>
 
         <div class="doc-section">
-            <h2>✨ Shrine Effects</h2>
+            <h2>Shrine Effects</h2>
             <p>Effects apply to <strong>all cabin members within 50 blocks</strong> of the shrine:</p>
             
             <div class="table-container">
                 <table>
                     <tr><th>God</th><th>Effect</th><th>Drain/30min</th></tr>
-                    <tr><td>⚡ Zeus</td><td>Lightning strikes hostiles</td><td>1%</td></tr>
-                    <tr><td>🔱 Poseidon</td><td>Water Breathing + Dolphin's Grace</td><td>0.5%</td></tr>
-                    <tr><td>💀 Hades</td><td>Hostiles take damage over time</td><td>1%</td></tr>
-                    <tr><td>🦉 Athena</td><td>+25% XP from all sources</td><td>0.75%</td></tr>
-                    <tr><td>☀️ Apollo</td><td>Regeneration I</td><td>0.75%</td></tr>
-                    <tr><td>🏹 Artemis</td><td>+20% bow damage, see crouchers</td><td>0.75%</td></tr>
-                    <tr><td>⚔️ Ares</td><td>Strength I + Resistance I</td><td>1%</td></tr>
-                    <tr><td>💕 Aphrodite</td><td>Animals attracted, breed faster</td><td>0.5%</td></tr>
-                    <tr><td>🔨 Hephaestus</td><td>Fire Res + 20% tool durability</td><td>0.75%</td></tr>
-                    <tr><td>👟 Hermes</td><td>Speed II + Jump Boost I</td><td>0.5%</td></tr>
-                    <tr><td>🌾 Demeter</td><td>Crops grow 50% faster</td><td>0.5%</td></tr>
-                    <tr><td>🍇 Dionysus</td><td>Luck I + 2x food saturation</td><td>0.5%</td></tr>
-                    <tr><td>👑 Hera</td><td>Absorption II + knockback resist</td><td>1%</td></tr>
-                    <tr><td>🌙 Hecate</td><td>See invisible + enchanting +3</td><td>0.75%</td></tr>
-                    <tr><td>😴 Hypnos</td><td>Sleep w/ monsters + heal sleep</td><td>0.5%</td></tr>
-                    <tr><td>🏆 Nike</td><td>+50% mob XP + crit chance</td><td>1%</td></tr>
-                    <tr><td>⚖️ Nemesis</td><td>&lt;30% HP: Str III + Speed II</td><td>0.5%</td></tr>
-                    <tr><td>🌈 Iris</td><td>See cabin through walls + fall dmg</td><td>0.5%</td></tr>
-                    <tr><td>🎲 Tyche</td><td>Fortune II + 10% rare drops</td><td>1%</td></tr>
+                    <tr><td>Zeus</td><td>Lightning strikes hostiles</td><td>1%</td></tr>
+                    <tr><td>Poseidon</td><td>Water Breathing + Dolphin's Grace</td><td>0.5%</td></tr>
+                    <tr><td>Hades</td><td>Hostiles take damage over time</td><td>1%</td></tr>
+                    <tr><td>Athena</td><td>+25% XP from all sources</td><td>0.75%</td></tr>
+                    <tr><td>Apollo</td><td>Regeneration I</td><td>0.75%</td></tr>
+                    <tr><td>Artemis</td><td>+20% bow damage, see crouchers</td><td>0.75%</td></tr>
+                    <tr><td>Ares</td><td>Strength I + Resistance I</td><td>1%</td></tr>
+                    <tr><td>Aphrodite</td><td>Animals attracted, breed faster</td><td>0.5%</td></tr>
+                    <tr><td>Hephaestus</td><td>Fire Res + 20% tool durability</td><td>0.75%</td></tr>
+                    <tr><td>Hermes</td><td>Speed II + Jump Boost I</td><td>0.5%</td></tr>
+                    <tr><td>Demeter</td><td>Crops grow 50% faster</td><td>0.5%</td></tr>
+                    <tr><td>Dionysus</td><td>Luck I + 2x food saturation</td><td>0.5%</td></tr>
+                    <tr><td>Hera</td><td>Absorption II + knockback resist</td><td>1%</td></tr>
+                    <tr><td>Hecate</td><td>See invisible + enchanting +3</td><td>0.75%</td></tr>
+                    <tr><td>Hypnos</td><td>Sleep w/ monsters + heal sleep</td><td>0.5%</td></tr>
+                    <tr><td>Nike</td><td>+50% mob XP + crit chance</td><td>1%</td></tr>
+                    <tr><td>Nemesis</td><td>Under 30% HP: Str III + Speed II</td><td>0.5%</td></tr>
+                    <tr><td>Iris</td><td>See cabin through walls + fall dmg</td><td>0.5%</td></tr>
+                    <tr><td>Tyche</td><td>Fortune II + 10% rare drops</td><td>1%</td></tr>
                 </table>
             </div>
         </div>
 
         <div class="doc-section">
-            <h2>✨ Dual Shrine Synergies</h2>
+            <h2>Dual Shrine Synergies</h2>
             <p>Build <strong>2 compatible shrines</strong> for bonus effects! Both must have fuel (>0%) and you must be in both radii.</p>
             
             <div class="table-container">
                 <table>
                     <tr><th>Shrine Combo</th><th>Synergy Name</th><th>Bonus Effect</th></tr>
-                    <tr><td>⚡🔱 Zeus + Poseidon</td><td>Tempest Unleashed</td><td>2x lightning in rain, Speed III swimming</td></tr>
-                    <tr><td>⚔️🦉 Ares + Athena</td><td>Strategic Warfare</td><td>Hero of Village, +50% crit damage</td></tr>
-                    <tr><td>☀️🏹 Apollo + Artemis</td><td>Twin Lights</td><td>Regen II, +40% bow damage</td></tr>
-                    <tr><td>🔨⚔️ Hephaestus + Ares</td><td>Arsenal of War</td><td>Zero durability loss, fire immunity</td></tr>
-                    <tr><td>🌾🍇 Demeter + Dionysus</td><td>Festival of Abundance</td><td>2x crop growth, food = regen</td></tr>
-                    <tr><td>💀🌙 Hades + Hecate</td><td>Shadow Sorcery</td><td>Crouch invisibility, +5 enchanting</td></tr>
-                    <tr><td>👑💕 Hera + Aphrodite</td><td>Divine Grace</td><td>Absorption IV, auto-tame animals</td></tr>
-                    <tr><td>👟🏆 Hermes + Nike</td><td>Blitz Champion</td><td>Speed III, Jump II, +75% XP</td></tr>
-                    <tr><td>🎲🌈 Tyche + Iris</td><td>Fortune's Eye</td><td>Fortune III, 100% fall immunity</td></tr>
-                    <tr><td>😴⚖️ Hypnos + Nemesis</td><td>Dream Vengeance</td><td>Mobs drowsy when sleeping, wake buffs</td></tr>
-                    <tr><td>💀⚡ Hades + Zeus</td><td>Wrath of Olympus</td><td>Lightning applies Wither II, 2x loot</td></tr>
-                    <tr><td>🦉🌙 Athena + Hecate</td><td>Arcane Scholar</td><td>+7 enchanting, 50% XP bonus</td></tr>
-                    <tr><td>🔱🌾 Poseidon + Demeter</td><td>Bountiful Waters</td><td>Instant kelp growth, 3x crops in rain</td></tr>
+                    <tr><td>Zeus + Poseidon</td><td>Tempest Unleashed</td><td>2x lightning in rain, Speed III swimming</td></tr>
+                    <tr><td>Ares + Athena</td><td>Strategic Warfare</td><td>Hero of Village, +50% crit damage</td></tr>
+                    <tr><td>Apollo + Artemis</td><td>Twin Lights</td><td>Regen II, +40% bow damage</td></tr>
+                    <tr><td>Hephaestus + Ares</td><td>Arsenal of War</td><td>Zero durability loss, fire immunity</td></tr>
+                    <tr><td>Demeter + Dionysus</td><td>Festival of Abundance</td><td>2x crop growth, food = regen</td></tr>
+                    <tr><td>Hades + Hecate</td><td>Shadow Sorcery</td><td>Crouch invisibility, +5 enchanting</td></tr>
+                    <tr><td>Hera + Aphrodite</td><td>Divine Grace</td><td>Absorption IV, auto-tame animals</td></tr>
+                    <tr><td>Hermes + Nike</td><td>Blitz Champion</td><td>Speed III, Jump II, +75% XP</td></tr>
+                    <tr><td>Tyche + Iris</td><td>Fortune's Eye</td><td>Fortune III, 100% fall immunity</td></tr>
+                    <tr><td>Hypnos + Nemesis</td><td>Dream Vengeance</td><td>Mobs drowsy when sleeping, wake buffs</td></tr>
+                    <tr><td>Hades + Zeus</td><td>Wrath of Olympus</td><td>Lightning applies Wither II, 2x loot</td></tr>
+                    <tr><td>Athena + Hecate</td><td>Arcane Scholar</td><td>+7 enchanting, 50% XP bonus</td></tr>
+                    <tr><td>Poseidon + Demeter</td><td>Bountiful Waters</td><td>Instant kelp growth, 3x crops in rain</td></tr>
                 </table>
             </div>
 
             <div class="info-box tip">
-                <div class="info-box-title">💡 Strategy</div>
+                <div class="info-box-title">Strategy</div>
                 <p>Plan your 2 shrines carefully! Synergies can make your cabin incredibly powerful. Check Discord with <code>!shrines cabin</code> to see active synergies!</p>
             </div>
         </div>
 
         <div class="doc-section">
-            <h2>🏛️ All 19 Shrine Core Blocks</h2>
+            <h2>All 19 Shrine Core Blocks</h2>
             
             <div class="table-container">
                 <table>
                     <tr><th>God</th><th>Core Block</th><th>Where to Find</th></tr>
-                    <tr><td>⚡ Zeus</td><td>Diamond Block</td><td>Craft 9 diamonds</td></tr>
-                    <tr><td>🔱 Poseidon</td><td>Dark Prismarine</td><td>Ocean monuments</td></tr>
-                    <tr><td>💀 Hades</td><td>Crying Obsidian</td><td>Nether, bastion remnants</td></tr>
-                    <tr><td>🦉 Athena</td><td>Chiseled Bookshelf</td><td>Craft w/ planks + slab</td></tr>
-                    <tr><td>☀️ Apollo</td><td>Glowstone</td><td>Nether ceiling</td></tr>
-                    <tr><td>🏹 Artemis</td><td>Quartz Pillar</td><td>Craft nether quartz</td></tr>
-                    <tr><td>⚔️ Ares</td><td>Netherite Block</td><td>Craft 9 netherite ingots</td></tr>
-                    <tr><td>💕 Aphrodite</td><td>Pink Glazed Terracotta</td><td>Smelt pink terracotta</td></tr>
-                    <tr><td>🔨 Hephaestus</td><td>Anvil</td><td>Craft w/ iron</td></tr>
-                    <tr><td>👟 Hermes</td><td>Lapis Block</td><td>Craft 9 lapis lazuli</td></tr>
-                    <tr><td>🌾 Demeter</td><td>Hay Block</td><td>Craft 9 wheat</td></tr>
-                    <tr><td>🍇 Dionysus</td><td>Purpur Pillar</td><td>Craft end stone</td></tr>
-                    <tr><td>👑 Hera</td><td>Purpur Block</td><td>Craft end stone</td></tr>
-                    <tr><td>🌙 Hecate</td><td>Obsidian</td><td>Water + lava</td></tr>
-                    <tr><td>😴 Hypnos</td><td>White Bed</td><td>Craft w/ wool + planks</td></tr>
-                    <tr><td>🏆 Nike</td><td>Gold Block</td><td>Craft 9 gold ingots</td></tr>
-                    <tr><td>⚖️ Nemesis</td><td>Polished Deepslate</td><td>Craft deepslate</td></tr>
-                    <tr><td>🌈 Iris</td><td>Beacon</td><td>Craft w/ nether star</td></tr>
-                    <tr><td>🎲 Tyche</td><td>Emerald Block</td><td>Craft 9 emeralds</td></tr>
+                    <tr><td>Zeus</td><td>Diamond Block</td><td>Craft 9 diamonds</td></tr>
+                    <tr><td>Poseidon</td><td>Dark Prismarine</td><td>Ocean monuments</td></tr>
+                    <tr><td>Hades</td><td>Crying Obsidian</td><td>Nether, bastion remnants</td></tr>
+                    <tr><td>Athena</td><td>Chiseled Bookshelf</td><td>Craft w/ planks + slab</td></tr>
+                    <tr><td>Apollo</td><td>Glowstone</td><td>Nether ceiling</td></tr>
+                    <tr><td>Artemis</td><td>Quartz Pillar</td><td>Craft nether quartz</td></tr>
+                    <tr><td>Ares</td><td>Netherite Block</td><td>Craft 9 netherite ingots</td></tr>
+                    <tr><td>Aphrodite</td><td>Pink Glazed Terracotta</td><td>Smelt pink terracotta</td></tr>
+                    <tr><td>Hephaestus</td><td>Anvil</td><td>Craft w/ iron</td></tr>
+                    <tr><td>Hermes</td><td>Lapis Block</td><td>Craft 9 lapis lazuli</td></tr>
+                    <tr><td>Demeter</td><td>Hay Block</td><td>Craft 9 wheat</td></tr>
+                    <tr><td>Dionysus</td><td>Purpur Pillar</td><td>Craft end stone</td></tr>
+                    <tr><td>Hera</td><td>Purpur Block</td><td>Craft end stone</td></tr>
+                    <tr><td>Hecate</td><td>Obsidian</td><td>Water + lava</td></tr>
+                    <tr><td>Hypnos</td><td>White Bed</td><td>Craft w/ wool + planks</td></tr>
+                    <tr><td>Nike</td><td>Gold Block</td><td>Craft 9 gold ingots</td></tr>
+                    <tr><td>Nemesis</td><td>Polished Deepslate</td><td>Craft deepslate</td></tr>
+                    <tr><td>Iris</td><td>Beacon</td><td>Craft w/ nether star</td></tr>
+                    <tr><td>Tyche</td><td>Emerald Block</td><td>Craft 9 emeralds</td></tr>
                 </table>
             </div>
         </div>
 
         <div class="doc-section">
-            <h2>📋 Quick Reference</h2>
+            <h2>Quick Reference</h2>
             
             <div class="feature-grid">
                 <div class="feature-card">
-                    <h4>🏗️ Building</h4>
-                    <p>2 shrines max per cabin<br>1000 💰 cost<br>Requires core block</p>
+                    <h4>Building</h4>
+                    <p>2 shrines max per cabin<br>1000 Drachma cost<br>Requires core block</p>
                 </div>
                 <div class="feature-card">
-                    <h4>⚡ Fuel</h4>
+                    <h4>Fuel</h4>
                     <p>Starts at 100%<br>Drains every 30min<br>Refuel with offerings</p>
                 </div>
                 <div class="feature-card">
-                    <h4>📏 Range</h4>
+                    <h4>Range</h4>
                     <p>Effects: 50 blocks<br>Offerings: 3 blocks<br>Cabin members only</p>
                 </div>
                 <div class="feature-card">
-                    <h4>✨ Synergies</h4>
+                    <h4>Synergies</h4>
                     <p>13 dual combos<br>Both need fuel<br>Must be in both radii</p>
                 </div>
             </div>
         </div>
 
         <div class="doc-section">
-            <h2>🎯 Tips & Strategies</h2>
+            <h2>Tips & Strategies</h2>
             <ul>
-                <li>💬 <strong>Coordinate with cabin!</strong> Discuss which 2 shrines to build for best synergy</li>
-                <li>🎁 <strong>Stockpile offerings</strong> before building to keep shrines fueled</li>
-                <li>📍 <strong>Build centrally</strong> so members benefit while at cabin base</li>
-                <li>⚖️ <strong>Balance offense/defense</strong> — one combat shrine, one utility shrine</li>
-                <li>🔔 <strong>Watch mail</strong> for low fuel and dormant warnings</li>
-                <li>📊 <strong>Check history</strong> with <code>!shrine history</code> to see who's contributing</li>
-                <li>🏛️ <strong>Popular combos:</strong> Zeus+Poseidon (combat), Hephaestus+Ares (crafting), Athena+Hecate (XP farming)</li>
+                <li><strong>Coordinate with cabin!</strong> Discuss which 2 shrines to build for best synergy</li>
+                <li><strong>Stockpile offerings</strong> before building to keep shrines fueled</li>
+                <li><strong>Build centrally</strong> so members benefit while at cabin base</li>
+                <li><strong>Balance offense/defense</strong> - one combat shrine, one utility shrine</li>
+                <li><strong>Watch mail</strong> for low fuel and dormant warnings</li>
+                <li><strong>Check history</strong> with <code>!shrine history</code> to see who's contributing</li>
+                <li><strong>Popular combos:</strong> Zeus+Poseidon (combat), Hephaestus+Ares (crafting), Athena+Hecate (XP farming)</li>
             </ul>
         </div>
 
         <div class="doc-section">
-            <h2>⛏️ Minecraft Commands</h2>
+            <h2>Minecraft Commands</h2>
             
             <div class="command">
                 <div class="command-name">/shrine register [god]</div>
@@ -2496,7 +2444,7 @@ const PAGES = {
         </div>
 
         <div class="doc-section">
-            <h2>❓ FAQ</h2>
+            <h2>FAQ</h2>
             
             <details>
                 <summary><strong>Can I move a shrine?</strong></summary>
@@ -2552,12 +2500,12 @@ const PAGES = {
         subtitle: 'Custom story adventures',
         content: `
             <div class="doc-section">
-                <h2>📜 Custom Questlines</h2>
+                <h2>Custom Questlines</h2>
                 <p>Original story questlines released in phases. No prior lore knowledge needed!</p>
             </div>
 
             <div class="doc-section">
-                <h2>🗺️ Finding Quests</h2>
+                <h2>Finding Quests</h2>
                 <ul>
                     <li><strong>Quest Board:</strong> Check camp for available quests</li>
                     <li><strong>NPCs:</strong> Talk to characters around camp</li>
@@ -2567,35 +2515,35 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>🎮 Quest Types</h2>
+                <h2>Quest Types</h2>
                 
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <h4>📖 Story Quests</h4>
+                        <h4>Story Quests</h4>
                         <p>Main storyline, released in phases.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>⚔️ Combat Quests</h4>
+                        <h4>Combat Quests</h4>
                         <p>Battle monsters and prove your skills.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🔍 Exploration</h4>
+                        <h4>Exploration</h4>
                         <p>Discover hidden locations.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🤝 Social Quests</h4>
+                        <h4>Social Quests</h4>
                         <p>Cooperative missions with others.</p>
                     </div>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>🎁 Quest Rewards</h2>
+                <h2>Quest Rewards</h2>
                 <ul>
-                    <li>💰 Drachma based on difficulty</li>
-                    <li>✨ Divine Favor for your cabin</li>
-                    <li>🎒 Unique quest-exclusive items</li>
-                    <li>📜 Timeline entries and titles</li>
+                    <li>Drachma based on difficulty</li>
+                    <li>Divine Favor for your cabin</li>
+                    <li>Unique quest-exclusive items</li>
+                    <li>Timeline entries and titles</li>
                 </ul>
             </div>
         `
@@ -2607,43 +2555,43 @@ const PAGES = {
         subtitle: 'Theater, battles, classes',
         content: `
             <div class="doc-section">
-                <h2>🎭 Live Events</h2>
+                <h2>Live Events</h2>
                 <p>Triggerable and scheduled live events in Minecraft!</p>
             </div>
 
             <div class="doc-section">
-                <h2>🎪 Event Types</h2>
+                <h2>Event Types</h2>
                 
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <h4>🎭 Theater Shows</h4>
+                        <h4>Theater Shows</h4>
                         <p>Greek tragedy and comedy at the amphitheater.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>⚔️ Combat Training</h4>
+                        <h4>Combat Training</h4>
                         <p>Learn techniques from counselors.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>📚 Classes</h4>
+                        <h4>Classes</h4>
                         <p>Mythology, crafting, survival skills.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🐉 Monster Battles</h4>
+                        <h4>Monster Battles</h4>
                         <p>Defeat powerful spawned monsters.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🔥 Campfires</h4>
+                        <h4>Campfires</h4>
                         <p>Storytelling and community bonding.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🏛️ Olympus Visits</h4>
+                        <h4>Olympus Visits</h4>
                         <p>Interact with the gods!</p>
                     </div>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>⏰ Schedule</h2>
+                <h2>Schedule</h2>
                 <p>Events announced in Discord. Check <code>!events</code> to see upcoming activities!</p>
             </div>
         `
@@ -2655,45 +2603,45 @@ const PAGES = {
         subtitle: 'CTF, arena, hide & seek',
         content: `
             <div class="doc-section">
-                <h2>🏆 Team Tournaments</h2>
+                <h2>Team Tournaments</h2>
                 <p>Compete for Drachma, Divine Favor, and glory!</p>
             </div>
 
             <div class="doc-section">
-                <h2>🎮 Tournament Types</h2>
+                <h2>Tournament Types</h2>
                 
                 <div class="game-card">
-                    <h4>🚩 Capture the Flag</h4>
+                    <h4>Capture the Flag</h4>
                     <p>Classic camp game! Capture enemy flag, defend yours.</p>
-                    <span class="game-reward">Winners: 50💰 + 10 Favor</span>
+                    <span class="game-reward">Winners: 50 + 10 Favor</span>
                 </div>
 
                 <div class="game-card">
-                    <h4>⚔️ Arena Battles</h4>
+                    <h4>Arena Battles</h4>
                     <p>PvP combat. 1v1, 2v2, 3v3, or FFA.</p>
                     <span class="game-reward">Based on placement</span>
                 </div>
 
                 <div class="game-card">
-                    <h4>🔍 Hide & Seek</h4>
+                    <h4>Hide & Seek</h4>
                     <p>Hide throughout camp or hunt others!</p>
                     <span class="game-reward">Points-based prizes</span>
                 </div>
 
                 <div class="game-card">
-                    <h4>🏃 Relay Races</h4>
+                    <h4>Relay Races</h4>
                     <p>Multi-stage team races.</p>
-                    <span class="game-reward">1st: 60💰, 2nd: 40💰, 3rd: 20💰</span>
+                    <span class="game-reward">1st: 60, 2nd: 40, 3rd: 20</span>
                 </div>
 
                 <div class="game-card">
-                    <h4>🏹 Archery Competition</h4>
+                    <h4>Archery Competition</h4>
                     <p>Test your aim at varying distances.</p>
                     <span class="game-reward">Top 3 win Drachma</span>
                 </div>
 
                 <div class="game-card">
-                    <h4>🐉 Monster Siege</h4>
+                    <h4>Monster Siege</h4>
                     <p>Defend against waves. Last cabin standing wins!</p>
                     <span class="game-reward">Survival + winner bonus</span>
                 </div>
@@ -2707,17 +2655,17 @@ const PAGES = {
         subtitle: 'In-game shop fulfillment',
         content: `
             <div class="doc-section">
-                <h2>🏪 Shopping in Camp</h2>
+                <h2>Shopping in Camp</h2>
                 <p>There are two ways to shop at Camp Half-Blood:</p>
             </div>
 
             <div class="doc-section">
-                <h2>🛒 Official Camp Store</h2>
+                <h2>Official Camp Store</h2>
                 <p>Use <code>!shop</code> in Discord to browse the official camp store. Items are delivered to Minecraft via <code>/chbpending</code>.</p>
             </div>
 
             <div class="doc-section">
-                <h2>🏪 Player Shop Fulfillment</h2>
+                <h2>Player Shop Fulfillment</h2>
                 <p>When you sell on Discord, buyers receive items in Minecraft!</p>
                 
                 <div class="steps">
@@ -2735,7 +2683,7 @@ const PAGES = {
                     </div>
                     <div class="step-item">
                         <h4>Confirm Delivery</h4>
-                        <p><code>!myshop</code> → Pending → Mark Complete</p>
+                        <p><code>!myshop</code> -> Pending -> Mark Complete</p>
                     </div>
                     <div class="step-item">
                         <h4>Get Paid</h4>
@@ -2744,16 +2692,14 @@ const PAGES = {
                 </div>
 
                 <div class="info-box tip">
-                    <div class="info-box-title">💡 Security</div>
+                    <div class="info-box-title">Security</div>
                     <p>Payment is held in escrow until you confirm delivery!</p>
                 </div>
             </div>
         `
     },
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // LORE PAGE
-    // ═══════════════════════════════════════════════════════════════════════
+    // Lore page
 
     'lore': {
         icon: '📖',
@@ -2761,13 +2707,13 @@ const PAGES = {
         subtitle: 'The story so far...',
         content: `
             <div class="doc-section">
-                <h2>📖 The Story</h2>
+                <h2>The Story</h2>
                 <p>An original story in a world of Greek mythology. <strong>No prior knowledge needed!</strong></p>
             </div>
 
             <div class="doc-section">
-                <h2>🌍 The World</h2>
-                <p>Greek mythology is real. The Olympian gods exist, and they have children with mortals—<strong>demigods</strong>.</p>
+                <h2>The World</h2>
+                <p>Greek mythology is real. The Olympian gods exist, and they have children with mortals - <strong>demigods</strong>.</p>
                 <p>Camp Half-Blood is a sanctuary where demigods train and stay safe from monsters.</p>
 
                 <h3>Key Concepts</h3>
@@ -2781,12 +2727,12 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>⚖️ Phase 1: Unsettling Circumstances</h2>
+                <h2>Phase 1: Unsettling Circumstances</h2>
                 <p class="phase-badge" style="display: inline-block; background: var(--lightning); color: var(--olympus-blue); padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem; margin-bottom: 1rem;">CURRENT PHASE</p>
                 
-                <p>As new Demigods arrive, something feels… <em>off</em>.</p>
+                <p>As new Demigods arrive, something feels... <em>off</em>.</p>
                 
-                <h3>🏛️ The Gods Are Quiet</h3>
+                <h3>The Gods Are Quiet</h3>
                 <p>Camp runs well, but there's no divine supervision.</p>
                 <ul>
                     <li>No direct orders from Olympus</li>
@@ -2795,7 +2741,7 @@ const PAGES = {
                 </ul>
                 <p>Camp isn't in peril... <em>yet</em>.</p>
 
-                <h3>🧭 What You Can Do</h3>
+                <h3>What You Can Do</h3>
                 <ul>
                     <li>Questlines available immediately</li>
                     <li>Explore camp and meet NPCs</li>
@@ -2804,13 +2750,13 @@ const PAGES = {
                 </ul>
 
                 <div class="info-box warning">
-                    <div class="info-box-title">⚠️ Pay Attention</div>
+                    <div class="info-box-title">Pay Attention</div>
                     <p>Not everything is as simple as it appears. Details matter!</p>
                 </div>
             </div>
 
             <div class="doc-section">
-                <h2>🔮 Future Phases</h2>
+                <h2>Future Phases</h2>
                 <p>The story continues based on community actions. Phase 2 will be announced when the time is right...</p>
             </div>
         `
