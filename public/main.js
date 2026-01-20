@@ -1,14 +1,12 @@
-// ══════════════════════════════════════════════════════════════════════════
-// CAMP HALF-BLOOD - FRONTEND JAVASCRIPT (v3 - Multiple Images & Character Browser)
-// ══════════════════════════════════════════════════════════════════════════
+/*
+ * Camp Half-Blood Frontend
+ * v3 - Character browser + multi-image support
+ */
 
 const API_BASE = window.location.origin;
 let currentSession = null;
 
-// ══════════════════════════════════════════════════════════════════════════
-// STARFIELD & PARTICLES
-// ══════════════════════════════════════════════════════════════════════════
-
+// Background effects
 function createStarfield() {
     const starfield = document.getElementById('starfield');
     for (let i = 0; i < 150; i++) {
@@ -43,10 +41,6 @@ function createParticles() {
         container.appendChild(particle);
     }
 }
-
-// ══════════════════════════════════════════════════════════════════════════
-// SCROLL & NAVIGATION
-// ══════════════════════════════════════════════════════════════════════════
 
 function setupScrollReveal() {
     const observer = new IntersectionObserver((entries) => {
@@ -150,10 +144,7 @@ function closeMobile() {
     document.body.style.overflow = '';
 }
 
-// ══════════════════════════════════════════════════════════════════════════
-// PORTAL - API INTEGRATION
-// ══════════════════════════════════════════════════════════════════════════
-
+// Portal login
 function connectDiscord() {
     alert('Discord OAuth coming soon!\n\nFor now, connect with your Minecraft username.');
 }
@@ -188,7 +179,7 @@ async function loginWithMC() {
             currentSession = {
                 username: result.data.mc_username,
                 god: result.data.god_parent,
-                godEmoji: result.data.god_emoji || '❓',
+                godEmoji: result.data.god_emoji || '?',
                 godColor: result.data.god_color || 'Unknown',
                 godEffect: result.data.god_effect || 'Unknown',
                 godDomain: result.data.god_domain || '',
@@ -258,7 +249,7 @@ function loadPortalDashboard() {
         document.getElementById('player-god').textContent = 
             `${currentSession.godEmoji} Child of ${currentSession.god}`;
     } else {
-        document.getElementById('player-god').textContent = '❓ Unclaimed - Use !claim in Discord';
+        document.getElementById('player-god').textContent = '? Unclaimed - Use !claim in Discord';
     }
     
     document.getElementById('player-drachma').textContent = currentSession.drachma;
@@ -277,16 +268,13 @@ function loadPortalDashboard() {
             const warning = document.createElement('div');
             warning.className = 'demo-warning';
             warning.style.cssText = 'background: rgba(251,191,36,0.2); color: #fbbf24; padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.85rem; margin-top: 1rem; text-align: center;';
-            warning.textContent = '⚠️ Demo Mode - Connect database for real data tracking';
+            warning.textContent = 'Demo Mode - Connect database for real data tracking';
             banner.appendChild(warning);
         }
     }
 }
 
-// ══════════════════════════════════════════════════════════════════════════
-// MAIL
-// ══════════════════════════════════════════════════════════════════════════
-
+// Mail system
 async function loadMail() {
     if (!currentSession?.username) return;
     
@@ -314,7 +302,7 @@ async function loadMail() {
         if (result.success && result.data && result.data.length > 0) {
             mailPanel.innerHTML = `
                 <div class="doc-section">
-                    <h2>📬 Your Mail (${result.data.length})</h2>
+                    <h2>Your Mail (${result.data.length})</h2>
                     <div class="mail-list">
                         ${result.data.map(mail => `
                             <div class="mail-item ${mail.is_read ? '' : 'unread'}" onclick="openMail(${mail.mail_id})">
@@ -332,9 +320,9 @@ async function loadMail() {
         } else {
             mailPanel.innerHTML = `
                 <div class="doc-section">
-                    <h2>📬 Your Mail</h2>
+                    <h2>Your Mail</h2>
                     <div class="info-box tip">
-                        <div class="info-box-title">📭 No Mail</div>
+                        <div class="info-box-title">No Mail</div>
                         <p>Your mailbox is empty! Mail from gods, events, and other players will appear here.</p>
                     </div>
                 </div>
@@ -344,9 +332,9 @@ async function loadMail() {
         console.error('Mail load failed:', error);
         mailPanel.innerHTML = `
             <div class="doc-section">
-                <h2>📬 Mail</h2>
+                <h2>Mail</h2>
                 <div class="info-box warning">
-                    <div class="info-box-title">⚠️ Error</div>
+                    <div class="info-box-title">Error</div>
                     <p>Could not load mail. Please try again.</p>
                 </div>
             </div>
@@ -364,10 +352,7 @@ async function openMail(mailId) {
     }
 }
 
-// ══════════════════════════════════════════════════════════════════════════
-// INVENTORY
-// ══════════════════════════════════════════════════════════════════════════
-
+// Inventory
 async function loadInventory() {
     if (!currentSession?.username) return;
     
@@ -393,13 +378,13 @@ async function loadInventory() {
         if (result.success && result.data && result.data.length > 0) {
             invPanel.innerHTML = `
                 <div class="doc-section">
-                    <h2>🎒 Your Inventory (${result.data.length} items)</h2>
+                    <h2>Your Inventory (${result.data.length} items)</h2>
                     <div class="inventory-grid">
                         ${result.data.map(item => `
                             <div class="inventory-item">
                                 <div class="item-name">${item.item_name || item.name || 'Unknown Item'}</div>
                                 <div class="item-qty">x${item.quantity || 1}</div>
-                                ${item.is_redeemable ? '<div class="item-tag">✨ Redeemable</div>' : ''}
+                                ${item.is_redeemable ? '<div class="item-tag">Redeemable</div>' : ''}
                             </div>
                         `).join('')}
                     </div>
@@ -408,9 +393,9 @@ async function loadInventory() {
         } else {
             invPanel.innerHTML = `
                 <div class="doc-section">
-                    <h2>🎒 Your Inventory</h2>
+                    <h2>Your Inventory</h2>
                     <div class="info-box tip">
-                        <div class="info-box-title">📦 Empty Inventory</div>
+                        <div class="info-box-title">Empty Inventory</div>
                         <p>You don't have any items yet! Win games, complete quests, or visit shops to get items.</p>
                     </div>
                 </div>
@@ -420,9 +405,9 @@ async function loadInventory() {
         console.error('Inventory load failed:', error);
         invPanel.innerHTML = `
             <div class="doc-section">
-                <h2>🎒 Inventory</h2>
+                <h2>Inventory</h2>
                 <div class="info-box warning">
-                    <div class="info-box-title">⚠️ Error</div>
+                    <div class="info-box-title">Error</div>
                     <p>Could not load inventory. Please try again.</p>
                 </div>
             </div>
@@ -430,10 +415,7 @@ async function loadInventory() {
     }
 }
 
-// ══════════════════════════════════════════════════════════════════════════
-// CHARACTER SHEETS - WITH MULTIPLE IMAGES & PUBLIC BROWSER
-// ══════════════════════════════════════════════════════════════════════════
-
+// Character sheets
 async function loadPublicCharacters() {
     try {
         const response = await fetch(`${API_BASE}/api/characters`);
@@ -444,7 +426,7 @@ async function loadPublicCharacters() {
         
         if (result.success && result.data && result.data.length > 0) {
             sidebar.innerHTML = `
-                <h3>📜 Community Characters</h3>
+                <h3>Community Characters</h3>
                 <div class="character-list">
                     ${result.data.map(char => `
                         <div class="char-list-item" onclick="viewPublicCharacter(${char.id})">
@@ -464,7 +446,7 @@ async function loadPublicCharacters() {
             `;
         } else {
             sidebar.innerHTML = `
-                <h3>📜 Community Characters</h3>
+                <h3>Community Characters</h3>
                 <p class="no-chars">No public character sheets yet. Be the first!</p>
             `;
         }
@@ -490,7 +472,7 @@ async function viewPublicCharacter(id) {
 }
 
 function showCharacterModal(data) {
-    // Remove existing modal if any
+    // remove existing modal
     const existingModal = document.getElementById('char-modal');
     if (existingModal) existingModal.remove();
     
@@ -501,10 +483,10 @@ function showCharacterModal(data) {
     modal.className = 'char-modal';
     modal.innerHTML = `
         <div class="char-modal-content">
-            <button class="modal-close" onclick="closeCharacterModal()">✕</button>
+            <button class="modal-close" onclick="closeCharacterModal()">x</button>
             <div class="modal-header">
                 <h2>${data.char_name || 'Unknown Character'}</h2>
-                <p class="modal-subtitle">${data.god_parent ? `⚡ Child of ${data.god_parent}` : '❓ Unclaimed'}</p>
+                <p class="modal-subtitle">${data.god_parent ? `Child of ${data.god_parent}` : 'Unclaimed'}</p>
             </div>
             
             ${images.length > 0 ? `
@@ -519,14 +501,14 @@ function showCharacterModal(data) {
             
             <div class="modal-grid">
                 <div class="modal-section">
-                    <h3>🎭 Basic Info</h3>
+                    <h3>Basic Info</h3>
                     <p><strong>Age:</strong> ${data.age || 'Unknown'}</p>
                     <p><strong>Gender:</strong> ${data.gender || 'Unknown'}</p>
                     <p><strong>Pronouns:</strong> ${data.pronouns || 'Unknown'}</p>
                 </div>
                 
                 <div class="modal-section">
-                    <h3>⚔️ Combat</h3>
+                    <h3>Combat</h3>
                     <p><strong>Weapon:</strong> ${data.weapon || 'None'}</p>
                     <p><strong>Fighting Style:</strong> ${data.fighting_style || 'Unknown'}</p>
                     ${data.abilities ? `<p><strong>Abilities:</strong> ${data.abilities}</p>` : ''}
@@ -535,7 +517,7 @@ function showCharacterModal(data) {
             
             ${data.personality ? `
                 <div class="modal-section full">
-                    <h3>✨ Personality</h3>
+                    <h3>Personality</h3>
                     <p>${data.personality}</p>
                 </div>
             ` : ''}
@@ -543,13 +525,13 @@ function showCharacterModal(data) {
             <div class="modal-grid">
                 ${data.likes ? `
                     <div class="modal-section">
-                        <h3>💚 Likes</h3>
+                        <h3>Likes</h3>
                         <p>${data.likes}</p>
                     </div>
                 ` : ''}
                 ${data.dislikes ? `
                     <div class="modal-section">
-                        <h3>💔 Dislikes</h3>
+                        <h3>Dislikes</h3>
                         <p>${data.dislikes}</p>
                     </div>
                 ` : ''}
@@ -557,7 +539,7 @@ function showCharacterModal(data) {
             
             ${data.backstory ? `
                 <div class="modal-section full">
-                    <h3>📖 Backstory</h3>
+                    <h3>Backstory</h3>
                     <p>${data.backstory}</p>
                 </div>
             ` : ''}
@@ -565,13 +547,13 @@ function showCharacterModal(data) {
             <div class="modal-grid">
                 ${data.goals ? `
                     <div class="modal-section">
-                        <h3>🎯 Goals</h3>
+                        <h3>Goals</h3>
                         <p>${data.goals}</p>
                     </div>
                 ` : ''}
                 ${data.fears ? `
                     <div class="modal-section">
-                        <h3>😨 Fears</h3>
+                        <h3>Fears</h3>
                         <p>${data.fears}</p>
                     </div>
                 ` : ''}
@@ -586,7 +568,6 @@ function showCharacterModal(data) {
     document.body.appendChild(modal);
     document.body.style.overflow = 'hidden';
     
-    // Close on background click
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeCharacterModal();
     });
@@ -605,7 +586,7 @@ function expandImage(src) {
     viewer.className = 'image-viewer';
     viewer.innerHTML = `
         <img src="${src}" alt="Expanded image">
-        <button onclick="this.parentElement.remove()">✕</button>
+        <button onclick="this.parentElement.remove()">x</button>
     `;
     viewer.addEventListener('click', (e) => {
         if (e.target === viewer) viewer.remove();
@@ -636,7 +617,6 @@ async function loadCharacterSheet() {
             if (data.goals) document.getElementById('char-goals').value = data.goals;
             if (data.fears) document.getElementById('char-fears').value = data.fears;
             
-            // Load images
             if (data.image_url_1) {
                 document.getElementById('char-image-preview-1').innerHTML = `<img src="${data.image_url_1}" alt="Character 1">`;
             }
@@ -647,13 +627,10 @@ async function loadCharacterSheet() {
                 document.getElementById('char-image-preview-3').innerHTML = `<img src="${data.image_url_3}" alt="Character 3">`;
             }
             
-            // Set public checkbox
             const publicCheckbox = document.getElementById('char-public');
             if (publicCheckbox) {
                 publicCheckbox.checked = data.is_public !== 0;
             }
-            
-            console.log('✅ Character sheet loaded');
         }
     } catch (error) {
         console.error('Character load failed:', error);
@@ -691,9 +668,7 @@ async function saveCharacterSheet() {
         isPublic: document.getElementById('char-public')?.checked !== false
     };
     
-    console.log('💾 Saving character sheet...');
-    
-    // Check image sizes
+    // check image sizes
     const checkImageSize = (img, name) => {
         if (img && img.length > 500000) {
             alert(`${name} is too large! Please use a smaller image or an image URL instead.`);
@@ -722,11 +697,10 @@ async function saveCharacterSheet() {
         });
         
         const result = await response.json();
-        console.log('💾 Save response:', result);
         
         if (result.success) {
-            alert('Character sheet saved! ✅');
-            loadPublicCharacters(); // Refresh sidebar
+            alert('Character sheet saved!');
+            loadPublicCharacters();
         } else {
             alert('Save failed: ' + (result.error || 'Unknown error'));
         }
@@ -735,7 +709,7 @@ async function saveCharacterSheet() {
         alert('Connection error. Please try again.');
     } finally {
         if (saveBtn) {
-            saveBtn.textContent = '💾 Save Character Sheet';
+            saveBtn.textContent = 'Save Character Sheet';
             saveBtn.disabled = false;
         }
     }
@@ -745,7 +719,7 @@ function previewImage(event, previewId) {
     const file = event.target.files[0];
     if (!file) return;
     
-    if (file.size > 500 * 1024) { // 500KB limit for base64
+    if (file.size > 500 * 1024) {
         alert('Image is too large! Please use an image under 500KB, or paste an image URL instead.');
         event.target.value = '';
         return;
@@ -789,8 +763,8 @@ function logoutPortal() {
         if (el) el.innerHTML = '<span class="placeholder">No image</span>';
     });
     
-    document.getElementById('panel-mail').innerHTML = '<div class="doc-section"><h2>📬 Mail</h2><p>Login to view your mail.</p></div>';
-    document.getElementById('panel-inventory').innerHTML = '<div class="doc-section"><h2>🎒 Inventory</h2><p>Login to view your inventory.</p></div>';
+    document.getElementById('panel-mail').innerHTML = '<div class="doc-section"><h2>Mail</h2><p>Login to view your mail.</p></div>';
+    document.getElementById('panel-inventory').innerHTML = '<div class="doc-section"><h2>Inventory</h2><p>Login to view your inventory.</p></div>';
 }
 
 function switchPortalTab(tabId) {
@@ -800,10 +774,7 @@ function switchPortalTab(tabId) {
     document.getElementById('panel-' + tabId).classList.add('active');
 }
 
-// ══════════════════════════════════════════════════════════════════════════
-// INITIALIZATION
-// ══════════════════════════════════════════════════════════════════════════
-
+// init
 document.addEventListener('DOMContentLoaded', () => {
     createStarfield();
     createParticles();
@@ -820,7 +791,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // Close modal on escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeCharacterModal();
@@ -830,9 +800,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch(`${API_BASE}/api/health`)
         .then(r => r.json())
         .then(data => {
-            console.log('🏕️ Camp Half-Blood API:', data.status, '| Database:', data.database);
+            console.log('API status:', data.status, '| DB:', data.database);
         })
-        .catch(() => console.log('⚠️ API not available - running static'));
-
-    console.log('%c⚡ Camp Half-Blood ⚡', 'font-size: 24px; color: #D4AF37; font-family: serif;');
+        .catch(() => console.log('API offline, running static'));
 });
