@@ -1894,24 +1894,63 @@ const PAGES = {
             </div>
 
             <div class="doc-section">
-                <h2>Nametag Colors</h2>
+                <h2>Complete God Reference</h2>
+                <p>All 19 gods with their nametag colors and potion effects:</p>
                 
                 <div class="table-container">
                     <table>
-                        <tr><th>God</th><th>Color</th></tr>
-                        <tr><td>Zeus</td><td style="color: yellow;">Yellow</td></tr>
-                        <tr><td>Poseidon</td><td style="color: aqua;">Aqua</td></tr>
-                        <tr><td>Hades</td><td style="color: gray;">Dark Gray</td></tr>
-                        <tr><td>Athena</td><td style="color: silver;">Silver</td></tr>
-                        <tr><td>Apollo</td><td style="color: gold;">Gold</td></tr>
-                        <tr><td>Artemis</td><td style="color: white;">White</td></tr>
-                        <tr><td>Ares</td><td style="color: darkred;">Dark Red</td></tr>
-                        <tr><td>Aphrodite</td><td style="color: pink;">Pink</td></tr>
-                        <tr><td>Hephaestus</td><td style="color: orangered;">Orange</td></tr>
-                        <tr><td>Hermes</td><td style="color: lime;">Green</td></tr>
-                        <tr><td>Demeter</td><td style="color: green;">Dark Green</td></tr>
-                        <tr><td>Dionysus</td><td style="color: purple;">Purple</td></tr>
-                        <tr><td>Hecate</td><td style="color: darkviolet;">Dark Purple</td></tr>
+                        <tr><th>God</th><th>Emoji</th><th>Nametag Color</th><th>Potion Effect</th></tr>
+                        <tr><td>Zeus</td><td>⚡</td><td style="color: yellow;">Yellow</td><td>Jump Boost</td></tr>
+                        <tr><td>Poseidon</td><td>🔱</td><td style="color: aqua;">Aqua</td><td>Water Breathing</td></tr>
+                        <tr><td>Hades</td><td>💀</td><td style="color: gray;">Dark Gray</td><td>Resistance</td></tr>
+                        <tr><td>Athena</td><td>🦉</td><td style="color: silver;">Gray</td><td>Haste</td></tr>
+                        <tr><td>Apollo</td><td>☀️</td><td style="color: gold;">Gold</td><td>Regeneration</td></tr>
+                        <tr><td>Artemis</td><td>🏹</td><td style="color: white;">White</td><td>Speed</td></tr>
+                        <tr><td>Ares</td><td>⚔️</td><td style="color: darkred;">Dark Red</td><td>Strength</td></tr>
+                        <tr><td>Aphrodite</td><td>💕</td><td style="color: #ff69b4;">Light Purple</td><td>Regeneration</td></tr>
+                        <tr><td>Hephaestus</td><td>🔨</td><td style="color: red;">Red</td><td>Fire Resistance</td></tr>
+                        <tr><td>Hermes</td><td>👟</td><td style="color: #5555ff;">Blue</td><td>Speed</td></tr>
+                        <tr><td>Demeter</td><td>🌾</td><td style="color: green;">Green</td><td>Saturation</td></tr>
+                        <tr><td>Dionysus</td><td>🍇</td><td style="color: purple;">Dark Purple</td><td>Luck</td></tr>
+                        <tr><td>Hera</td><td>👑</td><td style="color: darkcyan;">Dark Aqua</td><td>Resistance</td></tr>
+                        <tr><td>Hecate</td><td>🌙</td><td style="color: darkblue;">Dark Blue</td><td>Slow Falling</td></tr>
+                        <tr><td>Hypnos</td><td>😴</td><td style="color: #5555ff;">Blue</td><td>Slow Falling</td></tr>
+                        <tr><td>Nike</td><td>🏆</td><td style="color: gold;">Gold</td><td>Speed</td></tr>
+                        <tr><td>Nemesis</td><td>⚖️</td><td style="color: gray;">Gray</td><td>Resistance</td></tr>
+                        <tr><td>Iris</td><td>🌈</td><td style="color: #ff69b4;">Light Purple</td><td>Glowing</td></tr>
+                        <tr><td>Tyche</td><td>🎲</td><td style="color: green;">Green</td><td>Luck</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>How Effects Apply</h2>
+                <ul>
+                    <li>Effects apply automatically when you join (if linked)</li>
+                    <li>They refresh every 30 seconds during sync</li>
+                    <li>Changing your god parent in Discord updates MC on next sync</li>
+                    <li>Effects are permanent while online - no potion needed!</li>
+                </ul>
+            </div>
+
+            <div class="doc-section">
+                <h2>Effect Descriptions</h2>
+                
+                <div class="table-container">
+                    <table>
+                        <tr><th>Effect</th><th>What It Does</th><th>Gods</th></tr>
+                        <tr><td>Jump Boost</td><td>Jump higher than normal</td><td>Zeus</td></tr>
+                        <tr><td>Water Breathing</td><td>Breathe underwater indefinitely</td><td>Poseidon</td></tr>
+                        <tr><td>Resistance</td><td>Take reduced damage from all sources</td><td>Hades, Hera, Nemesis</td></tr>
+                        <tr><td>Haste</td><td>Mine and attack faster</td><td>Athena</td></tr>
+                        <tr><td>Regeneration</td><td>Slowly recover health over time</td><td>Apollo, Aphrodite</td></tr>
+                        <tr><td>Speed</td><td>Move faster</td><td>Artemis, Hermes, Nike</td></tr>
+                        <tr><td>Strength</td><td>Deal more melee damage</td><td>Ares</td></tr>
+                        <tr><td>Fire Resistance</td><td>Immune to fire and lava damage</td><td>Hephaestus</td></tr>
+                        <tr><td>Saturation</td><td>Hunger drains slower</td><td>Demeter</td></tr>
+                        <tr><td>Luck</td><td>Better loot from fishing and chests</td><td>Dionysus, Tyche</td></tr>
+                        <tr><td>Slow Falling</td><td>Fall slowly and take no fall damage</td><td>Hecate, Hypnos</td></tr>
+                        <tr><td>Glowing</td><td>You glow (visible through walls)</td><td>Iris</td></tr>
                     </table>
                 </div>
             </div>
