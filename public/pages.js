@@ -447,6 +447,78 @@ const PAGES = {
                     <p>You can retake the claiming ceremony anytime with <code>!claim</code> to choose a different god parent!</p>
                 </div>
             </div>
+
+            <div class="doc-section">
+                <h2>Complete God Reference</h2>
+                <p>All 19 gods with their nametag colors and potion effects in Minecraft:</p>
+                
+                <div class="table-container">
+                    <table>
+                        <tr><th>God</th><th>Emoji</th><th>Domain</th><th>Nametag Color</th><th>Potion Effect</th></tr>
+                        <tr><td>Zeus</td><td>⚡</td><td>Sky & Thunder</td><td style="color: yellow;">Yellow</td><td>Jump Boost</td></tr>
+                        <tr><td>Poseidon</td><td>🔱</td><td>Sea</td><td style="color: aqua;">Aqua</td><td>Water Breathing</td></tr>
+                        <tr><td>Hades</td><td>💀</td><td>Underworld</td><td style="color: gray;">Dark Gray</td><td>Resistance</td></tr>
+                        <tr><td>Athena</td><td>🦉</td><td>Wisdom</td><td style="color: silver;">Gray</td><td>Haste</td></tr>
+                        <tr><td>Apollo</td><td>☀️</td><td>Sun & Music</td><td style="color: gold;">Gold</td><td>Regeneration</td></tr>
+                        <tr><td>Artemis</td><td>🏹</td><td>Hunt & Moon</td><td style="color: white;">White</td><td>Speed</td></tr>
+                        <tr><td>Ares</td><td>⚔️</td><td>War</td><td style="color: darkred;">Dark Red</td><td>Strength</td></tr>
+                        <tr><td>Aphrodite</td><td>💕</td><td>Love</td><td style="color: #ff69b4;">Light Purple</td><td>Regeneration</td></tr>
+                        <tr><td>Hephaestus</td><td>🔨</td><td>Forge</td><td style="color: red;">Red</td><td>Fire Resistance</td></tr>
+                        <tr><td>Hermes</td><td>👟</td><td>Travel</td><td style="color: #5555ff;">Blue</td><td>Speed</td></tr>
+                        <tr><td>Demeter</td><td>🌾</td><td>Agriculture</td><td style="color: green;">Green</td><td>Saturation</td></tr>
+                        <tr><td>Dionysus</td><td>🍇</td><td>Wine</td><td style="color: purple;">Dark Purple</td><td>Luck</td></tr>
+                        <tr><td>Hera</td><td>👑</td><td>Marriage</td><td style="color: darkcyan;">Dark Aqua</td><td>Resistance</td></tr>
+                        <tr><td>Hecate</td><td>🌙</td><td>Magic</td><td style="color: darkblue;">Dark Blue</td><td>Slow Falling</td></tr>
+                        <tr><td>Hypnos</td><td>😴</td><td>Sleep</td><td style="color: #5555ff;">Blue</td><td>Slow Falling</td></tr>
+                        <tr><td>Nike</td><td>🏆</td><td>Victory</td><td style="color: gold;">Gold</td><td>Speed</td></tr>
+                        <tr><td>Nemesis</td><td>⚖️</td><td>Revenge</td><td style="color: gray;">Gray</td><td>Resistance</td></tr>
+                        <tr><td>Iris</td><td>🌈</td><td>Rainbows</td><td style="color: #ff69b4;">Light Purple</td><td>Glowing</td></tr>
+                        <tr><td>Tyche</td><td>🎲</td><td>Luck</td><td style="color: green;">Green</td><td>Luck</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>The 19 Olympian Gods</h2>
+                
+                <div class="god-grid">
+                    <div class="god-card"><div class="god-emoji">⚡</div><div class="god-name">Zeus</div><div class="god-domain">Sky & Thunder</div></div>
+                    <div class="god-card"><div class="god-emoji">🔱</div><div class="god-name">Poseidon</div><div class="god-domain">Sea</div></div>
+                    <div class="god-card"><div class="god-emoji">💀</div><div class="god-name">Hades</div><div class="god-domain">Underworld</div></div>
+                    <div class="god-card"><div class="god-emoji">🦉</div><div class="god-name">Athena</div><div class="god-domain">Wisdom</div></div>
+                    <div class="god-card"><div class="god-emoji">☀️</div><div class="god-name">Apollo</div><div class="god-domain">Sun & Music</div></div>
+                    <div class="god-card"><div class="god-emoji">🏹</div><div class="god-name">Artemis</div><div class="god-domain">Hunt & Moon</div></div>
+                    <div class="god-card"><div class="god-emoji">⚔️</div><div class="god-name">Ares</div><div class="god-domain">War</div></div>
+                    <div class="god-card"><div class="god-emoji">💕</div><div class="god-name">Aphrodite</div><div class="god-domain">Love</div></div>
+                    <div class="god-card"><div class="god-emoji">🔨</div><div class="god-name">Hephaestus</div><div class="god-domain">Forge</div></div>
+                    <div class="god-card"><div class="god-emoji">👟</div><div class="god-name">Hermes</div><div class="god-domain">Travel</div></div>
+                    <div class="god-card"><div class="god-emoji">🌾</div><div class="god-name">Demeter</div><div class="god-domain">Agriculture</div></div>
+                    <div class="god-card"><div class="god-emoji">🍇</div><div class="god-name">Dionysus</div><div class="god-domain">Wine</div></div>
+                    <div class="god-card"><div class="god-emoji">👑</div><div class="god-name">Hera</div><div class="god-domain">Marriage</div></div>
+                    <div class="god-card"><div class="god-emoji">🌙</div><div class="god-name">Hecate</div><div class="god-domain">Magic</div></div>
+                    <div class="god-card"><div class="god-emoji">😴</div><div class="god-name">Hypnos</div><div class="god-domain">Sleep</div></div>
+                    <div class="god-card"><div class="god-emoji">🏆</div><div class="god-name">Nike</div><div class="god-domain">Victory</div></div>
+                    <div class="god-card"><div class="god-emoji">⚖️</div><div class="god-name">Nemesis</div><div class="god-domain">Revenge</div></div>
+                    <div class="god-card"><div class="god-emoji">🌈</div><div class="god-name">Iris</div><div class="god-domain">Rainbows</div></div>
+                    <div class="god-card"><div class="god-emoji">🎲</div><div class="god-name">Tyche</div><div class="god-domain">Luck</div></div>
+                </div>
+            </div>
+
+            <div class="doc-section">
+                <h2>What You Receive</h2>
+                <p>When claimed, you get:</p>
+                <ul>
+                    <li><strong>Name Color</strong> - Your god's color displays in Minecraft</li>
+                    <li><strong>Potion Effects</strong> - Passive buffs based on your parent</li>
+                    <li><strong>Divine Letter</strong> - A personal welcome message from your godly parent</li>
+                    <li><strong>Cabin Eligibility</strong> - Join cabins aligned with your heritage</li>
+                </ul>
+                
+                <div class="info-box tip">
+                    <div class="info-box-title">Change Anytime</div>
+                    <p>You can retake the claiming ceremony anytime with <code>!claim</code> to choose a different god parent!</p>
+                </div>
+            </div>
         `
     },
 
