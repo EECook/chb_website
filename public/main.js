@@ -1,6 +1,6 @@
 /*
  * Camp Half-Blood Frontend
- * v3 - Character browser + multi-image support
+ * v3 - Character browser + multi-image support + formatting preservation
  */
 
 const API_BASE = window.location.origin;
@@ -471,6 +471,19 @@ async function viewPublicCharacter(id) {
     }
 }
 
+// Helper function to preserve formatting when displaying text
+function formatTextForDisplay(text) {
+    if (!text) return '';
+    // Convert newlines to <br> tags and preserve multiple spaces
+    return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\n/g, '<br>')
+        .replace(/  /g, '&nbsp;&nbsp;')
+        .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+}
+
 function showCharacterModal(data) {
     // remove existing modal
     const existingModal = document.getElementById('char-modal');
@@ -483,7 +496,7 @@ function showCharacterModal(data) {
     modal.className = 'char-modal';
     modal.innerHTML = `
         <div class="char-modal-content">
-            <button class="modal-close" onclick="closeCharacterModal()">x</button>
+            <button class="modal-close" onclick="closeCharacterModal()">×</button>
             <div class="modal-header">
                 <h2>${data.char_name || 'Unknown Character'}</h2>
                 <p class="modal-subtitle">${data.god_parent ? `Child of ${data.god_parent}` : 'Unclaimed'}</p>
@@ -511,14 +524,14 @@ function showCharacterModal(data) {
                     <h3>Combat</h3>
                     <p><strong>Weapon:</strong> ${data.weapon || 'None'}</p>
                     <p><strong>Fighting Style:</strong> ${data.fighting_style || 'Unknown'}</p>
-                    ${data.abilities ? `<p><strong>Abilities:</strong> ${data.abilities}</p>` : ''}
+                    ${data.abilities ? `<p><strong>Abilities:</strong> ${formatTextForDisplay(data.abilities)}</p>` : ''}
                 </div>
             </div>
             
             ${data.personality ? `
                 <div class="modal-section full">
                     <h3>Personality</h3>
-                    <p>${data.personality}</p>
+                    <p class="preserve-formatting">${formatTextForDisplay(data.personality)}</p>
                 </div>
             ` : ''}
             
@@ -526,13 +539,13 @@ function showCharacterModal(data) {
                 ${data.likes ? `
                     <div class="modal-section">
                         <h3>Likes</h3>
-                        <p>${data.likes}</p>
+                        <p class="preserve-formatting">${formatTextForDisplay(data.likes)}</p>
                     </div>
                 ` : ''}
                 ${data.dislikes ? `
                     <div class="modal-section">
                         <h3>Dislikes</h3>
-                        <p>${data.dislikes}</p>
+                        <p class="preserve-formatting">${formatTextForDisplay(data.dislikes)}</p>
                     </div>
                 ` : ''}
             </div>
@@ -540,7 +553,7 @@ function showCharacterModal(data) {
             ${data.backstory ? `
                 <div class="modal-section full">
                     <h3>Backstory</h3>
-                    <p>${data.backstory}</p>
+                    <p class="preserve-formatting">${formatTextForDisplay(data.backstory)}</p>
                 </div>
             ` : ''}
             
@@ -548,13 +561,13 @@ function showCharacterModal(data) {
                 ${data.goals ? `
                     <div class="modal-section">
                         <h3>Goals</h3>
-                        <p>${data.goals}</p>
+                        <p class="preserve-formatting">${formatTextForDisplay(data.goals)}</p>
                     </div>
                 ` : ''}
                 ${data.fears ? `
                     <div class="modal-section">
                         <h3>Fears</h3>
-                        <p>${data.fears}</p>
+                        <p class="preserve-formatting">${formatTextForDisplay(data.fears)}</p>
                     </div>
                 ` : ''}
             </div>
@@ -586,7 +599,7 @@ function expandImage(src) {
     viewer.className = 'image-viewer';
     viewer.innerHTML = `
         <img src="${src}" alt="Expanded image">
-        <button onclick="this.parentElement.remove()">x</button>
+        <button onclick="this.parentElement.remove()">×</button>
     `;
     viewer.addEventListener('click', (e) => {
         if (e.target === viewer) viewer.remove();
@@ -603,6 +616,7 @@ async function loadCharacterSheet() {
         
         if (result.success && result.data) {
             const data = result.data;
+            // Load text fields - the values naturally preserve formatting in textareas
             if (data.char_name) document.getElementById('char-name').value = data.char_name;
             if (data.age) document.getElementById('char-age').value = data.age;
             if (data.gender) document.getElementById('char-gender').value = data.gender;
@@ -648,6 +662,7 @@ async function saveCharacterSheet() {
         return img ? img.src : null;
     };
     
+    // Get values directly from textareas - they preserve newlines and formatting
     const data = {
         name: document.getElementById('char-name').value,
         age: document.getElementById('char-age').value,
@@ -780,6 +795,22 @@ document.addEventListener('DOMContentLoaded', () => {
     createParticles();
     setupScrollReveal();
     window.addEventListener('scroll', handleNavVisibility);
+    
+    // Add CSS for formatting preservation
+    if (!document.getElementById('char-format-styles')) {
+        const style = document.createElement('style');
+        style.id = 'char-format-styles';
+        style.textContent = `
+            .preserve-formatting {
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
+            .char-sheet textarea {
+                white-space: pre-wrap;
+            }
+        `;
+        document.head.appendChild(style);
+    }
     
     document.addEventListener('click', (e) => {
         const mobileMenu = document.getElementById('mobile-menu');
