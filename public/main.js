@@ -2,7 +2,6 @@
  * Camp Half-Blood Frontend
  * v4 - Full Mail System + Character browser + multi-image support
  */
-
 const API_BASE = window.location.origin;
 let currentSession = null;
 let playersCache = null; // Cache for player list
