@@ -1,10 +1,11 @@
 /*
  * Camp Half-Blood Frontend
- * v3 - Character browser + multi-image support + formatting preservation
+ * v4 - Full Mail System + Character browser + multi-image support
  */
 
 const API_BASE = window.location.origin;
 let currentSession = null;
+let playersCache = null; // Cache for player list
 
 // Background effects
 function createStarfield() {
@@ -274,65 +275,145 @@ function loadPortalDashboard() {
     }
 }
 
-// Mail system
+// ══════════════════════════════════════════════════════════════════════════
+// MAIL SYSTEM - Full Interactive Features
+// ══════════════════════════════════════════════════════════════════════════
+
+function injectMailStyles() {
+    if (document.getElementById('mail-styles-v2')) return;
+    
+    const style = document.createElement('style');
+    style.id = 'mail-styles-v2';
+    style.textContent = `
+        .mail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem; }
+        .mail-actions { display: flex; gap: 0.5rem; }
+        .mail-btn { padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid rgba(212,175,55,0.3); background: rgba(0,0,0,0.3); color: var(--marble); cursor: pointer; font-size: 0.85rem; transition: all 0.3s ease; display: flex; align-items: center; gap: 0.5rem; }
+        .mail-btn:hover { border-color: var(--gold); background: rgba(212,175,55,0.1); }
+        .mail-btn.primary { background: rgba(212,175,55,0.2); border-color: var(--gold); }
+        .mail-btn.danger { border-color: rgba(239,68,68,0.5); }
+        .mail-btn.danger:hover { background: rgba(239,68,68,0.2); border-color: #ef4444; }
+        .mail-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        .mail-list { display: flex; flex-direction: column; gap: 0.5rem; }
+        .mail-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.2); border-radius: 8px; cursor: pointer; transition: all 0.3s ease; align-items: flex-start; }
+        .mail-item:hover { border-color: var(--gold); transform: translateX(5px); background: rgba(212,175,55,0.05); }
+        .mail-item.unread { border-left: 3px solid var(--lightning); background: rgba(79,195,247,0.1); }
+        .mail-item.unread .mail-subject { font-weight: bold; }
+        .mail-icon { font-size: 1.5rem; flex-shrink: 0; }
+        .mail-content { flex: 1; min-width: 0; }
+        .mail-subject { font-family: 'Cinzel', serif; color: var(--gold); margin-bottom: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .mail-preview { font-size: 0.85rem; color: var(--marble-dark); margin-bottom: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .mail-meta { display: flex; gap: 1rem; font-size: 0.75rem; color: var(--gold-dark); flex-wrap: wrap; }
+        .mail-delete-btn { padding: 0.5rem; border-radius: 6px; border: 1px solid transparent; background: transparent; color: var(--marble-dark); cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+        .mail-delete-btn:hover { border-color: #ef4444; background: rgba(239,68,68,0.2); color: #ef4444; }
+        
+        .mail-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(5px); }
+        .mail-modal-content { background: linear-gradient(135deg, rgba(26,26,46,0.98), rgba(15,15,30,0.98)); border: 1px solid var(--gold); border-radius: 16px; max-width: 600px; width: 100%; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; }
+        .mail-modal-header { padding: 1.5rem; border-bottom: 1px solid rgba(212,175,55,0.2); display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+        .mail-modal-title { font-family: 'Cinzel', serif; color: var(--gold); font-size: 1.25rem; margin: 0; }
+        .mail-modal-meta { font-size: 0.85rem; color: var(--marble-dark); margin-top: 0.5rem; }
+        .mail-modal-close { background: none; border: none; color: var(--marble); font-size: 1.5rem; cursor: pointer; padding: 0.5rem; line-height: 1; border-radius: 8px; }
+        .mail-modal-close:hover { background: rgba(255,255,255,0.1); }
+        .mail-modal-body { padding: 1.5rem; overflow-y: auto; flex: 1; }
+        .mail-modal-body p { white-space: pre-wrap; word-wrap: break-word; line-height: 1.6; color: var(--marble); }
+        .mail-modal-footer { padding: 1rem 1.5rem; border-top: 1px solid rgba(212,175,55,0.2); display: flex; justify-content: flex-end; gap: 0.5rem; }
+        
+        .compose-form { background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.2); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .compose-form h3 { font-family: 'Cinzel', serif; color: var(--gold); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .compose-row { margin-bottom: 1rem; }
+        .compose-row label { display: block; color: var(--marble-dark); font-size: 0.85rem; margin-bottom: 0.5rem; }
+        .compose-row input, .compose-row textarea, .compose-row select { width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.2); border-radius: 8px; color: var(--marble); font-family: inherit; font-size: 0.95rem; }
+        .compose-row input:focus, .compose-row textarea:focus, .compose-row select:focus { outline: none; border-color: var(--gold); }
+        .compose-row textarea { min-height: 120px; resize: vertical; }
+        .compose-row select { cursor: pointer; }
+        .compose-row select option { background: #1a1a2e; color: var(--marble); }
+        .compose-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
+        .compose-form.collapsed { padding: 0; border: none; background: none; }
+        .compose-form.collapsed > *:not(.compose-toggle) { display: none; }
+        .compose-toggle { display: none; }
+        .compose-form.collapsed .compose-toggle { display: block; }
+        
+        .mail-type-badge { display: inline-block; padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .mail-type-badge.personal { background: rgba(79,195,247,0.2); color: #4fc3f7; }
+        .mail-type-badge.god_claiming { background: rgba(212,175,55,0.2); color: var(--gold); }
+        .mail-type-badge.cabin_invite { background: rgba(76,175,80,0.2); color: #4caf50; }
+        .mail-type-badge.system { background: rgba(156,39,176,0.2); color: #ce93d8; }
+        .mail-type-badge.reward { background: rgba(255,193,7,0.2); color: #ffc107; }
+        .mail-type-badge.shop_order { background: rgba(233,30,99,0.2); color: #f48fb1; }
+        
+        .empty-mail { text-align: center; padding: 3rem 1rem; color: var(--marble-dark); }
+        .empty-mail-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
+    `;
+    document.head.appendChild(style);
+}
+
 async function loadMail() {
     if (!currentSession?.username) return;
     
+    injectMailStyles();
     const mailPanel = document.getElementById('panel-mail');
-    
-    if (!document.getElementById('mail-styles')) {
-        const style = document.createElement('style');
-        style.id = 'mail-styles';
-        style.textContent = `
-            .mail-item { display: flex; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.2); border-radius: 8px; margin-bottom: 0.75rem; cursor: pointer; transition: all 0.3s ease; }
-            .mail-item:hover { border-color: var(--gold); transform: translateX(5px); }
-            .mail-item.unread { border-left: 3px solid var(--lightning); background: rgba(79,195,247,0.1); }
-            .mail-icon { font-size: 1.5rem; }
-            .mail-subject { font-family: 'Cinzel', serif; color: var(--gold); margin-bottom: 0.25rem; }
-            .mail-sender { font-size: 0.85rem; color: var(--marble-dark); }
-            .mail-date { font-size: 0.75rem; color: var(--gold-dark); }
-        `;
-        document.head.appendChild(style);
-    }
     
     try {
         const response = await fetch(`${API_BASE}/api/player/${encodeURIComponent(currentSession.username)}/mail`);
         const result = await response.json();
         
-        if (result.success && result.data && result.data.length > 0) {
-            mailPanel.innerHTML = `
-                <div class="doc-section">
-                    <h2>Your Mail (${result.data.length})</h2>
+        const mailData = result.success && result.data ? result.data : [];
+        const unreadCount = mailData.filter(m => !m.is_read).length;
+        const readCount = mailData.filter(m => m.is_read).length;
+        
+        // Update header mail count
+        document.getElementById('player-mail').textContent = unreadCount;
+        currentSession.mail = unreadCount;
+        localStorage.setItem('chb_session', JSON.stringify(currentSession));
+        
+        mailPanel.innerHTML = `
+            <div class="doc-section">
+                <div class="mail-header">
+                    <h2>📬 Your Mail (${mailData.length})</h2>
+                    <div class="mail-actions">
+                        <button class="mail-btn primary" onclick="toggleComposeForm()">
+                            ✉️ Compose
+                        </button>
+                        <button class="mail-btn danger" onclick="deleteAllReadMail()" ${readCount === 0 ? 'disabled' : ''}>
+                            🗑️ Delete Read (${readCount})
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="compose-container"></div>
+                
+                ${mailData.length > 0 ? `
                     <div class="mail-list">
-                        ${result.data.map(mail => `
-                            <div class="mail-item ${mail.is_read ? '' : 'unread'}" onclick="openMail(${mail.mail_id})">
-                                <div class="mail-icon">${mail.is_read ? '📭' : '📬'}</div>
-                                <div class="mail-content">
-                                    <div class="mail-subject">${mail.subject || 'No Subject'}</div>
-                                    <div class="mail-sender">Type: ${mail.mail_type || 'message'}</div>
-                                    <div class="mail-date">${new Date(mail.created_at).toLocaleDateString()}</div>
+                        ${mailData.map(mail => `
+                            <div class="mail-item ${mail.is_read ? '' : 'unread'}" data-mail-id="${mail.mail_id}">
+                                <div class="mail-icon" onclick="openMailModal(${mail.mail_id})">${getMailIcon(mail.mail_type, mail.is_read)}</div>
+                                <div class="mail-content" onclick="openMailModal(${mail.mail_id})">
+                                    <div class="mail-subject">${escapeHtml(mail.subject || 'No Subject')}</div>
+                                    <div class="mail-preview">${escapeHtml((mail.content || '').substring(0, 80))}${(mail.content || '').length > 80 ? '...' : ''}</div>
+                                    <div class="mail-meta">
+                                        <span class="mail-type-badge ${mail.mail_type || 'personal'}">${formatMailType(mail.mail_type)}</span>
+                                        <span>From: ${escapeHtml(mail.sender_name || 'Unknown')}</span>
+                                        <span>${formatDate(mail.created_at)}</span>
+                                    </div>
                                 </div>
+                                <button class="mail-delete-btn" onclick="event.stopPropagation(); deleteMail(${mail.mail_id})" title="Delete">🗑️</button>
                             </div>
                         `).join('')}
                     </div>
-                </div>
-            `;
-        } else {
-            mailPanel.innerHTML = `
-                <div class="doc-section">
-                    <h2>Your Mail</h2>
-                    <div class="info-box tip">
-                        <div class="info-box-title">No Mail</div>
-                        <p>Your mailbox is empty! Mail from gods, events, and other players will appear here.</p>
+                ` : `
+                    <div class="empty-mail">
+                        <div class="empty-mail-icon">📭</div>
+                        <p>Your mailbox is empty!</p>
+                        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Messages from gods, events, and other players will appear here.</p>
                     </div>
-                </div>
-            `;
-        }
+                `}
+            </div>
+        `;
     } catch (error) {
         console.error('Mail load failed:', error);
         mailPanel.innerHTML = `
             <div class="doc-section">
-                <h2>Mail</h2>
+                <h2>📬 Mail</h2>
                 <div class="info-box warning">
                     <div class="info-box-title">Error</div>
                     <p>Could not load mail. Please try again.</p>
@@ -342,17 +423,333 @@ async function loadMail() {
     }
 }
 
-async function openMail(mailId) {
+function getMailIcon(mailType, isRead) {
+    const icons = {
+        'god_claiming': '🏛️',
+        'cabin_invite': '🏕️',
+        'system': '⚙️',
+        'reward': '🎁',
+        'daily_reward': '🎁',
+        'shop_order': '🛒',
+        'delivery_request': '📦',
+        'delivery_complete': '✅',
+        'event': '🏆',
+        'quest_complete': '📜',
+        'personal': isRead ? '📭' : '📬'
+    };
+    return icons[mailType] || (isRead ? '📭' : '📬');
+}
+
+function formatMailType(type) {
+    const types = {
+        'god_claiming': 'Divine',
+        'cabin_invite': 'Cabin',
+        'system': 'System',
+        'reward': 'Reward',
+        'daily_reward': 'Daily',
+        'shop_order': 'Shop',
+        'delivery_request': 'Delivery',
+        'delivery_complete': 'Delivery',
+        'event': 'Event',
+        'quest_complete': 'Quest',
+        'personal': 'Personal'
+    };
+    return types[type] || type || 'Message';
+}
+
+function formatDate(dateStr) {
+    if (!dateStr) return 'Unknown';
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diff = now - date;
+    
+    if (diff < 60000) return 'Just now';
+    if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+    if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
+    if (diff < 604800000) return `${Math.floor(diff / 86400000)}d ago`;
+    
+    return date.toLocaleDateString();
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+async function openMailModal(mailId) {
     try {
+        // Mark as read
         await fetch(`${API_BASE}/api/mail/${mailId}/read`, { method: 'POST' });
-        loadMail();
+        
+        // Fetch full mail content
+        const response = await fetch(`${API_BASE}/api/mail/${mailId}`);
+        const result = await response.json();
+        
+        if (!result.success || !result.data) {
+            alert('Could not load mail');
+            return;
+        }
+        
+        const mail = result.data;
+        
+        // Update UI to show as read
+        const mailItem = document.querySelector(`.mail-item[data-mail-id="${mailId}"]`);
+        if (mailItem) {
+            mailItem.classList.remove('unread');
+            mailItem.querySelector('.mail-icon').textContent = getMailIcon(mail.mail_type, true);
+        }
+        
+        // Update unread count
         refreshPlayerData();
+        
+        // Create modal
+        const existingModal = document.getElementById('mail-modal');
+        if (existingModal) existingModal.remove();
+        
+        const modal = document.createElement('div');
+        modal.id = 'mail-modal';
+        modal.className = 'mail-modal';
+        modal.innerHTML = `
+            <div class="mail-modal-content">
+                <div class="mail-modal-header">
+                    <div>
+                        <h2 class="mail-modal-title">${escapeHtml(mail.subject || 'No Subject')}</h2>
+                        <div class="mail-modal-meta">
+                            <span class="mail-type-badge ${mail.mail_type || 'personal'}">${formatMailType(mail.mail_type)}</span>
+                            From: <strong>${escapeHtml(mail.sender_name || 'Unknown')}</strong> • ${formatDate(mail.created_at)}
+                        </div>
+                    </div>
+                    <button class="mail-modal-close" onclick="closeMailModal()">×</button>
+                </div>
+                <div class="mail-modal-body">
+                    <p>${escapeHtml(mail.content || 'No content')}</p>
+                </div>
+                <div class="mail-modal-footer">
+                    ${mail.sender_id && mail.sender_id != 0 ? `
+                        <button class="mail-btn" onclick="closeMailModal(); replyToMail('${escapeHtml(mail.sender_name || '')}')">
+                            ↩️ Reply
+                        </button>
+                    ` : ''}
+                    <button class="mail-btn danger" onclick="deleteMail(${mail.mail_id}); closeMailModal();">
+                        🗑️ Delete
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        document.body.style.overflow = 'hidden';
+        
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeMailModal();
+        });
+        
     } catch (error) {
-        console.error('Mark read failed:', error);
+        console.error('Open mail failed:', error);
+        alert('Error loading mail');
     }
 }
 
-// Inventory
+function closeMailModal() {
+    const modal = document.getElementById('mail-modal');
+    if (modal) {
+        modal.remove();
+        document.body.style.overflow = '';
+    }
+}
+
+async function deleteMail(mailId) {
+    if (!confirm('Delete this message?')) return;
+    
+    try {
+        const response = await fetch(`${API_BASE}/api/mail/${mailId}?username=${encodeURIComponent(currentSession.username)}`, {
+            method: 'DELETE'
+        });
+        const result = await response.json();
+        
+        if (result.success) {
+            // Remove from UI
+            const mailItem = document.querySelector(`.mail-item[data-mail-id="${mailId}"]`);
+            if (mailItem) {
+                mailItem.style.opacity = '0';
+                mailItem.style.transform = 'translateX(20px)';
+                setTimeout(() => {
+                    mailItem.remove();
+                    // Check if list is now empty
+                    const mailList = document.querySelector('.mail-list');
+                    if (mailList && mailList.children.length === 0) {
+                        loadMail(); // Reload to show empty state
+                    }
+                }, 300);
+            }
+            refreshPlayerData();
+        } else {
+            alert('Failed to delete: ' + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error('Delete failed:', error);
+        alert('Error deleting mail');
+    }
+}
+
+async function deleteAllReadMail() {
+    if (!confirm('Delete all read messages? This cannot be undone.')) return;
+    
+    try {
+        const response = await fetch(`${API_BASE}/api/player/${encodeURIComponent(currentSession.username)}/mail/read`, {
+            method: 'DELETE'
+        });
+        const result = await response.json();
+        
+        if (result.success) {
+            alert(`Deleted ${result.deleted} read message(s)`);
+            loadMail();
+        } else {
+            alert('Failed to delete: ' + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error('Delete all read failed:', error);
+        alert('Error deleting mail');
+    }
+}
+
+// Compose mail functionality
+async function toggleComposeForm() {
+    const container = document.getElementById('compose-container');
+    
+    if (container.innerHTML.trim()) {
+        // Close form
+        container.innerHTML = '';
+        return;
+    }
+    
+    // Load players if not cached
+    if (!playersCache) {
+        try {
+            const response = await fetch(`${API_BASE}/api/players`);
+            const result = await response.json();
+            playersCache = result.success ? result.data : [];
+        } catch (e) {
+            console.error('Failed to load players:', e);
+            playersCache = [];
+        }
+    }
+    
+    // Filter out self
+    const otherPlayers = playersCache.filter(p => 
+        p.username !== currentSession.username && 
+        p.mc_username !== currentSession.username
+    );
+    
+    container.innerHTML = `
+        <div class="compose-form">
+            <h3>✉️ Compose Message</h3>
+            <div class="compose-row">
+                <label>To:</label>
+                <select id="compose-recipient">
+                    <option value="">-- Select Recipient --</option>
+                    ${otherPlayers.map(p => `
+                        <option value="${escapeHtml(p.mc_username || p.username)}">
+                            ${escapeHtml(p.username)} ${p.god_parent ? `(${p.god_parent})` : ''}
+                            ${p.mc_username ? ` - MC: ${p.mc_username}` : ''}
+                        </option>
+                    `).join('')}
+                </select>
+            </div>
+            <div class="compose-row">
+                <label>Subject:</label>
+                <input type="text" id="compose-subject" placeholder="Message subject..." maxlength="100">
+            </div>
+            <div class="compose-row">
+                <label>Message:</label>
+                <textarea id="compose-content" placeholder="Write your message here..." maxlength="2000"></textarea>
+            </div>
+            <div class="compose-actions">
+                <button class="mail-btn" onclick="toggleComposeForm()">Cancel</button>
+                <button class="mail-btn primary" onclick="sendMail()">📤 Send</button>
+            </div>
+        </div>
+    `;
+    
+    // Focus recipient dropdown
+    document.getElementById('compose-recipient').focus();
+}
+
+function replyToMail(senderName) {
+    toggleComposeForm();
+    
+    // Wait for form to render then set recipient
+    setTimeout(() => {
+        const recipientSelect = document.getElementById('compose-recipient');
+        if (recipientSelect) {
+            // Try to find and select the sender
+            for (let option of recipientSelect.options) {
+                if (option.value === senderName || option.text.includes(senderName)) {
+                    option.selected = true;
+                    break;
+                }
+            }
+            document.getElementById('compose-subject').focus();
+        }
+    }, 100);
+}
+
+async function sendMail() {
+    const recipient = document.getElementById('compose-recipient').value;
+    const subject = document.getElementById('compose-subject').value.trim();
+    const content = document.getElementById('compose-content').value.trim();
+    
+    if (!recipient) {
+        alert('Please select a recipient');
+        return;
+    }
+    if (!subject) {
+        alert('Please enter a subject');
+        return;
+    }
+    if (!content) {
+        alert('Please enter a message');
+        return;
+    }
+    
+    const sendBtn = document.querySelector('.compose-actions .mail-btn.primary');
+    sendBtn.disabled = true;
+    sendBtn.textContent = 'Sending...';
+    
+    try {
+        const response = await fetch(`${API_BASE}/api/player/${encodeURIComponent(currentSession.username)}/mail/send`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                recipientUsername: recipient,
+                subject: subject,
+                content: content
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert('Message sent successfully!');
+            toggleComposeForm(); // Close form
+        } else {
+            alert('Failed to send: ' + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error('Send mail failed:', error);
+        alert('Error sending mail. Please try again.');
+    } finally {
+        sendBtn.disabled = false;
+        sendBtn.textContent = '📤 Send';
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+// INVENTORY SYSTEM
+// ══════════════════════════════════════════════════════════════════════════
+
 async function loadInventory() {
     if (!currentSession?.username) return;
     
@@ -363,7 +760,8 @@ async function loadInventory() {
         style.id = 'inv-styles';
         style.textContent = `
             .inventory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
-            .inventory-item { background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.2); border-radius: 8px; padding: 1rem; text-align: center; }
+            .inventory-item { background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.2); border-radius: 8px; padding: 1rem; text-align: center; transition: all 0.3s ease; }
+            .inventory-item:hover { border-color: var(--gold); transform: translateY(-2px); }
             .item-name { font-family: 'Cinzel', serif; color: var(--gold); margin-bottom: 0.5rem; }
             .item-qty { color: var(--marble-dark); font-size: 0.9rem; }
             .item-tag { background: rgba(79,195,247,0.2); color: var(--lightning); padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.75rem; margin-top: 0.5rem; display: inline-block; }
@@ -378,11 +776,11 @@ async function loadInventory() {
         if (result.success && result.data && result.data.length > 0) {
             invPanel.innerHTML = `
                 <div class="doc-section">
-                    <h2>Your Inventory (${result.data.length} items)</h2>
+                    <h2>🎒 Your Inventory (${result.data.length} items)</h2>
                     <div class="inventory-grid">
                         ${result.data.map(item => `
                             <div class="inventory-item">
-                                <div class="item-name">${item.item_name || item.name || 'Unknown Item'}</div>
+                                <div class="item-name">${escapeHtml(item.item_name || item.name || 'Unknown Item')}</div>
                                 <div class="item-qty">x${item.quantity || 1}</div>
                                 ${item.is_redeemable ? '<div class="item-tag">Redeemable</div>' : ''}
                             </div>
@@ -393,7 +791,7 @@ async function loadInventory() {
         } else {
             invPanel.innerHTML = `
                 <div class="doc-section">
-                    <h2>Your Inventory</h2>
+                    <h2>🎒 Your Inventory</h2>
                     <div class="info-box tip">
                         <div class="info-box-title">Empty Inventory</div>
                         <p>You don't have any items yet! Win games, complete quests, or visit shops to get items.</p>
@@ -405,7 +803,7 @@ async function loadInventory() {
         console.error('Inventory load failed:', error);
         invPanel.innerHTML = `
             <div class="doc-section">
-                <h2>Inventory</h2>
+                <h2>🎒 Inventory</h2>
                 <div class="info-box warning">
                     <div class="info-box-title">Error</div>
                     <p>Could not load inventory. Please try again.</p>
@@ -415,7 +813,10 @@ async function loadInventory() {
     }
 }
 
-// Character sheets
+// ══════════════════════════════════════════════════════════════════════════
+// CHARACTER SHEETS
+// ══════════════════════════════════════════════════════════════════════════
+
 async function loadPublicCharacters() {
     try {
         const response = await fetch(`${API_BASE}/api/characters`);
@@ -432,12 +833,12 @@ async function loadPublicCharacters() {
                         <div class="char-list-item" onclick="viewPublicCharacter(${char.id})">
                             <div class="char-avatar">
                                 ${char.image_url_1 ? 
-                                    `<img src="${char.image_url_1}" alt="${char.char_name}">` : 
+                                    `<img src="${char.image_url_1}" alt="${escapeHtml(char.char_name)}">` : 
                                     `<span>👤</span>`
                                 }
                             </div>
                             <div class="char-info">
-                                <div class="char-list-name">${char.char_name || 'Unknown'}</div>
+                                <div class="char-list-name">${escapeHtml(char.char_name || 'Unknown')}</div>
                                 <div class="char-list-god">${char.god_parent ? `Child of ${char.god_parent}` : 'Unclaimed'}</div>
                             </div>
                         </div>
@@ -471,10 +872,8 @@ async function viewPublicCharacter(id) {
     }
 }
 
-// Helper function to preserve formatting when displaying text
 function formatTextForDisplay(text) {
     if (!text) return '';
-    // Convert newlines to <br> tags and preserve multiple spaces
     return text
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
@@ -485,7 +884,6 @@ function formatTextForDisplay(text) {
 }
 
 function showCharacterModal(data) {
-    // remove existing modal
     const existingModal = document.getElementById('char-modal');
     if (existingModal) existingModal.remove();
     
@@ -498,7 +896,7 @@ function showCharacterModal(data) {
         <div class="char-modal-content">
             <button class="modal-close" onclick="closeCharacterModal()">×</button>
             <div class="modal-header">
-                <h2>${data.char_name || 'Unknown Character'}</h2>
+                <h2>${escapeHtml(data.char_name || 'Unknown Character')}</h2>
                 <p class="modal-subtitle">${data.god_parent ? `Child of ${data.god_parent}` : 'Unclaimed'}</p>
             </div>
             
@@ -515,15 +913,15 @@ function showCharacterModal(data) {
             <div class="modal-grid">
                 <div class="modal-section">
                     <h3>Basic Info</h3>
-                    <p><strong>Age:</strong> ${data.age || 'Unknown'}</p>
-                    <p><strong>Gender:</strong> ${data.gender || 'Unknown'}</p>
-                    <p><strong>Pronouns:</strong> ${data.pronouns || 'Unknown'}</p>
+                    <p><strong>Age:</strong> ${escapeHtml(data.age) || 'Unknown'}</p>
+                    <p><strong>Gender:</strong> ${escapeHtml(data.gender) || 'Unknown'}</p>
+                    <p><strong>Pronouns:</strong> ${escapeHtml(data.pronouns) || 'Unknown'}</p>
                 </div>
                 
                 <div class="modal-section">
                     <h3>Combat</h3>
-                    <p><strong>Weapon:</strong> ${data.weapon || 'None'}</p>
-                    <p><strong>Fighting Style:</strong> ${data.fighting_style || 'Unknown'}</p>
+                    <p><strong>Weapon:</strong> ${escapeHtml(data.weapon) || 'None'}</p>
+                    <p><strong>Fighting Style:</strong> ${escapeHtml(data.fighting_style) || 'Unknown'}</p>
                     ${data.abilities ? `<p><strong>Abilities:</strong> ${formatTextForDisplay(data.abilities)}</p>` : ''}
                 </div>
             </div>
@@ -573,7 +971,7 @@ function showCharacterModal(data) {
             </div>
             
             <div class="modal-footer">
-                <small>Player: ${data.mc_username || 'Unknown'}</small>
+                <small>Player: ${escapeHtml(data.mc_username) || 'Unknown'}</small>
             </div>
         </div>
     `;
@@ -616,7 +1014,6 @@ async function loadCharacterSheet() {
         
         if (result.success && result.data) {
             const data = result.data;
-            // Load text fields - the values naturally preserve formatting in textareas
             if (data.char_name) document.getElementById('char-name').value = data.char_name;
             if (data.age) document.getElementById('char-age').value = data.age;
             if (data.gender) document.getElementById('char-gender').value = data.gender;
@@ -662,7 +1059,6 @@ async function saveCharacterSheet() {
         return img ? img.src : null;
     };
     
-    // Get values directly from textareas - they preserve newlines and formatting
     const data = {
         name: document.getElementById('char-name').value,
         age: document.getElementById('char-age').value,
@@ -683,7 +1079,6 @@ async function saveCharacterSheet() {
         isPublic: document.getElementById('char-public')?.checked !== false
     };
     
-    // check image sizes
     const checkImageSize = (img, name) => {
         if (img && img.length > 500000) {
             alert(`${name} is too large! Please use a smaller image or an image URL instead.`);
@@ -760,6 +1155,7 @@ function removeImage(previewId) {
 
 function logoutPortal() {
     currentSession = null;
+    playersCache = null;
     localStorage.removeItem('chb_session');
     document.getElementById('portal-login').style.display = 'block';
     document.getElementById('portal-dashboard').classList.remove('active');
@@ -778,8 +1174,8 @@ function logoutPortal() {
         if (el) el.innerHTML = '<span class="placeholder">No image</span>';
     });
     
-    document.getElementById('panel-mail').innerHTML = '<div class="doc-section"><h2>Mail</h2><p>Login to view your mail.</p></div>';
-    document.getElementById('panel-inventory').innerHTML = '<div class="doc-section"><h2>Inventory</h2><p>Login to view your inventory.</p></div>';
+    document.getElementById('panel-mail').innerHTML = '<div class="doc-section"><h2>📬 Mail</h2><p>Login to view your mail.</p></div>';
+    document.getElementById('panel-inventory').innerHTML = '<div class="doc-section"><h2>🎒 Inventory</h2><p>Login to view your inventory.</p></div>';
 }
 
 function switchPortalTab(tabId) {
@@ -789,14 +1185,13 @@ function switchPortalTab(tabId) {
     document.getElementById('panel-' + tabId).classList.add('active');
 }
 
-// init
+// Init
 document.addEventListener('DOMContentLoaded', () => {
     createStarfield();
     createParticles();
     setupScrollReveal();
     window.addEventListener('scroll', handleNavVisibility);
     
-    // Add CSS for formatting preservation
     if (!document.getElementById('char-format-styles')) {
         const style = document.createElement('style');
         style.id = 'char-format-styles';
@@ -825,6 +1220,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeCharacterModal();
+            closeMailModal();
         }
     });
 
