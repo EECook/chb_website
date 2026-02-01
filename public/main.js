@@ -1,6 +1,6 @@
 /*
  * Camp Half-Blood Frontend
- * v4 - Full Mail System + Character browser + multi-image support
+ * v5 - Full Mail System + Character browser + multi-image support + Announcements with Admin Panel
  */
 const API_BASE = window.location.origin;
 let currentSession = null;
@@ -178,6 +178,8 @@ async function loginWithMC() {
         if (result.success) {
             currentSession = {
                 username: result.data.mc_username,
+                visibleUsername: result.data.username, // Discord username if available
+                visibleDiscordId: result.data.discord_id, // Discord ID if available
                 god: result.data.god_parent,
                 godEmoji: result.data.god_emoji || '?',
                 godColor: result.data.god_color || 'Unknown',
@@ -1184,65 +1186,22 @@ function switchPortalTab(tabId) {
     document.getElementById('panel-' + tabId).classList.add('active');
 }
 
-// Init
-document.addEventListener('DOMContentLoaded', () => {
-    createStarfield();
-    createParticles();
-    setupScrollReveal();
-    window.addEventListener('scroll', handleNavVisibility);
-    
-    if (!document.getElementById('char-format-styles')) {
-        const style = document.createElement('style');
-        style.id = 'char-format-styles';
-        style.textContent = `
-            .preserve-formatting {
-                white-space: pre-wrap;
-                word-wrap: break-word;
-            }
-            .char-sheet textarea {
-                white-space: pre-wrap;
-            }
-        `;
-        document.head.appendChild(style);
-    }
-    
-    document.addEventListener('click', (e) => {
-        const mobileMenu = document.getElementById('mobile-menu');
-        const mobileToggle = document.querySelector('.mobile-toggle');
-        if (mobileMenu && mobileMenu.classList.contains('active') && 
-            !mobileMenu.contains(e.target) && 
-            mobileToggle && !mobileToggle.contains(e.target)) {
-            closeMobile();
-        }
-    });
-    
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            closeCharacterModal();
-            closeMailModal();
-        }
-    });
-
-    fetch(`${API_BASE}/api/health`)
-        .then(r => r.json())
-        .then(data => {
-            console.log('API status:', data.status, '| DB:', data.database);
-        })
-        .catch(() => console.log('API offline, running static'));
-});
 // ═══════════════════════════════════════════════════════════════════════════════
-// CONFIGURATION
+// ANNOUNCEMENTS SYSTEM
 // ═══════════════════════════════════════════════════════════════════════════════
 
 const ANNOUNCEMENTS_CONFIG = {
-    // Admin Discord IDs (replace with actual IDs)
-    adminIds: ['lizzzerd', 'ussdylan'],
+    // Admin info - MC usernames (lowercase) and Discord IDs
+    admins: [
+        { visibleDiscordId: '667478723213262848', visibleMcUsername: 'ussdylan' },
+        { visibleDiscordId: '788852381726015489', visibleMcUsername: 'lizzzerd' }
+    ],
     
     // Discord webhook for announcements channel
-    discordWebhook: null, // Set via API or environment
+    discordWebhook: null,
     discordChannelId: '1454707501282103427',
     
-    // API endpoints (adjust to match your server.js routes)
+    // API endpoints
     apiBase: '/api',
     
     // Pagination
@@ -1253,7 +1212,7 @@ const ANNOUNCEMENTS_CONFIG = {
 };
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// STATE MANAGEMENT
+// ANNOUNCEMENTS STATE
 // ═══════════════════════════════════════════════════════════════════════════════
 
 let announcementsState = {
@@ -1268,14 +1227,14 @@ let announcementsState = {
 };
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// INITIALIZATION
+// ANNOUNCEMENTS INITIALIZATION
 // ═══════════════════════════════════════════════════════════════════════════════
 
 async function initAnnouncementsPage() {
     console.log('[Announcements] Initializing...');
     
-    // Check if user is logged in and if they're an admin
-    await checkAdminStatus();
+    // Check if user is logged in via portal and if they're an admin
+    checkAdminStatus();
     
     // Load all data
     await Promise.all([
@@ -1284,39 +1243,47 @@ async function initAnnouncementsPage() {
     ]);
     
     // Setup event listeners
-    setupEventListeners();
+    setupAnnouncementEventListeners();
     
     // Update server IP display
-    document.getElementById('server-ip-display').textContent = ANNOUNCEMENTS_CONFIG.serverIP;
+    const serverIpEl = document.getElementById('server-ip-display');
+    if (serverIpEl) {
+        serverIpEl.textContent = ANNOUNCEMENTS_CONFIG.serverIP;
+    }
     
-    console.log('[Announcements] Initialized');
+    console.log('[Announcements] Initialized, isAdmin:', announcementsState.isAdmin);
 }
 
-async function checkAdminStatus() {
-    try {
-        // Try to get current user from your auth system
-        // This assumes you have a way to get the current user's Discord info
-        const response = await fetch(`${ANNOUNCEMENTS_CONFIG.apiBase}/auth/me`, {
-            credentials: 'include'
-        });
-        
-        if (response.ok) {
-            const user = await response.json();
-            announcementsState.currentUser = user;
+function checkAdminStatus() {
+    // Check if user is logged in via the portal
+    const saved = localStorage.getItem('chb_session');
+    if (saved) {
+        try {
+            const session = JSON.parse(saved);
+            announcementsState.currentUser = session;
             
-            // Check if user is admin
-            const username = user.username?.toLowerCase() || user.discord_username?.toLowerCase();
-            announcementsState.isAdmin = ANNOUNCEMENTS_CONFIG.adminIds.includes(username);
+            // Check if user's MC username matches any admin
+            const mcUsername = (session.username || '').toLowerCase();
+            const discordId = session.visibleDiscordId || '';
             
-            if (announcementsState.isAdmin) {
+            const isAdmin = ANNOUNCEMENTS_CONFIG.admins.some(admin => {
+                return admin.visibleMcUsername.toLowerCase() === mcUsername ||
+                       admin.visibleDiscordId === discordId;
+            });
+            
+            announcementsState.isAdmin = isAdmin;
+            
+            if (isAdmin) {
+                console.log('[Announcements] Admin detected:', mcUsername);
                 showAdminPanel();
+            } else {
+                console.log('[Announcements] User is not admin:', mcUsername);
             }
+        } catch(e) {
+            console.error('[Announcements] Session parse error:', e);
         }
-    } catch (error) {
-        console.log('[Announcements] User not logged in or auth check failed');
-        // For development/testing, you can manually enable admin:
-        // announcementsState.isAdmin = true;
-        // showAdminPanel();
+    } else {
+        console.log('[Announcements] No session found - user not logged in');
     }
 }
 
@@ -1330,10 +1297,10 @@ function showAdminPanel() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// EVENT LISTENERS
+// ANNOUNCEMENTS EVENT LISTENERS
 // ═══════════════════════════════════════════════════════════════════════════════
 
-function setupEventListeners() {
+function setupAnnouncementEventListeners() {
     // Admin tabs
     document.querySelectorAll('.admin-tab').forEach(tab => {
         tab.addEventListener('click', () => switchAdminTab(tab.dataset.tab));
@@ -1358,7 +1325,7 @@ function switchAdminTab(tabId) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// ANNOUNCEMENTS
+// ANNOUNCEMENTS LOADING
 // ═══════════════════════════════════════════════════════════════════════════════
 
 async function loadAnnouncements() {
@@ -1368,7 +1335,7 @@ async function loadAnnouncements() {
         if (response.ok) {
             const data = await response.json();
             announcementsState.announcements = data.announcements || [];
-            announcementsState.pinnedAnnouncements = data.announcements?.filter(a => a.is_pinned) || [];
+            announcementsState.pinnedAnnouncements = announcementsState.announcements.filter(a => a.is_pinned);
         } else {
             // Use demo data if API not available
             announcementsState.announcements = getDemoAnnouncements();
@@ -1413,6 +1380,8 @@ function renderPinnedAnnouncements() {
     const container = document.getElementById('pinned-grid');
     const section = document.getElementById('pinned-section');
     
+    if (!container || !section) return;
+    
     const pinned = announcementsState.pinnedAnnouncements.slice(0, 4);
     
     if (pinned.length === 0) {
@@ -1439,8 +1408,8 @@ function renderPinnedAnnouncements() {
 
 function renderAnnouncementsFeed() {
     const container = document.getElementById('feed-container');
+    if (!container) return;
     
-    // Filter out pinned from main feed (they're shown separately)
     const feedAnnouncements = announcementsState.announcements;
     
     // Pagination
@@ -1477,11 +1446,11 @@ function renderAnnouncementsFeed() {
             </div>
             <div class="announcement-content">
                 <div class="announcement-title">${escapeHtml(ann.title)}</div>
-                <div class="announcement-body">${formatContent(ann.content)}</div>
+                <div class="announcement-body">${formatAnnouncementContent(ann.content)}</div>
                 ${ann.notes ? `
                     <div class="announcement-notes">
                         <div class="announcement-notes-label">📝 Additional Notes</div>
-                        <div class="announcement-notes-content">${formatContent(ann.notes)}</div>
+                        <div class="announcement-notes-content">${formatAnnouncementContent(ann.notes)}</div>
                     </div>
                 ` : ''}
             </div>
@@ -1506,6 +1475,7 @@ function renderAnnouncementsFeed() {
 
 function renderPagination() {
     const container = document.getElementById('feed-pagination');
+    if (!container) return;
     
     if (announcementsState.totalPages <= 1) {
         container.innerHTML = '';
@@ -1581,18 +1551,18 @@ async function postAnnouncement() {
         const response = await fetch(`${ANNOUNCEMENTS_CONFIG.apiBase}/announcements`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
             body: JSON.stringify({
                 title,
                 content,
                 notes: notes || null,
                 is_pinned: isPinned,
-                post_to_discord: postToDiscord
+                post_to_discord: postToDiscord,
+                author: announcementsState.currentUser?.username || 'Admin',
+                author_avatar: announcementsState.currentUser?.godEmoji || '⚡'
             })
         });
         
         if (response.ok) {
-            const result = await response.json();
             showToast('success', 'Announcement posted successfully!');
             
             // Clear form
@@ -1630,7 +1600,6 @@ async function togglePin(id) {
         const response = await fetch(`${ANNOUNCEMENTS_CONFIG.apiBase}/announcements/${id}/pin`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
             body: JSON.stringify({ is_pinned: !announcement.is_pinned })
         });
         
@@ -1651,8 +1620,7 @@ async function deleteAnnouncement(id) {
     
     try {
         const response = await fetch(`${ANNOUNCEMENTS_CONFIG.apiBase}/announcements/${id}`, {
-            method: 'DELETE',
-            credentials: 'include'
+            method: 'DELETE'
         });
         
         if (response.ok) {
@@ -1712,6 +1680,7 @@ function getDemoFiles() {
 
 function renderFiles() {
     const container = document.getElementById('downloads-grid');
+    if (!container) return;
     
     let files = announcementsState.files;
     
@@ -1807,7 +1776,6 @@ async function uploadFile() {
         const response = await fetch(`${ANNOUNCEMENTS_CONFIG.apiBase}/files`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
             body: JSON.stringify({
                 title,
                 category,
@@ -1845,8 +1813,7 @@ async function deleteFile(id) {
     
     try {
         const response = await fetch(`${ANNOUNCEMENTS_CONFIG.apiBase}/files/${id}`, {
-            method: 'DELETE',
-            credentials: 'include'
+            method: 'DELETE'
         });
         
         if (response.ok) {
@@ -1923,24 +1890,19 @@ function copyServerIP() {
     const ip = ANNOUNCEMENTS_CONFIG.serverIP;
     navigator.clipboard.writeText(ip).then(() => {
         const btn = document.querySelector('.copy-btn');
-        btn.textContent = '✓';
-        btn.classList.add('copied');
-        showToast('success', 'Server IP copied!');
-        setTimeout(() => {
-            btn.textContent = '📋';
-            btn.classList.remove('copied');
-        }, 2000);
+        if (btn) {
+            btn.textContent = '✓';
+            btn.classList.add('copied');
+            showToast('success', 'Server IP copied!');
+            setTimeout(() => {
+                btn.textContent = '📋';
+                btn.classList.remove('copied');
+            }, 2000);
+        }
     });
 }
 
-function escapeHtml(text) {
-    if (!text) return '';
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-function formatContent(text) {
+function formatAnnouncementContent(text) {
     if (!text) return '';
     
     // Escape HTML first
@@ -1972,28 +1934,6 @@ function truncateText(text, maxLength) {
     return escapeHtml(text.substring(0, maxLength)) + '...';
 }
 
-function formatDate(dateString) {
-    if (!dateString) return 'Unknown';
-    
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now - date;
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMs / 3600000);
-    const diffDays = Math.floor(diffMs / 86400000);
-    
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    if (diffDays < 7) return `${diffDays}d ago`;
-    
-    return date.toLocaleDateString('en-US', { 
-        month: 'short', 
-        day: 'numeric',
-        year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
-    });
-}
-
 function isNewAnnouncement(dateString) {
     if (!dateString) return false;
     const date = new Date(dateString);
@@ -2012,6 +1952,7 @@ function showToast(type, message) {
     if (!container) {
         container = document.createElement('div');
         container.className = 'toast-container';
+        container.style.cssText = 'position: fixed; bottom: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px;';
         document.body.appendChild(container);
     }
     
@@ -2021,42 +1962,99 @@ function showToast(type, message) {
         info: 'ℹ️'
     };
     
+    const colors = {
+        success: 'rgba(34, 197, 94, 0.9)',
+        error: 'rgba(239, 68, 68, 0.9)',
+        info: 'rgba(59, 130, 246, 0.9)'
+    };
+    
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
+    toast.style.cssText = `
+        display: flex; align-items: center; gap: 10px; padding: 12px 20px;
+        background: ${colors[type]}; color: white; border-radius: 8px;
+        font-size: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        animation: slideIn 0.3s ease;
+    `;
     toast.innerHTML = `
-        <span class="toast-icon">${icons[type] || 'ℹ️'}</span>
-        <span class="toast-message">${escapeHtml(message)}</span>
-        <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+        <span>${icons[type] || 'ℹ️'}</span>
+        <span>${escapeHtml(message)}</span>
+        <button onclick="this.parentElement.remove()" style="background:none;border:none;color:white;cursor:pointer;font-size:18px;margin-left:10px;">×</button>
     `;
     
     container.appendChild(toast);
     
     // Auto remove after 5 seconds
     setTimeout(() => {
-        toast.style.animation = 'slideIn 0.3s ease reverse';
-        setTimeout(() => toast.remove(), 300);
+        if (toast.parentElement) {
+            toast.style.animation = 'slideIn 0.3s ease reverse';
+            setTimeout(() => toast.remove(), 300);
+        }
     }, 5000);
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// INIT ON PAGE LOAD
-// ═══════════════════════════════════════════════════════════════════════════════
-
-// Call this when the announcements page loads
-// If using a router, call initAnnouncementsPage() when navigating to the page
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        if (document.querySelector('.announcements-page')) {
-            initAnnouncementsPage();
+// Add slideIn animation
+if (!document.getElementById('toast-styles')) {
+    const style = document.createElement('style');
+    style.id = 'toast-styles';
+    style.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
-    });
-} else {
-    if (document.querySelector('.announcements-page')) {
-        initAnnouncementsPage();
-    }
+    `;
+    document.head.appendChild(style);
 }
 
 // Export for use with page router
 window.initAnnouncementsPage = initAnnouncementsPage;
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════════════════
 
+document.addEventListener('DOMContentLoaded', () => {
+    createStarfield();
+    createParticles();
+    setupScrollReveal();
+    window.addEventListener('scroll', handleNavVisibility);
+    
+    if (!document.getElementById('char-format-styles')) {
+        const style = document.createElement('style');
+        style.id = 'char-format-styles';
+        style.textContent = `
+            .preserve-formatting {
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
+            .char-sheet textarea {
+                white-space: pre-wrap;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    document.addEventListener('click', (e) => {
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileToggle = document.querySelector('.mobile-toggle');
+        if (mobileMenu && mobileMenu.classList.contains('active') && 
+            !mobileMenu.contains(e.target) && 
+            mobileToggle && !mobileToggle.contains(e.target)) {
+            closeMobile();
+        }
+    });
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeCharacterModal();
+            closeMailModal();
+        }
+    });
+
+    fetch(`${API_BASE}/api/health`)
+        .then(r => r.json())
+        .then(data => {
+            console.log('API status:', data.status, '| DB:', data.database);
+        })
+        .catch(() => console.log('API offline, running static'));
+});
