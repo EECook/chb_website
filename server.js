@@ -1,5 +1,5 @@
 // ══════════════════════════════════════════════════════════════════════════
-// CAMP HALF-BLOOD - BACKEND SERVER (v4 - Full Mail System + Announcements)
+// CAMP HALF-BLOOD - BACKEND SERVER (v4 - Full Mail System + Announcements
 // ══════════════════════════════════════════════════════════════════════════
 
 const express = require('express');
