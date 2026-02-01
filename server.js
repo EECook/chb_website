@@ -1,5 +1,5 @@
 // ══════════════════════════════════════════════════════════════════════════
-// CAMP HALF-BLOOD - BACKEND SERVER (v3 - Multiple Images & Public Sheets)
+// CAMP HALF-BLOOD - BACKEND SERVER (v4 - Full Mail System)
 // ══════════════════════════════════════════════════════════════════════════
 
 const express = require('express');
@@ -12,7 +12,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.json({ limit: '10mb' })); // Increased limit for images
+app.use(express.json({ limit: '10mb' }));
 app.use(express.static('public'));
 
 const dbConfig = {
@@ -43,7 +43,6 @@ async function initDatabase() {
 
 async function createWebTables() {
     try {
-        // Drop and recreate with new schema for multiple images
         await pool.execute(`
             CREATE TABLE IF NOT EXISTS web_character_sheets (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -99,6 +98,53 @@ const GODS = {
     'Tyche': { emoji: '🎲', color: 'Blue', effect: 'Luck', domain: 'Fortune' }
 };
 
+// Helper: Get system sender name based on mail type
+function getSystemSenderName(mailType) {
+    const senderNames = {
+        'god_claiming': '🏛️ The Olympians',
+        'divine': '⚡ Divine Message',
+        'system': '⚙️ Camp System',
+        'reward': '🎁 Camp Rewards',
+        'daily_reward': '🎁 Daily Bonus',
+        'cabin_invite': '🏕️ Cabin Council',
+        'shop_order': '🛒 Camp Store',
+        'delivery_request': '📦 Delivery Service',
+        'delivery_complete': '✅ Delivery Complete',
+        'event': '🏆 Camp Events',
+        'quest_complete': '📜 Quest Board'
+    };
+    return senderNames[mailType] || '📬 Camp Half-Blood';
+}
+
+// Helper: Get discord_id from MC username
+async function getDiscordIdFromUsername(username) {
+    if (!pool) return null;
+    try {
+        const [rows] = await pool.execute(
+            'SELECT CAST(discord_id AS CHAR) as discord_id FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
+            [username]
+        );
+        return rows.length > 0 ? rows[0].discord_id : null;
+    } catch (e) {
+        console.error('Error getting discord_id:', e);
+        return null;
+    }
+}
+
+// Helper: Get username from discord_id
+async function getUsernameFromDiscordId(discordId) {
+    if (!pool || !discordId) return 'Unknown';
+    try {
+        const [rows] = await pool.execute(
+            'SELECT username FROM players WHERE CAST(user_id AS CHAR) = ?',
+            [discordId]
+        );
+        return rows.length > 0 ? rows[0].username : 'Unknown';
+    } catch (e) {
+        return 'Unknown';
+    }
+}
+
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', database: pool ? 'connected' : 'demo mode' });
 });
@@ -107,7 +153,10 @@ app.get('/api/gods', (req, res) => {
     res.json({ success: true, data: GODS });
 });
 
-// Main player lookup
+// ══════════════════════════════════════════════════════════════════════════
+// PLAYER ENDPOINTS
+// ══════════════════════════════════════════════════════════════════════════
+
 app.get('/api/player/:username', async (req, res) => {
     const username = req.params.username;
     console.log('🔍 Looking up player:', username);
@@ -141,7 +190,6 @@ app.get('/api/player/:username', async (req, res) => {
         
         const player = playerRows[0];
         
-        // Get cabin info
         let cabinName = null;
         let cabinFavor = 0;
         if (player.cabin_id) {
@@ -157,7 +205,6 @@ app.get('/api/player/:username', async (req, res) => {
             } catch (e) {}
         }
         
-        // Get unread mail count
         let unreadMail = 0;
         try {
             const [mailRows] = await pool.execute(
@@ -173,6 +220,7 @@ app.get('/api/player/:username', async (req, res) => {
             success: true,
             data: {
                 user_id: player.user_id,
+                discord_id: discordId,
                 discord_username: player.username,
                 mc_username: actualMcUsername,
                 god_parent: player.god_parent,
@@ -198,53 +246,253 @@ app.get('/api/player/:username', async (req, res) => {
     }
 });
 
-// Get mail
+// ══════════════════════════════════════════════════════════════════════════
+// MAIL ENDPOINTS - FULL CRUD
+// ══════════════════════════════════════════════════════════════════════════
+
+// Get all mail for a player
 app.get('/api/player/:username/mail', async (req, res) => {
     const username = req.params.username;
     if (!pool) return res.json({ success: true, data: [] });
     
     try {
-        const [linkRows] = await pool.execute(
-            'SELECT CAST(discord_id AS CHAR) as discord_id FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
-            [username]
-        );
-        if (linkRows.length === 0) return res.json({ success: true, data: [] });
+        const discordId = await getDiscordIdFromUsername(username);
+        if (!discordId) return res.json({ success: true, data: [] });
         
-        const [rows] = await pool.execute(
-            'SELECT * FROM mail WHERE CAST(recipient_id AS CHAR) = ? ORDER BY created_at DESC LIMIT 50',
-            [linkRows[0].discord_id]
-        );
-        res.json({ success: true, data: rows });
+        const [rows] = await pool.execute(`
+            SELECT 
+                m.mail_id,
+                m.sender_id,
+                m.recipient_id,
+                m.subject,
+                m.content,
+                m.mail_type,
+                m.action_data,
+                m.is_read,
+                m.created_at,
+                m.read_at,
+                m.priority,
+                p.username as sender_name
+            FROM mail m
+            LEFT JOIN players p ON CAST(m.sender_id AS CHAR) = CAST(p.user_id AS CHAR)
+            WHERE CAST(m.recipient_id AS CHAR) = ?
+            ORDER BY m.created_at DESC 
+            LIMIT 100
+        `, [discordId]);
+        
+        // Format sender names for system mail
+        const formattedMail = rows.map(mail => ({
+            ...mail,
+            sender_name: !mail.sender_id || mail.sender_id == 0 
+                ? getSystemSenderName(mail.mail_type) 
+                : (mail.sender_name || 'Unknown Player')
+        }));
+        
+        res.json({ success: true, data: formattedMail });
     } catch (error) {
+        console.error('Mail fetch error:', error);
         res.json({ success: true, data: [] });
     }
 });
 
-app.post('/api/mail/:mailId/read', async (req, res) => {
-    if (!pool) return res.json({ success: true });
+// Get single mail by ID
+app.get('/api/mail/:mailId', async (req, res) => {
+    const { mailId } = req.params;
+    if (!pool) return res.json({ success: false, error: 'Database not connected' });
+    
     try {
-        await pool.execute('UPDATE mail SET is_read = 1 WHERE mail_id = ?', [req.params.mailId]);
-        res.json({ success: true });
+        const [rows] = await pool.execute(`
+            SELECT 
+                m.*,
+                p.username as sender_name
+            FROM mail m
+            LEFT JOIN players p ON CAST(m.sender_id AS CHAR) = CAST(p.user_id AS CHAR)
+            WHERE m.mail_id = ?
+        `, [mailId]);
+        
+        if (rows.length === 0) {
+            return res.json({ success: false, error: 'Mail not found' });
+        }
+        
+        const mail = rows[0];
+        mail.sender_name = !mail.sender_id || mail.sender_id == 0 
+            ? getSystemSenderName(mail.mail_type) 
+            : (mail.sender_name || 'Unknown Player');
+        
+        res.json({ success: true, data: mail });
     } catch (error) {
-        res.json({ success: false });
+        console.error('Single mail fetch error:', error);
+        res.json({ success: false, error: 'Database error' });
     }
 });
 
-// Get inventory
+// Mark mail as read
+app.post('/api/mail/:mailId/read', async (req, res) => {
+    if (!pool) return res.json({ success: true });
+    
+    try {
+        await pool.execute(
+            'UPDATE mail SET is_read = 1, read_at = NOW() WHERE mail_id = ?', 
+            [req.params.mailId]
+        );
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Mark read error:', error);
+        res.json({ success: false, error: 'Database error' });
+    }
+});
+
+// Delete single mail
+app.delete('/api/mail/:mailId', async (req, res) => {
+    const { mailId } = req.params;
+    const { username } = req.query; // For verification
+    
+    if (!pool) return res.json({ success: false, error: 'Database not connected' });
+    
+    try {
+        // Verify ownership if username provided
+        if (username) {
+            const discordId = await getDiscordIdFromUsername(username);
+            if (discordId) {
+                const [check] = await pool.execute(
+                    'SELECT mail_id FROM mail WHERE mail_id = ? AND CAST(recipient_id AS CHAR) = ?',
+                    [mailId, discordId]
+                );
+                if (check.length === 0) {
+                    return res.json({ success: false, error: 'Mail not found or not yours' });
+                }
+            }
+        }
+        
+        await pool.execute('DELETE FROM mail WHERE mail_id = ?', [mailId]);
+        console.log('🗑️ Deleted mail:', mailId);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Delete mail error:', error);
+        res.json({ success: false, error: 'Database error' });
+    }
+});
+
+// Delete all read mail for a player
+app.delete('/api/player/:username/mail/read', async (req, res) => {
+    const { username } = req.params;
+    if (!pool) return res.json({ success: false, error: 'Database not connected' });
+    
+    try {
+        const discordId = await getDiscordIdFromUsername(username);
+        if (!discordId) {
+            return res.json({ success: false, error: 'Player not found' });
+        }
+        
+        const [result] = await pool.execute(
+            'DELETE FROM mail WHERE CAST(recipient_id AS CHAR) = ? AND is_read = 1',
+            [discordId]
+        );
+        
+        console.log('🗑️ Deleted', result.affectedRows, 'read messages for', username);
+        res.json({ success: true, deleted: result.affectedRows });
+    } catch (error) {
+        console.error('Delete read mail error:', error);
+        res.json({ success: false, error: 'Database error' });
+    }
+});
+
+// Send mail
+app.post('/api/player/:username/mail/send', async (req, res) => {
+    const senderUsername = req.params.username;
+    const { recipientUsername, subject, content } = req.body;
+    
+    console.log('📬 Send mail request:', { from: senderUsername, to: recipientUsername, subject });
+    
+    if (!pool) return res.json({ success: false, error: 'Database not connected' });
+    
+    if (!recipientUsername || !subject || !content) {
+        return res.json({ success: false, error: 'Missing required fields' });
+    }
+    
+    try {
+        // Get sender's discord ID
+        const senderId = await getDiscordIdFromUsername(senderUsername);
+        if (!senderId) {
+            return res.json({ success: false, error: 'Sender not found' });
+        }
+        
+        // Get recipient's discord ID - try MC username first, then Discord username
+        let recipientId = await getDiscordIdFromUsername(recipientUsername);
+        
+        // If not found by MC username, try by Discord username
+        if (!recipientId) {
+            const [playerRows] = await pool.execute(
+                'SELECT CAST(user_id AS CHAR) as user_id FROM players WHERE LOWER(username) = LOWER(?)',
+                [recipientUsername]
+            );
+            if (playerRows.length > 0) {
+                recipientId = playerRows[0].user_id;
+            }
+        }
+        
+        if (!recipientId) {
+            return res.json({ success: false, error: 'Recipient not found' });
+        }
+        
+        // Don't allow sending to yourself
+        if (senderId === recipientId) {
+            return res.json({ success: false, error: 'Cannot send mail to yourself' });
+        }
+        
+        // Insert the mail
+        const [result] = await pool.execute(`
+            INSERT INTO mail (recipient_id, sender_id, mail_type, subject, content, is_read, created_at)
+            VALUES (?, ?, 'personal', ?, ?, 0, NOW())
+        `, [recipientId, senderId, subject.substring(0, 100), content.substring(0, 2000)]);
+        
+        console.log('✅ Mail sent! ID:', result.insertId);
+        res.json({ success: true, mailId: result.insertId });
+    } catch (error) {
+        console.error('Send mail error:', error);
+        res.json({ success: false, error: 'Database error: ' + error.message });
+    }
+});
+
+// Get list of players for recipient dropdown
+app.get('/api/players', async (req, res) => {
+    if (!pool) return res.json({ success: true, data: [] });
+    
+    try {
+        const [rows] = await pool.execute(`
+            SELECT 
+                p.username,
+                p.god_parent,
+                ml.minecraft_username as mc_username
+            FROM players p
+            LEFT JOIN minecraft_links ml ON CAST(p.user_id AS CHAR) = CAST(ml.discord_id AS CHAR)
+            WHERE p.is_active = 1
+            ORDER BY p.username ASC
+            LIMIT 100
+        `);
+        
+        res.json({ success: true, data: rows });
+    } catch (error) {
+        console.error('Players list error:', error);
+        res.json({ success: true, data: [] });
+    }
+});
+
+// ══════════════════════════════════════════════════════════════════════════
+// INVENTORY ENDPOINTS
+// ══════════════════════════════════════════════════════════════════════════
+
 app.get('/api/player/:username/inventory', async (req, res) => {
     const username = req.params.username;
     if (!pool) return res.json({ success: true, data: [] });
     
     try {
-        const [linkRows] = await pool.execute(
-            'SELECT CAST(discord_id AS CHAR) as discord_id FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
-            [username]
-        );
-        if (linkRows.length === 0) return res.json({ success: true, data: [] });
+        const discordId = await getDiscordIdFromUsername(username);
+        if (!discordId) return res.json({ success: true, data: [] });
         
         const [rows] = await pool.execute(
             'SELECT * FROM inventory WHERE CAST(user_id AS CHAR) = ?',
-            [linkRows[0].discord_id]
+            [discordId]
         );
         res.json({ success: true, data: rows });
     } catch (error) {
@@ -253,25 +501,21 @@ app.get('/api/player/:username/inventory', async (req, res) => {
 });
 
 // ══════════════════════════════════════════════════════════════════════════
-// CHARACTER SHEETS - WITH MULTIPLE IMAGES & PUBLIC VIEWING
+// CHARACTER SHEETS
 // ══════════════════════════════════════════════════════════════════════════
 
-// Get own character sheet
 app.get('/api/player/:username/character', async (req, res) => {
     const username = req.params.username;
     console.log('📋 Getting character sheet for:', username);
     if (!pool) return res.json({ success: true, data: null });
     
     try {
-        const [linkRows] = await pool.execute(
-            'SELECT CAST(discord_id AS CHAR) as discord_id FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
-            [username]
-        );
-        if (linkRows.length === 0) return res.json({ success: true, data: null });
+        const discordId = await getDiscordIdFromUsername(username);
+        if (!discordId) return res.json({ success: true, data: null });
         
         const [rows] = await pool.execute(
             'SELECT * FROM web_character_sheets WHERE discord_id = ?',
-            [linkRows[0].discord_id]
+            [discordId]
         );
         console.log('📋 Character sheet found:', rows.length > 0);
         res.json({ success: true, data: rows[0] || null });
@@ -281,7 +525,6 @@ app.get('/api/player/:username/character', async (req, res) => {
     }
 });
 
-// Get ALL public character sheets (for sidebar)
 app.get('/api/characters', async (req, res) => {
     if (!pool) return res.json({ success: true, data: [] });
     
@@ -309,7 +552,6 @@ app.get('/api/characters', async (req, res) => {
     }
 });
 
-// Get a specific character sheet by ID (public view)
 app.get('/api/character/:id', async (req, res) => {
     const { id } = req.params;
     if (!pool) return res.json({ success: true, data: null });
@@ -331,7 +573,6 @@ app.get('/api/character/:id', async (req, res) => {
     }
 });
 
-// Save character sheet - WITH MULTIPLE IMAGES
 app.post('/api/player/:username/character', async (req, res) => {
     const username = req.params.username;
     const data = req.body;
@@ -340,18 +581,11 @@ app.post('/api/player/:username/character', async (req, res) => {
     if (!pool) return res.json({ success: true });
     
     try {
-        const [linkRows] = await pool.execute(
-            'SELECT CAST(discord_id AS CHAR) as discord_id FROM minecraft_links WHERE LOWER(minecraft_username) = LOWER(?)',
-            [username]
-        );
-        
-        if (linkRows.length === 0) {
+        const discordId = await getDiscordIdFromUsername(username);
+        if (!discordId) {
             return res.status(404).json({ success: false, error: 'Account not linked' });
         }
         
-        const discordId = linkRows[0].discord_id;
-        
-        // Get player's god parent
         let godParent = null;
         try {
             const [playerRows] = await pool.execute(
@@ -363,10 +597,8 @@ app.post('/api/player/:username/character', async (req, res) => {
             }
         } catch (e) {}
         
-        // Process images - limit size by truncating if too long
         const processImage = (img) => {
             if (!img) return null;
-            // If it's a data URL and too large, reject it
             if (img.startsWith('data:') && img.length > 500000) {
                 console.log('⚠️ Image too large, skipping');
                 return null;
@@ -378,7 +610,6 @@ app.post('/api/player/:username/character', async (req, res) => {
         const image2 = processImage(data.image2);
         const image3 = processImage(data.image3);
         
-        // Check if record exists
         const [existing] = await pool.execute(
             'SELECT id FROM web_character_sheets WHERE discord_id = ?',
             [discordId]
@@ -388,48 +619,16 @@ app.post('/api/player/:username/character', async (req, res) => {
             console.log('💾 Updating existing character sheet');
             await pool.execute(`
                 UPDATE web_character_sheets SET
-                    mc_username = ?,
-                    char_name = ?,
-                    age = ?,
-                    gender = ?,
-                    pronouns = ?,
-                    god_parent = ?,
-                    personality = ?,
-                    likes = ?,
-                    dislikes = ?,
-                    backstory = ?,
-                    weapon = ?,
-                    fighting_style = ?,
-                    abilities = ?,
-                    goals = ?,
-                    fears = ?,
-                    image_url_1 = ?,
-                    image_url_2 = ?,
-                    image_url_3 = ?,
-                    is_public = ?
+                    mc_username = ?, char_name = ?, age = ?, gender = ?, pronouns = ?,
+                    god_parent = ?, personality = ?, likes = ?, dislikes = ?, backstory = ?,
+                    weapon = ?, fighting_style = ?, abilities = ?, goals = ?, fears = ?,
+                    image_url_1 = ?, image_url_2 = ?, image_url_3 = ?, is_public = ?
                 WHERE discord_id = ?`,
-                [
-                    username,
-                    data.name || null,
-                    data.age || null,
-                    data.gender || null,
-                    data.pronouns || null,
-                    godParent,
-                    data.personality || null,
-                    data.likes || null,
-                    data.dislikes || null,
-                    data.backstory || null,
-                    data.weapon || null,
-                    data.style || null,
-                    data.abilities || null,
-                    data.goals || null,
-                    data.fears || null,
-                    image1,
-                    image2,
-                    image3,
-                    data.isPublic !== false ? 1 : 0,
-                    discordId
-                ]
+                [username, data.name || null, data.age || null, data.gender || null, 
+                 data.pronouns || null, godParent, data.personality || null, data.likes || null,
+                 data.dislikes || null, data.backstory || null, data.weapon || null,
+                 data.style || null, data.abilities || null, data.goals || null, data.fears || null,
+                 image1, image2, image3, data.isPublic !== false ? 1 : 0, discordId]
             );
         } else {
             console.log('💾 Creating new character sheet');
@@ -439,28 +638,11 @@ app.post('/api/player/:username/character', async (req, res) => {
                  personality, likes, dislikes, backstory, weapon, fighting_style, 
                  abilities, goals, fears, image_url_1, image_url_2, image_url_3, is_public)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [
-                    discordId,
-                    username,
-                    data.name || null,
-                    data.age || null,
-                    data.gender || null,
-                    data.pronouns || null,
-                    godParent,
-                    data.personality || null,
-                    data.likes || null,
-                    data.dislikes || null,
-                    data.backstory || null,
-                    data.weapon || null,
-                    data.style || null,
-                    data.abilities || null,
-                    data.goals || null,
-                    data.fears || null,
-                    image1,
-                    image2,
-                    image3,
-                    data.isPublic !== false ? 1 : 0
-                ]
+                [discordId, username, data.name || null, data.age || null, data.gender || null,
+                 data.pronouns || null, godParent, data.personality || null, data.likes || null,
+                 data.dislikes || null, data.backstory || null, data.weapon || null,
+                 data.style || null, data.abilities || null, data.goals || null, data.fears || null,
+                 image1, image2, image3, data.isPublic !== false ? 1 : 0]
             );
         }
         
@@ -472,7 +654,10 @@ app.post('/api/player/:username/character', async (req, res) => {
     }
 });
 
-// Leaderboard
+// ══════════════════════════════════════════════════════════════════════════
+// LEADERBOARD
+// ══════════════════════════════════════════════════════════════════════════
+
 app.get('/api/leaderboard', async (req, res) => {
     if (!pool) return res.json({ success: true, data: [] });
     
