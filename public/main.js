@@ -1208,7 +1208,7 @@ const ANNOUNCEMENTS_CONFIG = {
     postsPerPage: 10,
     
     // Server IP
-    serverIP: '169.155.120.58:26960'
+    serverIP: 'play.camphalfblood.net'
 };
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -1557,8 +1557,7 @@ async function postAnnouncement() {
                 notes: notes || null,
                 is_pinned: isPinned,
                 post_to_discord: postToDiscord,
-                author: announcementsState.currentUser?.username || 'Admin',
-                author_avatar: announcementsState.currentUser?.godEmoji || '⚡'
+                username: announcementsState.currentUser?.username || 'Admin'
             })
         });
         
@@ -1600,7 +1599,10 @@ async function togglePin(id) {
         const response = await fetch(`${ANNOUNCEMENTS_CONFIG.apiBase}/announcements/${id}/pin`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ is_pinned: !announcement.is_pinned })
+            body: JSON.stringify({ 
+                is_pinned: !announcement.is_pinned,
+                username: announcementsState.currentUser?.username
+            })
         });
         
         if (response.ok) {
@@ -1619,7 +1621,8 @@ async function deleteAnnouncement(id) {
     if (!confirm('Are you sure you want to delete this announcement?')) return;
     
     try {
-        const response = await fetch(`${ANNOUNCEMENTS_CONFIG.apiBase}/announcements/${id}`, {
+        const username = announcementsState.currentUser?.username;
+        const response = await fetch(`${ANNOUNCEMENTS_CONFIG.apiBase}/announcements/${id}?username=${encodeURIComponent(username)}`, {
             method: 'DELETE'
         });
         
@@ -1627,6 +1630,9 @@ async function deleteAnnouncement(id) {
             showToast('success', 'Announcement deleted.');
             await loadAnnouncements();
             loadManageLists();
+        } else {
+            const error = await response.json();
+            showToast('error', error.error || 'Failed to delete announcement.');
         }
     } catch (error) {
         showToast('error', 'Failed to delete announcement.');
@@ -1781,7 +1787,8 @@ async function uploadFile() {
                 category,
                 description: description || null,
                 url,
-                size: size || null
+                size: size || null,
+                username: announcementsState.currentUser?.username
             })
         });
         
