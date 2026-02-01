@@ -1208,7 +1208,7 @@ const ANNOUNCEMENTS_CONFIG = {
     postsPerPage: 10,
     
     // Server IP
-    serverIP: 'play.camphalfblood.net'
+    serverIP: '169.155.120.58:26960'
 };
 
 // ═══════════════════════════════════════════════════════════════════════════════
