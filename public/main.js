@@ -1231,3 +1231,833 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(() => console.log('API offline, running static'));
 });
+// ═══════════════════════════════════════════════════════════════════════════════
+// CONFIGURATION
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const ANNOUNCEMENTS_CONFIG = {
+    // Admin Discord IDs (replace with actual IDs)
+    adminIds: ['lizzzerd', 'ussdylan'],
+    
+    // Discord webhook for announcements channel
+    discordWebhook: null, // Set via API or environment
+    discordChannelId: '1454707501282103427',
+    
+    // API endpoints (adjust to match your server.js routes)
+    apiBase: '/api',
+    
+    // Pagination
+    postsPerPage: 10,
+    
+    // Server IP
+    serverIP: 'play.camphalfblood.net'
+};
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// STATE MANAGEMENT
+// ═══════════════════════════════════════════════════════════════════════════════
+
+let announcementsState = {
+    currentUser: null,
+    isAdmin: false,
+    announcements: [],
+    pinnedAnnouncements: [],
+    files: [],
+    currentPage: 1,
+    totalPages: 1,
+    currentFilter: 'all'
+};
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// INITIALIZATION
+// ═══════════════════════════════════════════════════════════════════════════════
+
+async function initAnnouncementsPage() {
+    console.log('[Announcements] Initializing...');
+    
+    // Check if user is logged in and if they're an admin
+    await checkAdminStatus();
+    
+    // Load all data
+    await Promise.all([
+        loadAnnouncements(),
+        loadFiles()
+    ]);
+    
+    // Setup event listeners
+    setupEventListeners();
+    
+    // Update server IP display
+    document.getElementById('server-ip-display').textContent = ANNOUNCEMENTS_CONFIG.serverIP;
+    
+    console.log('[Announcements] Initialized');
+}
+
+async function checkAdminStatus() {
+    try {
+        // Try to get current user from your auth system
+        // This assumes you have a way to get the current user's Discord info
+        const response = await fetch(`${ANNOUNCEMENTS_CONFIG.apiBase}/auth/me`, {
+            credentials: 'include'
+        });
+        
+        if (response.ok) {
+            const user = await response.json();
+            announcementsState.currentUser = user;
+            
+            // Check if user is admin
+            const username = user.username?.toLowerCase() || user.discord_username?.toLowerCase();
+            announcementsState.isAdmin = ANNOUNCEMENTS_CONFIG.adminIds.includes(username);
+            
+            if (announcementsState.isAdmin) {
+                showAdminPanel();
+            }
+        }
+    } catch (error) {
+        console.log('[Announcements] User not logged in or auth check failed');
+        // For development/testing, you can manually enable admin:
+        // announcementsState.isAdmin = true;
+        // showAdminPanel();
+    }
+}
+
+function showAdminPanel() {
+    const adminPanel = document.getElementById('admin-controls');
+    if (adminPanel) {
+        adminPanel.style.display = 'block';
+        document.body.classList.add('admin-view');
+    }
+    loadManageLists();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// EVENT LISTENERS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+function setupEventListeners() {
+    // Admin tabs
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+        tab.addEventListener('click', () => switchAdminTab(tab.dataset.tab));
+    });
+    
+    // Download filter tabs
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.addEventListener('click', () => filterDownloads(tab.dataset.filter));
+    });
+}
+
+function switchAdminTab(tabId) {
+    // Update tab buttons
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.tab === tabId);
+    });
+    
+    // Update tab content
+    document.querySelectorAll('.admin-tab-content').forEach(content => {
+        content.classList.toggle('active', content.id === `tab-${tabId}`);
+    });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ANNOUNCEMENTS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+async function loadAnnouncements() {
+    try {
+        const response = await fetch(`${ANNOUNCEMENTS_CONFIG.apiBase}/announcements`);
+        
+        if (response.ok) {
+            const data = await response.json();
+            announcementsState.announcements = data.announcements || [];
+            announcementsState.pinnedAnnouncements = data.announcements?.filter(a => a.is_pinned) || [];
+        } else {
+            // Use demo data if API not available
+            announcementsState.announcements = getDemoAnnouncements();
+            announcementsState.pinnedAnnouncements = announcementsState.announcements.filter(a => a.is_pinned);
+        }
+    } catch (error) {
+        console.error('[Announcements] Failed to load:', error);
+        announcementsState.announcements = getDemoAnnouncements();
+        announcementsState.pinnedAnnouncements = announcementsState.announcements.filter(a => a.is_pinned);
+    }
+    
+    renderPinnedAnnouncements();
+    renderAnnouncementsFeed();
+}
+
+function getDemoAnnouncements() {
+    return [
+        {
+            id: 1,
+            title: 'Welcome to Camp Half-Blood!',
+            content: 'We\'re excited to launch our new announcements system! Here you\'ll find all the latest updates about the server, new features, and community events.\n\nMake sure to check back regularly for updates!',
+            notes: 'Server IP: play.camphalfblood.net',
+            author: 'lizzzerd',
+            author_avatar: '⚡',
+            created_at: new Date().toISOString(),
+            is_pinned: true
+        },
+        {
+            id: 2,
+            title: 'Resource Pack Update v2.1',
+            content: 'We\'ve updated the resource pack with new custom armor textures and improved god effects! Download the latest version from the Downloads section below.',
+            notes: null,
+            author: 'ussdylan',
+            author_avatar: '🔱',
+            created_at: new Date(Date.now() - 86400000).toISOString(),
+            is_pinned: false
+        }
+    ];
+}
+
+function renderPinnedAnnouncements() {
+    const container = document.getElementById('pinned-grid');
+    const section = document.getElementById('pinned-section');
+    
+    const pinned = announcementsState.pinnedAnnouncements.slice(0, 4);
+    
+    if (pinned.length === 0) {
+        section.style.display = 'none';
+        return;
+    }
+    
+    section.style.display = 'block';
+    
+    container.innerHTML = pinned.map(ann => `
+        <div class="pinned-card" data-id="${ann.id}">
+            <div class="pinned-card-title">${escapeHtml(ann.title)}</div>
+            <div class="pinned-card-content">${truncateText(ann.content, 120)}</div>
+            <div class="pinned-card-meta">
+                <div class="pinned-card-author">
+                    <span>${ann.author_avatar || '👤'}</span>
+                    <span>${escapeHtml(ann.author)}</span>
+                </div>
+                <span>${formatDate(ann.created_at)}</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderAnnouncementsFeed() {
+    const container = document.getElementById('feed-container');
+    
+    // Filter out pinned from main feed (they're shown separately)
+    const feedAnnouncements = announcementsState.announcements;
+    
+    // Pagination
+    const startIndex = (announcementsState.currentPage - 1) * ANNOUNCEMENTS_CONFIG.postsPerPage;
+    const endIndex = startIndex + ANNOUNCEMENTS_CONFIG.postsPerPage;
+    const pageAnnouncements = feedAnnouncements.slice(startIndex, endIndex);
+    
+    announcementsState.totalPages = Math.ceil(feedAnnouncements.length / ANNOUNCEMENTS_CONFIG.postsPerPage);
+    
+    if (pageAnnouncements.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">📢</div>
+                <div class="empty-state-text">No announcements yet. Check back later!</div>
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = pageAnnouncements.map(ann => `
+        <div class="announcement-card ${ann.is_pinned ? 'pinned' : ''}" data-id="${ann.id}">
+            <div class="announcement-header">
+                <div class="announcement-header-left">
+                    <div class="announcement-avatar">${ann.author_avatar || '👤'}</div>
+                    <div class="announcement-meta">
+                        <div class="announcement-author">${escapeHtml(ann.author)}</div>
+                        <div class="announcement-date">${formatDate(ann.created_at)}</div>
+                    </div>
+                </div>
+                <div class="announcement-badges">
+                    ${ann.is_pinned ? '<span class="badge pinned">📌 Pinned</span>' : ''}
+                    ${isNewAnnouncement(ann.created_at) ? '<span class="badge new">New</span>' : ''}
+                </div>
+            </div>
+            <div class="announcement-content">
+                <div class="announcement-title">${escapeHtml(ann.title)}</div>
+                <div class="announcement-body">${formatContent(ann.content)}</div>
+                ${ann.notes ? `
+                    <div class="announcement-notes">
+                        <div class="announcement-notes-label">📝 Additional Notes</div>
+                        <div class="announcement-notes-content">${formatContent(ann.notes)}</div>
+                    </div>
+                ` : ''}
+            </div>
+            <div class="announcement-footer">
+                <div class="announcement-id">#${ann.id}</div>
+                <div class="announcement-actions">
+                    ${announcementsState.isAdmin ? `
+                        <button class="action-btn admin-only" onclick="togglePin(${ann.id})">
+                            ${ann.is_pinned ? '📌 Unpin' : '📌 Pin'}
+                        </button>
+                        <button class="action-btn admin-only delete" onclick="deleteAnnouncement(${ann.id})">
+                            🗑️ Delete
+                        </button>
+                    ` : ''}
+                </div>
+            </div>
+        </div>
+    `).join('');
+    
+    renderPagination();
+}
+
+function renderPagination() {
+    const container = document.getElementById('feed-pagination');
+    
+    if (announcementsState.totalPages <= 1) {
+        container.innerHTML = '';
+        return;
+    }
+    
+    let html = '';
+    
+    html += `<button class="page-btn" onclick="changePage(${announcementsState.currentPage - 1})" 
+             ${announcementsState.currentPage === 1 ? 'disabled' : ''}>← Prev</button>`;
+    
+    for (let i = 1; i <= announcementsState.totalPages; i++) {
+        if (i === 1 || i === announcementsState.totalPages || 
+            (i >= announcementsState.currentPage - 1 && i <= announcementsState.currentPage + 1)) {
+            html += `<button class="page-btn ${i === announcementsState.currentPage ? 'active' : ''}" 
+                     onclick="changePage(${i})">${i}</button>`;
+        } else if (i === announcementsState.currentPage - 2 || i === announcementsState.currentPage + 2) {
+            html += '<span class="page-ellipsis">...</span>';
+        }
+    }
+    
+    html += `<button class="page-btn" onclick="changePage(${announcementsState.currentPage + 1})" 
+             ${announcementsState.currentPage === announcementsState.totalPages ? 'disabled' : ''}>Next →</button>`;
+    
+    container.innerHTML = html;
+}
+
+function changePage(page) {
+    if (page < 1 || page > announcementsState.totalPages) return;
+    announcementsState.currentPage = page;
+    renderAnnouncementsFeed();
+    document.getElementById('feed-container').scrollIntoView({ behavior: 'smooth' });
+}
+
+function sortFeed(order) {
+    if (order === 'oldest') {
+        announcementsState.announcements.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+    } else {
+        announcementsState.announcements.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    }
+    announcementsState.currentPage = 1;
+    renderAnnouncementsFeed();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// POST ANNOUNCEMENT
+// ═══════════════════════════════════════════════════════════════════════════════
+
+async function postAnnouncement() {
+    if (!announcementsState.isAdmin) {
+        showToast('error', 'You do not have permission to post announcements.');
+        return;
+    }
+    
+    const title = document.getElementById('announce-title').value.trim();
+    const content = document.getElementById('announce-content').value.trim();
+    const notes = document.getElementById('announce-notes').value.trim();
+    const isPinned = document.getElementById('announce-pin').checked;
+    const postToDiscord = document.getElementById('announce-discord').checked;
+    
+    if (!title || !content) {
+        showToast('error', 'Please fill in the title and content.');
+        return;
+    }
+    
+    // Check pin limit
+    if (isPinned && announcementsState.pinnedAnnouncements.length >= 4) {
+        showToast('error', 'Maximum 4 pinned announcements. Please unpin one first.');
+        return;
+    }
+    
+    try {
+        const response = await fetch(`${ANNOUNCEMENTS_CONFIG.apiBase}/announcements`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({
+                title,
+                content,
+                notes: notes || null,
+                is_pinned: isPinned,
+                post_to_discord: postToDiscord
+            })
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            showToast('success', 'Announcement posted successfully!');
+            
+            // Clear form
+            document.getElementById('announce-title').value = '';
+            document.getElementById('announce-content').value = '';
+            document.getElementById('announce-notes').value = '';
+            document.getElementById('announce-pin').checked = false;
+            
+            // Reload announcements
+            await loadAnnouncements();
+            loadManageLists();
+        } else {
+            const error = await response.json();
+            showToast('error', error.message || 'Failed to post announcement.');
+        }
+    } catch (error) {
+        console.error('[Announcements] Post error:', error);
+        showToast('error', 'Failed to post announcement. Please try again.');
+    }
+}
+
+async function togglePin(id) {
+    if (!announcementsState.isAdmin) return;
+    
+    const announcement = announcementsState.announcements.find(a => a.id === id);
+    if (!announcement) return;
+    
+    // Check pin limit
+    if (!announcement.is_pinned && announcementsState.pinnedAnnouncements.length >= 4) {
+        showToast('error', 'Maximum 4 pinned announcements. Please unpin one first.');
+        return;
+    }
+    
+    try {
+        const response = await fetch(`${ANNOUNCEMENTS_CONFIG.apiBase}/announcements/${id}/pin`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ is_pinned: !announcement.is_pinned })
+        });
+        
+        if (response.ok) {
+            showToast('success', announcement.is_pinned ? 'Announcement unpinned.' : 'Announcement pinned!');
+            await loadAnnouncements();
+            loadManageLists();
+        }
+    } catch (error) {
+        showToast('error', 'Failed to update pin status.');
+    }
+}
+
+async function deleteAnnouncement(id) {
+    if (!announcementsState.isAdmin) return;
+    
+    if (!confirm('Are you sure you want to delete this announcement?')) return;
+    
+    try {
+        const response = await fetch(`${ANNOUNCEMENTS_CONFIG.apiBase}/announcements/${id}`, {
+            method: 'DELETE',
+            credentials: 'include'
+        });
+        
+        if (response.ok) {
+            showToast('success', 'Announcement deleted.');
+            await loadAnnouncements();
+            loadManageLists();
+        }
+    } catch (error) {
+        showToast('error', 'Failed to delete announcement.');
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// FILES / DOWNLOADS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+async function loadFiles() {
+    try {
+        const response = await fetch(`${ANNOUNCEMENTS_CONFIG.apiBase}/files`);
+        
+        if (response.ok) {
+            const data = await response.json();
+            announcementsState.files = data.files || [];
+        } else {
+            announcementsState.files = getDemoFiles();
+        }
+    } catch (error) {
+        console.error('[Announcements] Failed to load files:', error);
+        announcementsState.files = getDemoFiles();
+    }
+    
+    renderFiles();
+}
+
+function getDemoFiles() {
+    return [
+        {
+            id: 1,
+            title: 'Camp Half-Blood Resource Pack v2.1',
+            category: 'resourcepack',
+            description: 'Custom textures for armor, items, and god effects. Required for the best experience!',
+            url: '#',
+            size: '45 MB',
+            created_at: new Date().toISOString()
+        },
+        {
+            id: 2,
+            title: 'CHB Modpack (CurseForge)',
+            category: 'modpack',
+            description: 'Complete modpack for the Camp Half-Blood server. Includes all required mods.',
+            url: '#',
+            size: '250 MB',
+            created_at: new Date().toISOString()
+        }
+    ];
+}
+
+function renderFiles() {
+    const container = document.getElementById('downloads-grid');
+    
+    let files = announcementsState.files;
+    
+    // Apply filter
+    if (announcementsState.currentFilter !== 'all') {
+        files = files.filter(f => f.category === announcementsState.currentFilter);
+    }
+    
+    if (files.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">📁</div>
+                <div class="empty-state-text">No files available in this category.</div>
+            </div>
+        `;
+        return;
+    }
+    
+    const categoryIcons = {
+        resourcepack: '🎨',
+        modpack: '📦',
+        guide: '📖',
+        other: '📁'
+    };
+    
+    const categoryLabels = {
+        resourcepack: 'Resource Pack',
+        modpack: 'Modpack',
+        guide: 'Guide',
+        other: 'Other'
+    };
+    
+    container.innerHTML = files.map(file => `
+        <div class="download-card" data-id="${file.id}" data-category="${file.category}">
+            <div class="download-card-header">
+                <div class="download-icon">${categoryIcons[file.category] || '📁'}</div>
+                <div class="download-info">
+                    <div class="download-title">${escapeHtml(file.title)}</div>
+                    <span class="download-category ${file.category}">${categoryLabels[file.category] || 'File'}</span>
+                </div>
+            </div>
+            <div class="download-description">${escapeHtml(file.description || 'No description provided.')}</div>
+            <div class="download-footer">
+                <div class="download-meta">
+                    ${file.size ? `<span>📦 ${file.size}</span>` : ''}
+                    <span>📅 ${formatDate(file.created_at)}</span>
+                </div>
+                <a href="${file.url}" target="_blank" class="download-btn" rel="noopener noreferrer">
+                    <span>📥</span> Download
+                </a>
+            </div>
+        </div>
+    `).join('');
+}
+
+function filterDownloads(filter) {
+    announcementsState.currentFilter = filter;
+    
+    // Update tab states
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.filter === filter);
+    });
+    
+    renderFiles();
+}
+
+async function uploadFile() {
+    if (!announcementsState.isAdmin) {
+        showToast('error', 'You do not have permission to upload files.');
+        return;
+    }
+    
+    const title = document.getElementById('file-title').value.trim();
+    const category = document.getElementById('file-category').value;
+    const description = document.getElementById('file-description').value.trim();
+    const url = document.getElementById('file-url').value.trim();
+    const size = document.getElementById('file-size').value.trim();
+    
+    if (!title || !url) {
+        showToast('error', 'Please fill in the file name and URL.');
+        return;
+    }
+    
+    // Basic URL validation
+    try {
+        new URL(url);
+    } catch {
+        showToast('error', 'Please enter a valid URL.');
+        return;
+    }
+    
+    try {
+        const response = await fetch(`${ANNOUNCEMENTS_CONFIG.apiBase}/files`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({
+                title,
+                category,
+                description: description || null,
+                url,
+                size: size || null
+            })
+        });
+        
+        if (response.ok) {
+            showToast('success', 'File added successfully!');
+            
+            // Clear form
+            document.getElementById('file-title').value = '';
+            document.getElementById('file-description').value = '';
+            document.getElementById('file-url').value = '';
+            document.getElementById('file-size').value = '';
+            
+            await loadFiles();
+            loadManageLists();
+        } else {
+            const error = await response.json();
+            showToast('error', error.message || 'Failed to add file.');
+        }
+    } catch (error) {
+        console.error('[Announcements] Upload error:', error);
+        showToast('error', 'Failed to add file. Please try again.');
+    }
+}
+
+async function deleteFile(id) {
+    if (!announcementsState.isAdmin) return;
+    
+    if (!confirm('Are you sure you want to delete this file?')) return;
+    
+    try {
+        const response = await fetch(`${ANNOUNCEMENTS_CONFIG.apiBase}/files/${id}`, {
+            method: 'DELETE',
+            credentials: 'include'
+        });
+        
+        if (response.ok) {
+            showToast('success', 'File deleted.');
+            await loadFiles();
+            loadManageLists();
+        }
+    } catch (error) {
+        showToast('error', 'Failed to delete file.');
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// MANAGE LISTS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+function loadManageLists() {
+    renderPinnedManageList();
+    renderFilesManageList();
+}
+
+function renderPinnedManageList() {
+    const container = document.getElementById('pinned-manage-list');
+    if (!container) return;
+    
+    const pinned = announcementsState.pinnedAnnouncements;
+    
+    if (pinned.length === 0) {
+        container.innerHTML = '<div class="manage-item"><span class="manage-item-title" style="color: var(--text-muted);">No pinned announcements</span></div>';
+        return;
+    }
+    
+    container.innerHTML = pinned.map(ann => `
+        <div class="manage-item">
+            <div class="manage-item-info">
+                <div class="manage-item-title">${escapeHtml(ann.title)}</div>
+                <div class="manage-item-meta">${formatDate(ann.created_at)}</div>
+            </div>
+            <div class="manage-item-actions">
+                <button class="manage-btn unpin" onclick="togglePin(${ann.id})" title="Unpin">📌</button>
+                <button class="manage-btn delete" onclick="deleteAnnouncement(${ann.id})" title="Delete">🗑️</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderFilesManageList() {
+    const container = document.getElementById('files-manage-list');
+    if (!container) return;
+    
+    if (announcementsState.files.length === 0) {
+        container.innerHTML = '<div class="manage-item"><span class="manage-item-title" style="color: var(--text-muted);">No files uploaded</span></div>';
+        return;
+    }
+    
+    container.innerHTML = announcementsState.files.map(file => `
+        <div class="manage-item">
+            <div class="manage-item-info">
+                <div class="manage-item-title">${escapeHtml(file.title)}</div>
+                <div class="manage-item-meta">${file.category} • ${formatDate(file.created_at)}</div>
+            </div>
+            <div class="manage-item-actions">
+                <button class="manage-btn delete" onclick="deleteFile(${file.id})" title="Delete">🗑️</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// UTILITY FUNCTIONS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+function copyServerIP() {
+    const ip = ANNOUNCEMENTS_CONFIG.serverIP;
+    navigator.clipboard.writeText(ip).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.textContent = '✓';
+        btn.classList.add('copied');
+        showToast('success', 'Server IP copied!');
+        setTimeout(() => {
+            btn.textContent = '📋';
+            btn.classList.remove('copied');
+        }, 2000);
+    });
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function formatContent(text) {
+    if (!text) return '';
+    
+    // Escape HTML first
+    let formatted = escapeHtml(text);
+    
+    // Convert newlines to <br>
+    formatted = formatted.replace(/\n/g, '<br>');
+    
+    // Convert **bold**
+    formatted = formatted.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    
+    // Convert *italic*
+    formatted = formatted.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    
+    // Convert `code`
+    formatted = formatted.replace(/`(.+?)`/g, '<code>$1</code>');
+    
+    // Convert URLs to links
+    formatted = formatted.replace(
+        /(https?:\/\/[^\s<]+)/g, 
+        '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+    );
+    
+    return formatted;
+}
+
+function truncateText(text, maxLength) {
+    if (!text || text.length <= maxLength) return escapeHtml(text);
+    return escapeHtml(text.substring(0, maxLength)) + '...';
+}
+
+function formatDate(dateString) {
+    if (!dateString) return 'Unknown';
+    
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+    
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    if (diffDays < 7) return `${diffDays}d ago`;
+    
+    return date.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric',
+        year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+    });
+}
+
+function isNewAnnouncement(dateString) {
+    if (!dateString) return false;
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffHours = (now - date) / 3600000;
+    return diffHours < 48; // Less than 48 hours old
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// TOAST NOTIFICATIONS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+function showToast(type, message) {
+    let container = document.querySelector('.toast-container');
+    
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+    }
+    
+    const icons = {
+        success: '✅',
+        error: '❌',
+        info: 'ℹ️'
+    };
+    
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+        <span class="toast-icon">${icons[type] || 'ℹ️'}</span>
+        <span class="toast-message">${escapeHtml(message)}</span>
+        <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+    `;
+    
+    container.appendChild(toast);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        toast.style.animation = 'slideIn 0.3s ease reverse';
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// INIT ON PAGE LOAD
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// Call this when the announcements page loads
+// If using a router, call initAnnouncementsPage() when navigating to the page
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        if (document.querySelector('.announcements-page')) {
+            initAnnouncementsPage();
+        }
+    });
+} else {
+    if (document.querySelector('.announcements-page')) {
+        initAnnouncementsPage();
+    }
+}
+
+// Export for use with page router
+window.initAnnouncementsPage = initAnnouncementsPage;
+
+
