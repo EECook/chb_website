@@ -5,6 +5,175 @@
 
 const PAGES = {
 
+    'announcements': {
+    icon: '📢',
+    title: 'Announcements',
+    subtitle: 'News, downloads, and updates',
+    content: `
+        <div class="announcements-page">
+            <!-- Admin Controls (hidden for non-admins) -->
+            <div id="admin-controls" class="admin-panel" style="display: none;">
+                <div class="admin-header">
+                    <h3>⚡ Admin Controls</h3>
+                    <span class="admin-badge">ADMIN</span>
+                </div>
+                
+                <div class="admin-tabs">
+                    <button class="admin-tab active" data-tab="post">📝 New Post</button>
+                    <button class="admin-tab" data-tab="upload">📁 Upload File</button>
+                    <button class="admin-tab" data-tab="manage">⚙️ Manage</button>
+                </div>
+                
+                <!-- New Announcement Tab -->
+                <div class="admin-tab-content active" id="tab-post">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="announce-title" placeholder="Announcement title..." maxlength="100">
+                    </div>
+                    <div class="form-group">
+                        <label>Content <span class="hint">(Markdown supported)</span></label>
+                        <textarea id="announce-content" placeholder="Main announcement content..." rows="6"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Additional Notes <span class="hint">(Optional)</span></label>
+                        <textarea id="announce-notes" placeholder="Extra info, links, etc..." rows="3"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="announce-pin">
+                            <span>📌 Pin this announcement</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="announce-discord" checked>
+                            <span>💬 Post to Discord</span>
+                        </label>
+                    </div>
+                    <button class="btn-primary" onclick="postAnnouncement()">
+                        <span class="btn-icon">📢</span> Post Announcement
+                    </button>
+                </div>
+                
+                <!-- Upload File Tab -->
+                <div class="admin-tab-content" id="tab-upload">
+                    <div class="form-group">
+                        <label>File Name / Title</label>
+                        <input type="text" id="file-title" placeholder="e.g., Camp Half-Blood Resource Pack v2.1">
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="file-category">
+                            <option value="resourcepack">🎨 Resource Pack</option>
+                            <option value="modpack">📦 Modpack</option>
+                            <option value="guide">📖 Guide / Document</option>
+                            <option value="other">📁 Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Description <span class="hint">(Optional)</span></label>
+                        <textarea id="file-description" placeholder="Brief description of the file..." rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>File URL <span class="hint">(Direct download link - Dropbox, Google Drive, etc.)</span></label>
+                        <input type="text" id="file-url" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label>File Size <span class="hint">(Optional)</span></label>
+                        <input type="text" id="file-size" placeholder="e.g., 45 MB">
+                    </div>
+                    <button class="btn-primary" onclick="uploadFile()">
+                        <span class="btn-icon">📤</span> Add File
+                    </button>
+                </div>
+                
+                <!-- Manage Tab -->
+                <div class="admin-tab-content" id="tab-manage">
+                    <div class="manage-section">
+                        <h4>📌 Pinned Posts (max 4)</h4>
+                        <div id="pinned-manage-list" class="manage-list">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                    <div class="manage-section">
+                        <h4>📁 Files</h4>
+                        <div id="files-manage-list" class="manage-list">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Links / Server Info Banner -->
+            <div class="quick-links-banner">
+                <div class="server-info">
+                    <div class="server-ip">
+                        <span class="label">Server IP</span>
+                        <code id="server-ip-display">play.camphalfblood.net</code>
+                        <button class="copy-btn" onclick="copyServerIP()" title="Copy IP">📋</button>
+                    </div>
+                </div>
+                <div class="quick-actions">
+                    <a href="#downloads" class="quick-link">
+                        <span class="icon">📥</span>
+                        <span>Downloads</span>
+                    </a>
+                    <a href="https://discord.gg/your-invite" target="_blank" class="quick-link discord">
+                        <span class="icon">💬</span>
+                        <span>Discord</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Pinned Announcements -->
+            <div class="pinned-section" id="pinned-section">
+                <div class="section-header">
+                    <h2>📌 Pinned</h2>
+                </div>
+                <div class="pinned-grid" id="pinned-grid">
+                    <!-- Populated by JS -->
+                    <div class="loading-placeholder">Loading pinned announcements...</div>
+                </div>
+            </div>
+
+            <!-- File Downloads Section -->
+            <div class="downloads-section" id="downloads">
+                <div class="section-header">
+                    <h2>📥 Downloads</h2>
+                    <div class="filter-tabs">
+                        <button class="filter-tab active" data-filter="all">All</button>
+                        <button class="filter-tab" data-filter="resourcepack">Resource Packs</button>
+                        <button class="filter-tab" data-filter="modpack">Modpacks</button>
+                        <button class="filter-tab" data-filter="guide">Guides</button>
+                    </div>
+                </div>
+                <div class="downloads-grid" id="downloads-grid">
+                    <!-- Populated by JS -->
+                    <div class="loading-placeholder">Loading downloads...</div>
+                </div>
+            </div>
+
+            <!-- Announcement Feed -->
+            <div class="feed-section">
+                <div class="section-header">
+                    <h2>📢 Announcements</h2>
+                    <div class="feed-controls">
+                        <select id="feed-sort" onchange="sortFeed(this.value)">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="feed-container" id="feed-container">
+                    <!-- Populated by JS -->
+                    <div class="loading-placeholder">Loading announcements...</div>
+                </div>
+                <div class="feed-pagination" id="feed-pagination">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    `
+},
+
     'home': {
         icon: '🏛️',
         title: 'Camp Half-Blood',
