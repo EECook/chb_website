@@ -1,5 +1,5 @@
 // ══════════════════════════════════════════════════════════════════════════
-// CAMP HALF-BLOOD - BACKEND SERVER (v4 - Full Mail System)
+// CAMP HALF-BLOOD - BACKEND SERVER (v4 - Full Mail System + Announcements)
 // ══════════════════════════════════════════════════════════════════════════
 
 const express = require('express');
@@ -653,237 +653,33 @@ app.post('/api/player/:username/character', async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 });
-const express = require('express');
-const fetch = require('node-fetch');
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// CONFIGURATION
-// ═══════════════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════════════
+// ANNOUNCEMENTS & FILES SYSTEM
+// ══════════════════════════════════════════════════════════════════════════
 
-const ADMIN_USERS = ['lizzzerd', 'ussdylan'];
-const DISCORD_WEBHOOK_URL = process.env.DISCORD_ANNOUNCEMENTS_WEBHOOK || null;
-const DISCORD_CHANNEL_ID = '1454707501282103427';
+// Configuration
+const ANNOUNCEMENT_ADMIN_USERS = ['lizzzerd', 'ussdylan'];
+const DISCORD_ANNOUNCEMENTS_WEBHOOK = process.env.DISCORD_ANNOUNCEMENTS_WEBHOOK || null;
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// MIDDLEWARE
-// ═══════════════════════════════════════════════════════════════════════════════
-
-// Check if user is admin
-function isAdmin(req, res, next) {
-    // Assuming you have user info in req.user from your auth middleware
-    const user = req.user;
-    
-    if (!user) {
-        return res.status(401).json({ error: 'Not authenticated' });
-    }
-    
-    const username = (user.username || user.discord_username || '').toLowerCase();
-    
-    if (!ADMIN_USERS.includes(username)) {
-        return res.status(403).json({ error: 'Admin access required' });
-    }
-    
-    next();
+// Helper: Check if user is announcement admin
+function isAnnouncementAdmin(username) {
+    if (!username) return false;
+    return ANNOUNCEMENT_ADMIN_USERS.includes(username.toLowerCase());
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// ANNOUNCEMENTS ROUTES
-// ═══════════════════════════════════════════════════════════════════════════════
-
-function setupAnnouncementsRoutes(app, db) {
-    
-    // Get all announcements
-    app.get('/api/announcements', async (req, res) => {
-        try {
-            const [announcements] = await db.promise().query(`
-                SELECT * FROM announcements 
-                ORDER BY is_pinned DESC, created_at DESC
-            `);
-            
-            res.json({ announcements });
-        } catch (error) {
-            console.error('[Announcements] Get error:', error);
-            res.status(500).json({ error: 'Failed to fetch announcements' });
-        }
-    });
-    
-    // Get single announcement
-    app.get('/api/announcements/:id', async (req, res) => {
-        try {
-            const [rows] = await db.promise().query(
-                'SELECT * FROM announcements WHERE id = ?',
-                [req.params.id]
-            );
-            
-            if (rows.length === 0) {
-                return res.status(404).json({ error: 'Announcement not found' });
-            }
-            
-            res.json({ announcement: rows[0] });
-        } catch (error) {
-            console.error('[Announcements] Get single error:', error);
-            res.status(500).json({ error: 'Failed to fetch announcement' });
-        }
-    });
-    
-    // Create announcement (Admin only)
-    app.post('/api/announcements', isAdmin, async (req, res) => {
-        try {
-            const { title, content, notes, is_pinned, post_to_discord } = req.body;
-            const user = req.user;
-            
-            if (!title || !content) {
-                return res.status(400).json({ error: 'Title and content are required' });
-            }
-            
-            // Check pin limit
-            if (is_pinned) {
-                const [pinned] = await db.promise().query(
-                    'SELECT COUNT(*) as count FROM announcements WHERE is_pinned = 1'
-                );
-                if (pinned[0].count >= 4) {
-                    return res.status(400).json({ error: 'Maximum 4 pinned announcements allowed' });
-                }
-            }
-            
-            const author = user.username || user.discord_username || 'Admin';
-            const authorAvatar = getAuthorAvatar(author);
-            
-            const [result] = await db.promise().query(`
-                INSERT INTO announcements (title, content, notes, author, author_avatar, is_pinned, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, NOW())
-            `, [title, content, notes || null, author, authorAvatar, is_pinned ? 1 : 0]);
-            
-            const announcementId = result.insertId;
-            
-            // Post to Discord if requested
-            if (post_to_discord && DISCORD_WEBHOOK_URL) {
-                await postToDiscord(title, content, notes, author, authorAvatar, announcementId);
-            }
-            
-            res.json({ 
-                success: true, 
-                id: announcementId,
-                message: 'Announcement posted successfully'
-            });
-        } catch (error) {
-            console.error('[Announcements] Create error:', error);
-            res.status(500).json({ error: 'Failed to create announcement' });
-        }
-    });
-    
-    // Update announcement pin status (Admin only)
-    app.put('/api/announcements/:id/pin', isAdmin, async (req, res) => {
-        try {
-            const { is_pinned } = req.body;
-            const announcementId = req.params.id;
-            
-            // Check pin limit
-            if (is_pinned) {
-                const [pinned] = await db.promise().query(
-                    'SELECT COUNT(*) as count FROM announcements WHERE is_pinned = 1 AND id != ?',
-                    [announcementId]
-                );
-                if (pinned[0].count >= 4) {
-                    return res.status(400).json({ error: 'Maximum 4 pinned announcements allowed' });
-                }
-            }
-            
-            await db.promise().query(
-                'UPDATE announcements SET is_pinned = ? WHERE id = ?',
-                [is_pinned ? 1 : 0, announcementId]
-            );
-            
-            res.json({ success: true, message: is_pinned ? 'Announcement pinned' : 'Announcement unpinned' });
-        } catch (error) {
-            console.error('[Announcements] Pin error:', error);
-            res.status(500).json({ error: 'Failed to update pin status' });
-        }
-    });
-    
-    // Delete announcement (Admin only)
-    app.delete('/api/announcements/:id', isAdmin, async (req, res) => {
-        try {
-            await db.promise().query('DELETE FROM announcements WHERE id = ?', [req.params.id]);
-            res.json({ success: true, message: 'Announcement deleted' });
-        } catch (error) {
-            console.error('[Announcements] Delete error:', error);
-            res.status(500).json({ error: 'Failed to delete announcement' });
-        }
-    });
-    
-    // ═══════════════════════════════════════════════════════════════════════════
-    // FILES ROUTES
-    // ═══════════════════════════════════════════════════════════════════════════
-    
-    // Get all files
-    app.get('/api/files', async (req, res) => {
-        try {
-            const [files] = await db.promise().query(`
-                SELECT * FROM download_files 
-                ORDER BY created_at DESC
-            `);
-            
-            res.json({ files });
-        } catch (error) {
-            console.error('[Files] Get error:', error);
-            res.status(500).json({ error: 'Failed to fetch files' });
-        }
-    });
-    
-    // Add file (Admin only)
-    app.post('/api/files', isAdmin, async (req, res) => {
-        try {
-            const { title, category, description, url, size } = req.body;
-            
-            if (!title || !url) {
-                return res.status(400).json({ error: 'Title and URL are required' });
-            }
-            
-            // Validate URL
-            try {
-                new URL(url);
-            } catch {
-                return res.status(400).json({ error: 'Invalid URL format' });
-            }
-            
-            const validCategories = ['resourcepack', 'modpack', 'guide', 'other'];
-            const fileCategory = validCategories.includes(category) ? category : 'other';
-            
-            const [result] = await db.promise().query(`
-                INSERT INTO download_files (title, category, description, url, size, created_at)
-                VALUES (?, ?, ?, ?, ?, NOW())
-            `, [title, fileCategory, description || null, url, size || null]);
-            
-            res.json({ 
-                success: true, 
-                id: result.insertId,
-                message: 'File added successfully'
-            });
-        } catch (error) {
-            console.error('[Files] Create error:', error);
-            res.status(500).json({ error: 'Failed to add file' });
-        }
-    });
-    
-    // Delete file (Admin only)
-    app.delete('/api/files/:id', isAdmin, async (req, res) => {
-        try {
-            await db.promise().query('DELETE FROM download_files WHERE id = ?', [req.params.id]);
-            res.json({ success: true, message: 'File deleted' });
-        } catch (error) {
-            console.error('[Files] Delete error:', error);
-            res.status(500).json({ error: 'Failed to delete file' });
-        }
-    });
+// Helper: Get author avatar emoji
+function getAuthorAvatar(author) {
+    const avatars = {
+        'lizzzerd': '⚡',
+        'ussdylan': '🔱'
+    };
+    return avatars[(author || '').toLowerCase()] || '👤';
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// DISCORD WEBHOOK
-// ═══════════════════════════════════════════════════════════════════════════════
-
-async function postToDiscord(title, content, notes, author, authorAvatar, announcementId) {
-    if (!DISCORD_WEBHOOK_URL) {
+// Helper: Post to Discord webhook
+async function postAnnouncementToDiscord(title, content, notes, author, announcementId) {
+    if (!DISCORD_ANNOUNCEMENTS_WEBHOOK) {
         console.log('[Announcements] No Discord webhook configured');
         return;
     }
@@ -892,18 +688,12 @@ async function postToDiscord(title, content, notes, author, authorAvatar, announ
         const embed = {
             title: `📢 ${title}`,
             description: content.length > 2000 ? content.substring(0, 1997) + '...' : content,
-            color: 0xD4AF37, // Gold color
-            author: {
-                name: author,
-                icon_url: null // Could add avatar URL here
-            },
-            footer: {
-                text: `Camp Half-Blood Announcements • #${announcementId}`
-            },
+            color: 0xD4AF37,
+            author: { name: author },
+            footer: { text: `Camp Half-Blood Announcements • #${announcementId}` },
             timestamp: new Date().toISOString()
         };
         
-        // Add notes as a field if present
         if (notes) {
             embed.fields = [{
                 name: '📝 Additional Notes',
@@ -912,12 +702,11 @@ async function postToDiscord(title, content, notes, author, authorAvatar, announ
             }];
         }
         
-        const response = await fetch(DISCORD_WEBHOOK_URL, {
+        const response = await fetch(DISCORD_ANNOUNCEMENTS_WEBHOOK, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 username: 'Camp Half-Blood',
-                avatar_url: null, // Add your bot's avatar URL
                 embeds: [embed]
             })
         });
@@ -932,20 +721,231 @@ async function postToDiscord(title, content, notes, author, authorAvatar, announ
     }
 }
 
-function getAuthorAvatar(author) {
-    const avatars = {
-        'lizzzerd': '⚡',
-        'ussdylan': '🔱'
-    };
-    return avatars[author.toLowerCase()] || '👤';
-}
+// Get all announcements
+app.get('/api/announcements', async (req, res) => {
+    if (!pool) return res.json({ announcements: [] });
+    
+    try {
+        const [announcements] = await pool.execute(`
+            SELECT * FROM announcements 
+            ORDER BY is_pinned DESC, created_at DESC
+        `);
+        res.json({ announcements });
+    } catch (error) {
+        console.error('[Announcements] Get error:', error);
+        res.status(500).json({ error: 'Failed to fetch announcements' });
+    }
+});
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// EXPORT
-// ═══════════════════════════════════════════════════════════════════════════════
+// Get single announcement
+app.get('/api/announcements/:id', async (req, res) => {
+    if (!pool) return res.status(404).json({ error: 'Database not connected' });
+    
+    try {
+        const [rows] = await pool.execute(
+            'SELECT * FROM announcements WHERE id = ?',
+            [req.params.id]
+        );
+        
+        if (rows.length === 0) {
+            return res.status(404).json({ error: 'Announcement not found' });
+        }
+        
+        res.json({ announcement: rows[0] });
+    } catch (error) {
+        console.error('[Announcements] Get single error:', error);
+        res.status(500).json({ error: 'Failed to fetch announcement' });
+    }
+});
 
-module.exports = { setupAnnouncementsRoutes, isAdmin };
+// Create announcement (Admin only - pass username in body)
+app.post('/api/announcements', async (req, res) => {
+    if (!pool) return res.status(500).json({ error: 'Database not connected' });
+    
+    try {
+        const { title, content, notes, is_pinned, post_to_discord, username } = req.body;
+        
+        if (!isAnnouncementAdmin(username)) {
+            return res.status(403).json({ error: 'Admin access required' });
+        }
+        
+        if (!title || !content) {
+            return res.status(400).json({ error: 'Title and content are required' });
+        }
+        
+        // Check pin limit
+        if (is_pinned) {
+            const [pinned] = await pool.execute(
+                'SELECT COUNT(*) as count FROM announcements WHERE is_pinned = 1'
+            );
+            if (pinned[0].count >= 4) {
+                return res.status(400).json({ error: 'Maximum 4 pinned announcements allowed' });
+            }
+        }
+        
+        const author = username;
+        const authorAvatar = getAuthorAvatar(author);
+        
+        const [result] = await pool.execute(`
+            INSERT INTO announcements (title, content, notes, author, author_avatar, is_pinned, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, NOW())
+        `, [title, content, notes || null, author, authorAvatar, is_pinned ? 1 : 0]);
+        
+        const announcementId = result.insertId;
+        
+        // Post to Discord if requested
+        if (post_to_discord) {
+            await postAnnouncementToDiscord(title, content, notes, author, announcementId);
+        }
+        
+        console.log('[Announcements] Created:', announcementId, 'by', author);
+        res.json({ success: true, id: announcementId, message: 'Announcement posted successfully' });
+    } catch (error) {
+        console.error('[Announcements] Create error:', error);
+        res.status(500).json({ error: 'Failed to create announcement' });
+    }
+});
 
+// Update announcement pin status (Admin only)
+app.put('/api/announcements/:id/pin', async (req, res) => {
+    if (!pool) return res.status(500).json({ error: 'Database not connected' });
+    
+    try {
+        const { is_pinned, username } = req.body;
+        const announcementId = req.params.id;
+        
+        if (!isAnnouncementAdmin(username)) {
+            return res.status(403).json({ error: 'Admin access required' });
+        }
+        
+        // Check pin limit
+        if (is_pinned) {
+            const [pinned] = await pool.execute(
+                'SELECT COUNT(*) as count FROM announcements WHERE is_pinned = 1 AND id != ?',
+                [announcementId]
+            );
+            if (pinned[0].count >= 4) {
+                return res.status(400).json({ error: 'Maximum 4 pinned announcements allowed' });
+            }
+        }
+        
+        await pool.execute(
+            'UPDATE announcements SET is_pinned = ? WHERE id = ?',
+            [is_pinned ? 1 : 0, announcementId]
+        );
+        
+        res.json({ success: true, message: is_pinned ? 'Announcement pinned' : 'Announcement unpinned' });
+    } catch (error) {
+        console.error('[Announcements] Pin error:', error);
+        res.status(500).json({ error: 'Failed to update pin status' });
+    }
+});
+
+// Delete announcement (Admin only)
+app.delete('/api/announcements/:id', async (req, res) => {
+    if (!pool) return res.status(500).json({ error: 'Database not connected' });
+    
+    try {
+        const { username } = req.query;
+        
+        if (!isAnnouncementAdmin(username)) {
+            return res.status(403).json({ error: 'Admin access required' });
+        }
+        
+        await pool.execute('DELETE FROM announcements WHERE id = ?', [req.params.id]);
+        res.json({ success: true, message: 'Announcement deleted' });
+    } catch (error) {
+        console.error('[Announcements] Delete error:', error);
+        res.status(500).json({ error: 'Failed to delete announcement' });
+    }
+});
+
+// Get all files
+app.get('/api/files', async (req, res) => {
+    if (!pool) return res.json({ files: [] });
+    
+    try {
+        const [files] = await pool.execute(`
+            SELECT * FROM download_files 
+            ORDER BY created_at DESC
+        `);
+        res.json({ files });
+    } catch (error) {
+        console.error('[Files] Get error:', error);
+        res.status(500).json({ error: 'Failed to fetch files' });
+    }
+});
+
+// Add file (Admin only)
+app.post('/api/files', async (req, res) => {
+    if (!pool) return res.status(500).json({ error: 'Database not connected' });
+    
+    try {
+        const { title, category, description, url, size, username } = req.body;
+        
+        if (!isAnnouncementAdmin(username)) {
+            return res.status(403).json({ error: 'Admin access required' });
+        }
+        
+        if (!title || !url) {
+            return res.status(400).json({ error: 'Title and URL are required' });
+        }
+        
+        // Validate URL
+        try {
+            new URL(url);
+        } catch {
+            return res.status(400).json({ error: 'Invalid URL format' });
+        }
+        
+        const validCategories = ['resourcepack', 'modpack', 'guide', 'other'];
+        const fileCategory = validCategories.includes(category) ? category : 'other';
+        
+        const [result] = await pool.execute(`
+            INSERT INTO download_files (title, category, description, url, size, created_at)
+            VALUES (?, ?, ?, ?, ?, NOW())
+        `, [title, fileCategory, description || null, url, size || null]);
+        
+        console.log('[Files] Added:', result.insertId);
+        res.json({ success: true, id: result.insertId, message: 'File added successfully' });
+    } catch (error) {
+        console.error('[Files] Create error:', error);
+        res.status(500).json({ error: 'Failed to add file' });
+    }
+});
+
+// Delete file (Admin only)
+app.delete('/api/files/:id', async (req, res) => {
+    if (!pool) return res.status(500).json({ error: 'Database not connected' });
+    
+    try {
+        const { username } = req.query;
+        
+        if (!isAnnouncementAdmin(username)) {
+            return res.status(403).json({ error: 'Admin access required' });
+        }
+        
+        await pool.execute('DELETE FROM download_files WHERE id = ?', [req.params.id]);
+        res.json({ success: true, message: 'File deleted' });
+    } catch (error) {
+        console.error('[Files] Delete error:', error);
+        res.status(500).json({ error: 'Failed to delete file' });
+    }
+});
+
+// Get current user info (for admin check on frontend)
+app.get('/api/auth/me', async (req, res) => {
+    const { username } = req.query;
+    
+    if (!username) {
+        return res.status(401).json({ error: 'Not authenticated' });
+    }
+    
+    res.json({
+        username: username,
+        isAdmin: isAnnouncementAdmin(username)
+    });
+});
 
 // ══════════════════════════════════════════════════════════════════════════
 // LEADERBOARD
