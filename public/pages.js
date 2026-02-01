@@ -2,7 +2,6 @@
  * Camp Half-Blood - Page Content
  * All documentation pages for the site
  */
-
 const PAGES = {
 
     'announcements': {
