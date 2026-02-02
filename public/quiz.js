@@ -294,7 +294,7 @@ let quizState = {
     currentQuestion: 0,
     questions: [],
     godPoints: {},
-    totalQuestions: 5,  // Match Discord: 5 questions
+    totalQuestions: 7,  // Match Discord: 7 questions
     transitioning: false
 };
 
@@ -464,9 +464,9 @@ function startQuiz() {
     quizState = {
         active: true,
         currentQuestion: 0,
-        questions: shuffleArray([...QUIZ_QUESTIONS]).slice(0, 5),  // Match Discord: 5 questions
+        questions: shuffleArray([...QUIZ_QUESTIONS]).slice(0, 7),  // Match Discord: 7 questions
         godPoints: {},
-        totalQuestions: 5,
+        totalQuestions: 7,
         transitioning: false
     };
     
