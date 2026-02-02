@@ -7,7 +7,7 @@
 // CONFIGURATION
 // ═══════════════════════════════════════════════════════════════════════════════
 
-const API_BASE = 'https://YOUR-APP-NAME.up.railway.app';
+const API_BASE = 'chbwebsite-production.up.railway.app';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // SESSION MANAGEMENT
