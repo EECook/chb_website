@@ -164,153 +164,123 @@ const OLYMPIAN_GODS = {
 
 const QUIZ_QUESTIONS = [
     {
-        question: "You find yourself at a crossroads in a misty forest. Three paths lay before you. Which calls to you?",
-        atmosphere: "forest",
-        answers: [
-            { text: "The path lit by flickering torches, leading upward toward distant thunder", gods: ["Zeus", "Nike", "Ares"] },
-            { text: "The overgrown trail winding toward the sound of rushing water", gods: ["Poseidon", "Demeter", "Artemis"] },
-            { text: "The shadowy path descending into mysterious darkness", gods: ["Hades", "Hecate", "Hypnos"] },
-            { text: "The golden path shimmering with dappled sunlight", gods: ["Apollo", "Aphrodite", "Iris"] }
-        ]
-    },
-    {
-        question: "A fellow camper has wronged your closest friend. How do you respond?",
-        atmosphere: "conflict",
-        answers: [
-            { text: "Confront them directly and demand they apologize immediately", gods: ["Ares", "Zeus", "Nike"] },
-            { text: "Plan careful revenge when they least expect it", gods: ["Nemesis", "Athena", "Hades"] },
-            { text: "Try to understand why they did it and seek a peaceful resolution", gods: ["Aphrodite", "Demeter", "Iris"] },
-            { text: "Help your friend move on - dwelling on it won't help", gods: ["Apollo", "Hermes", "Dionysus"] }
-        ]
-    },
-    {
-        question: "You discover a hidden room in Camp Half-Blood. Inside, you find...",
-        atmosphere: "discovery",
-        answers: [
-            { text: "An ancient forge with tools that seem to hum with power", gods: ["Hephaestus", "Athena", "Ares"] },
-            { text: "A library of forbidden scrolls containing lost knowledge", gods: ["Athena", "Hecate", "Apollo"] },
-            { text: "A pool of water showing visions of distant places", gods: ["Poseidon", "Iris", "Hypnos"] },
-            { text: "A throne room with weapons and treasures from every era", gods: ["Zeus", "Hera", "Nike"] }
-        ]
-    },
-    {
-        question: "During capture the flag, what role do you naturally take?",
-        atmosphere: "battle",
-        answers: [
-            { text: "Lead the charge and inspire others to follow", gods: ["Zeus", "Ares", "Nike"] },
-            { text: "Scout ahead and report enemy positions", gods: ["Artemis", "Hermes", "Athena"] },
-            { text: "Defend the flag with unwavering determination", gods: ["Hera", "Demeter", "Hades"] },
-            { text: "Create distractions and chaos to confuse the enemy", gods: ["Dionysus", "Hermes", "Tyche"] }
-        ]
-    },
-    {
-        question: "What time of day makes you feel most alive?",
-        atmosphere: "celestial",
-        answers: [
-            { text: "Dawn, when the world awakens with fresh possibilities", gods: ["Apollo", "Nike", "Iris"] },
-            { text: "Midnight, when the world sleeps and secrets emerge", gods: ["Hecate", "Hypnos", "Hades"] },
-            { text: "Dusk, the magical hour between day and night", gods: ["Artemis", "Aphrodite", "Nemesis"] },
-            { text: "High noon, when energy and passion are at their peak", gods: ["Zeus", "Ares", "Hephaestus"] }
-        ]
-    },
-    {
-        question: "You receive a gift from an unknown sender. You open it to find...",
-        atmosphere: "mystery",
-        answers: [
-            { text: "A beautifully crafted weapon that feels perfectly balanced in your hand", gods: ["Ares", "Hephaestus", "Athena"] },
-            { text: "A journal filled with your future written in riddles", gods: ["Apollo", "Hecate", "Tyche"] },
-            { text: "A compass that doesn't point north, but somewhere else entirely", gods: ["Hermes", "Poseidon", "Artemis"] },
-            { text: "A mirror that shows your reflection, but different somehow", gods: ["Aphrodite", "Nemesis", "Hades"] }
-        ]
-    },
-    {
-        question: "What do you fear most?",
-        atmosphere: "dark",
-        answers: [
-            { text: "Being forgotten, leaving no legacy behind", gods: ["Zeus", "Nike", "Apollo"] },
-            { text: "Losing control of yourself or your emotions", gods: ["Dionysus", "Ares", "Poseidon"] },
-            { text: "Being betrayed by someone you trusted completely", gods: ["Hera", "Nemesis", "Athena"] },
-            { text: "Being alone, with no one who understands you", gods: ["Aphrodite", "Demeter", "Iris"] }
-        ]
-    },
-    {
-        question: "A mysterious figure offers you one gift. Which do you accept?",
-        atmosphere: "offering",
-        answers: [
-            { text: "The power to see truth through any deception", gods: ["Athena", "Apollo", "Nemesis"] },
-            { text: "The ability to move unseen and unheard", gods: ["Hermes", "Hecate", "Artemis"] },
-            { text: "Strength that makes you nearly unstoppable", gods: ["Ares", "Poseidon", "Hephaestus"] },
-            { text: "The gift of making anyone trust and like you", gods: ["Aphrodite", "Dionysus", "Iris"] }
-        ]
-    },
-    {
-        question: "You hear music in the distance. What draws you toward it?",
-        atmosphere: "ethereal",
-        answers: [
-            { text: "War drums that make your heart pound with anticipation", gods: ["Ares", "Nike", "Zeus"] },
-            { text: "A haunting melody that speaks to your soul", gods: ["Apollo", "Hypnos", "Hecate"] },
-            { text: "Wild, chaotic music that makes you want to dance", gods: ["Dionysus", "Hermes", "Tyche"] },
-            { text: "A gentle song that reminds you of home", gods: ["Demeter", "Hera", "Aphrodite"] }
-        ]
-    },
-    {
-        question: "When making an important decision, you rely most on...",
+        question: "You find a lost wallet with $500. What do you do?",
         atmosphere: "contemplation",
         answers: [
-            { text: "Careful analysis and strategic thinking", gods: ["Athena", "Hephaestus", "Nemesis"] },
-            { text: "Your gut instinct and inner feelings", gods: ["Poseidon", "Dionysus", "Tyche"] },
-            { text: "What will bring the greatest glory or recognition", gods: ["Zeus", "Nike", "Apollo"] },
-            { text: "How it will affect the people you care about", gods: ["Hera", "Demeter", "Aphrodite"] }
+            { text: "Return it immediately - honesty is important", gods: ["Athena", "Hera"] },
+            { text: "Keep the cash, return the wallet - finder's fee!", gods: ["Hermes", "Tyche"] },
+            { text: "Try to find the owner yourself", gods: ["Apollo", "Iris"] },
+            { text: "Leave it - not your problem", gods: ["Ares", "Hades"] }
         ]
     },
     {
-        question: "In your dreams, you often find yourself...",
-        atmosphere: "dreams",
+        question: "Your ideal vacation would be...",
+        atmosphere: "discovery",
         answers: [
-            { text: "Flying through storm clouds, lightning at your fingertips", gods: ["Zeus", "Nike", "Iris"] },
-            { text: "Wandering through endless dark corridors seeking something", gods: ["Hades", "Hecate", "Hypnos"] },
-            { text: "Swimming in an infinite ocean, breathing underwater", gods: ["Poseidon", "Artemis", "Demeter"] },
-            { text: "Standing before crowds who cheer your name", gods: ["Apollo", "Aphrodite", "Ares"] }
+            { text: "Beach resort with water activities", gods: ["Poseidon", "Aphrodite"] },
+            { text: "Mountain hiking and wilderness camping", gods: ["Artemis", "Demeter"] },
+            { text: "Historical museums and ancient ruins", gods: ["Athena", "Hecate"] },
+            { text: "Extreme sports and adventure", gods: ["Ares", "Nike"] }
         ]
     },
     {
-        question: "What would you sacrifice for power?",
-        atmosphere: "sacrifice",
+        question: "In a group project, you are...",
+        atmosphere: "contemplation",
         answers: [
-            { text: "Nothing - power isn't worth losing who you are", gods: ["Demeter", "Hera", "Iris"] },
-            { text: "My comfort, if it means achieving something great", gods: ["Athena", "Nike", "Apollo"] },
-            { text: "Whatever it takes - the ends justify the means", gods: ["Hades", "Ares", "Nemesis"] },
-            { text: "I don't seek power, I seek freedom", gods: ["Hermes", "Dionysus", "Artemis"] }
+            { text: "The leader who organizes everything", gods: ["Zeus", "Athena"] },
+            { text: "The creative one with unique ideas", gods: ["Apollo", "Dionysus"] },
+            { text: "The builder who makes things happen", gods: ["Hephaestus", "Demeter"] },
+            { text: "The one who keeps the peace", gods: ["Hera", "Iris"] }
         ]
     },
     {
-        question: "A injured creature lies in your path. What do you do?",
-        atmosphere: "compassion",
+        question: "Your greatest fear is...",
+        atmosphere: "dark",
         answers: [
-            { text: "Heal it with whatever skills you have", gods: ["Apollo", "Demeter", "Artemis"] },
-            { text: "End its suffering quickly and humanely", gods: ["Ares", "Nemesis", "Hades"] },
-            { text: "Examine it to understand what happened", gods: ["Athena", "Hecate", "Hephaestus"] },
-            { text: "Comfort it and stay until help arrives", gods: ["Aphrodite", "Hera", "Iris"] }
+            { text: "Being forgotten or insignificant", gods: ["Zeus", "Nike"] },
+            { text: "Losing loved ones", gods: ["Hera", "Demeter"] },
+            { text: "Being trapped or confined", gods: ["Hermes", "Poseidon"] },
+            { text: "Chaos and disorder", gods: ["Athena", "Nemesis"] }
         ]
     },
     {
-        question: "Which element speaks to your spirit?",
-        atmosphere: "elemental",
+        question: "What matters most to you?",
+        atmosphere: "contemplation",
         answers: [
-            { text: "Fire - passionate, transformative, dangerous", gods: ["Hephaestus", "Ares", "Apollo"] },
-            { text: "Water - adaptable, deep, ever-changing", gods: ["Poseidon", "Aphrodite", "Tyche"] },
-            { text: "Earth - stable, nurturing, patient", gods: ["Demeter", "Hades", "Hera"] },
-            { text: "Air - free, swift, impossible to contain", gods: ["Zeus", "Hermes", "Iris"] }
+            { text: "Knowledge and wisdom", gods: ["Athena", "Hecate"] },
+            { text: "Family and relationships", gods: ["Hera", "Demeter"] },
+            { text: "Freedom and adventure", gods: ["Hermes", "Artemis"] },
+            { text: "Power and success", gods: ["Zeus", "Ares"] }
         ]
     },
     {
-        question: "You find an ancient prophecy that mentions your name. You...",
-        atmosphere: "prophecy",
+        question: "How do you handle conflict?",
+        atmosphere: "conflict",
         answers: [
-            { text: "Embrace it - destiny has called and you will answer", gods: ["Zeus", "Apollo", "Nike"] },
-            { text: "Study it carefully to understand every hidden meaning", gods: ["Athena", "Hecate", "Nemesis"] },
-            { text: "Ignore it - you forge your own path", gods: ["Ares", "Hermes", "Dionysus"] },
-            { text: "Feel the weight of it, knowing prophecies always come with a price", gods: ["Hades", "Hypnos", "Tyche"] }
+            { text: "Talk it out and find compromise", gods: ["Hera", "Iris"] },
+            { text: "Fight for what's right", gods: ["Ares", "Nike"] },
+            { text: "Outsmart your opponent", gods: ["Athena", "Hermes"] },
+            { text: "Walk away - not worth it", gods: ["Dionysus", "Hypnos"] }
+        ]
+    },
+    {
+        question: "Pick a superpower:",
+        atmosphere: "offering",
+        answers: [
+            { text: "Control over the elements", gods: ["Poseidon", "Zeus"] },
+            { text: "Mind reading or manipulation", gods: ["Aphrodite", "Hypnos"] },
+            { text: "Super strength or speed", gods: ["Ares", "Hermes"] },
+            { text: "Invisibility or teleportation", gods: ["Hades", "Hecate"] }
+        ]
+    },
+    {
+        question: "What time of day do you feel most alive?",
+        atmosphere: "celestial",
+        answers: [
+            { text: "Dawn - full of possibilities", gods: ["Apollo", "Nike"] },
+            { text: "Afternoon - peak productivity", gods: ["Athena", "Hephaestus"] },
+            { text: "Evening - time to unwind", gods: ["Dionysus", "Aphrodite"] },
+            { text: "Midnight - when the world sleeps", gods: ["Hecate", "Hades"] }
+        ]
+    },
+    {
+        question: "On a Saturday night, you'd rather...",
+        atmosphere: "ethereal",
+        answers: [
+            { text: "Go to a party or social event", gods: ["Dionysus", "Aphrodite"] },
+            { text: "Stay home with a good book", gods: ["Athena", "Hypnos"] },
+            { text: "Go on an adventure outdoors", gods: ["Artemis", "Hermes"] },
+            { text: "Work on a personal project", gods: ["Hephaestus", "Hecate"] }
+        ]
+    },
+    {
+        question: "You witness someone being bullied. You...",
+        atmosphere: "conflict",
+        answers: [
+            { text: "Confront the bully directly", gods: ["Ares", "Zeus"] },
+            { text: "Cleverly embarrass the bully", gods: ["Hermes", "Nemesis"] },
+            { text: "Comfort and help the victim", gods: ["Hera", "Apollo"] },
+            { text: "Report it to authorities", gods: ["Athena", "Nike"] }
+        ]
+    },
+    {
+        question: "Your dream superpower would be...",
+        atmosphere: "mystery",
+        answers: [
+            { text: "Control over elements (fire, water, etc.)", gods: ["Poseidon", "Zeus", "Hephaestus"] },
+            { text: "Mind reading or foresight", gods: ["Apollo", "Athena", "Hecate"] },
+            { text: "Super strength and combat skills", gods: ["Ares", "Artemis"] },
+            { text: "Invisibility or teleportation", gods: ["Hades", "Hermes"] }
+        ]
+    },
+    {
+        question: "What role do you play in your friend group?",
+        atmosphere: "contemplation",
+        answers: [
+            { text: "The leader who makes decisions", gods: ["Zeus", "Athena"] },
+            { text: "The fun one who plans events", gods: ["Dionysus", "Hermes"] },
+            { text: "The listener who gives advice", gods: ["Hera", "Apollo"] },
+            { text: "The quiet one who observes", gods: ["Hades", "Artemis"] }
         ]
     }
 ];
@@ -324,7 +294,7 @@ let quizState = {
     currentQuestion: 0,
     questions: [],
     godPoints: {},
-    totalQuestions: 7,
+    totalQuestions: 5,  // Match Discord: 5 questions
     transitioning: false
 };
 
@@ -494,9 +464,9 @@ function startQuiz() {
     quizState = {
         active: true,
         currentQuestion: 0,
-        questions: shuffleArray([...QUIZ_QUESTIONS]).slice(0, 7),
+        questions: shuffleArray([...QUIZ_QUESTIONS]).slice(0, 5),  // Match Discord: 5 questions
         godPoints: {},
-        totalQuestions: 7,
+        totalQuestions: 5,
         transitioning: false
     };
     
