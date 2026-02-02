@@ -3015,3 +3015,576 @@ const PAGES = {
         `
     }
 };
+
+/*
+ * Camp Half-Blood - Documentation Pages
+ * Page content and rendering for the wiki/documentation section
+ */
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// PAGE DEFINITIONS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const PAGES = {
+    home: {
+        title: "Camp Half-Blood Overview",
+        icon: "🏛️",
+        content: `
+            <div class="doc-section">
+                <h2>🏛️ Welcome to Camp Half-Blood</h2>
+                <p>Camp Half-Blood is an immersive roleplay community bridging Discord and Minecraft, inspired by the Percy Jackson universe. Here, you'll discover your divine heritage, join a cabin, train your abilities, and embark on epic quests.</p>
+                
+                <h3>What We Offer</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>⚡ Divine Heritage</h4>
+                        <p>Take our quiz or choose your Olympian parent. Gain unique powers and blessings based on your godly lineage.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🏕️ Cabin System</h4>
+                        <p>Join your cabin based on your god parent. Compete with other cabins, earn divine favor, and make lifelong friends.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>💰 Economy</h4>
+                        <p>Earn Drachma through activities, games, and quests. Spend it in shops for items, permits, and divine blessings.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🎮 Minecraft Integration</h4>
+                        <p>Link your account to get in-game effects based on your god parent, skill trees, and shrine benefits.</p>
+                    </div>
+                </div>
+            </div>
+        `
+    },
+    
+    "new-player": {
+        title: "New Player Guide",
+        icon: "🌟",
+        content: `
+            <div class="doc-section">
+                <h2>🌟 Getting Started</h2>
+                <p>Welcome, young demigod! Here's everything you need to begin your journey at Camp Half-Blood.</p>
+                
+                <h3>Step 1: Join Discord</h3>
+                <p>Our community lives on Discord. Join the server to access all features, chat with other demigods, and participate in events.</p>
+                
+                <h3>Step 2: Discover Your God Parent</h3>
+                <p>Take our <strong>Divine Claiming Quiz</strong> to discover which Olympian claims you! Your god parent determines your cabin, powers, and Minecraft effects.</p>
+                <button class="doc-link-btn" onclick="showQuizPage()">🔮 Take the Quiz</button>
+                
+                <h3>Step 3: Set Up Your Profile</h3>
+                <p>Use <code>/profile</code> on Discord to view and customize your demigod profile. Add a backstory, choose a display name, and more.</p>
+                
+                <h3>Step 4: Link Your Minecraft Account</h3>
+                <p>If you want to play on our Minecraft server, use <code>/mclink</code> on Discord to connect your accounts. This unlocks god-specific powers in-game!</p>
+                
+                <h3>Step 5: Explore!</h3>
+                <p>Check out the mini-games, earn Drachma, visit the shop, and start making friends. The camp is yours to explore!</p>
+            </div>
+        `
+    },
+    
+    gods: {
+        title: "Gods & Claiming",
+        icon: "⚡",
+        content: `
+            <div class="doc-section">
+                <h2>⚡ The Olympians</h2>
+                <p>Nineteen gods may claim you as their child. Each offers unique traits, powers, and Minecraft blessings.</p>
+                
+                <div class="god-grid" id="gods-grid">
+                    <!-- Populated by JavaScript -->
+                </div>
+                
+                <h3>How Claiming Works</h3>
+                <p>You can be claimed in two ways:</p>
+                <ul>
+                    <li><strong>Quiz:</strong> Take our personality quiz to discover which god best matches you</li>
+                    <li><strong>Manual Selection:</strong> Choose your god parent directly if you know who you want</li>
+                </ul>
+                
+                <button class="doc-link-btn" onclick="showQuizPage()">🔮 Take the God Quiz</button>
+            </div>
+        `
+    },
+    
+    cabins: {
+        title: "Cabins",
+        icon: "🏕️",
+        content: `
+            <div class="doc-section">
+                <h2>🏕️ Cabin System</h2>
+                <p>Each god has a cabin at Camp Half-Blood. When you're claimed, you automatically join your parent's cabin.</p>
+                
+                <h3>Cabin Benefits</h3>
+                <ul>
+                    <li>Private cabin Discord channels</li>
+                    <li>Cabin-wide competitions and events</li>
+                    <li>Divine favor rewards</li>
+                    <li>Shared shrine bonuses in Minecraft</li>
+                </ul>
+                
+                <h3>Divine Favor</h3>
+                <p>Cabins earn Divine Favor through member activity, quest completions, and event victories. High favor brings blessings from the gods!</p>
+            </div>
+        `
+    },
+    
+    profile: {
+        title: "Profile & Mail",
+        icon: "👤",
+        content: `
+            <div class="doc-section">
+                <h2>👤 Your Demigod Profile</h2>
+                <p>Your profile tracks everything about your character at Camp Half-Blood.</p>
+                
+                <h3>Discord Commands</h3>
+                <div class="command-list">
+                    <div class="command"><code>/profile</code> - View your profile</div>
+                    <div class="command"><code>/profile user:@someone</code> - View another player's profile</div>
+                    <div class="command"><code>/mail</code> - Check your inbox</div>
+                    <div class="command"><code>/mail send user:@someone message:Hello!</code> - Send mail</div>
+                </div>
+                
+                <h3>What Your Profile Shows</h3>
+                <ul>
+                    <li>God parent and cabin</li>
+                    <li>Drachma balance</li>
+                    <li>Divine favor status</li>
+                    <li>Linked Minecraft account</li>
+                    <li>Skill tree progress</li>
+                </ul>
+            </div>
+        `
+    },
+    
+    economy: {
+        title: "Economy & Shop",
+        icon: "💰",
+        content: `
+            <div class="doc-section">
+                <h2>💰 Drachma Economy</h2>
+                <p>Drachma is the currency of Camp Half-Blood. Earn it through various activities and spend it wisely!</p>
+                
+                <h3>Ways to Earn Drachma</h3>
+                <ul>
+                    <li>Daily check-in rewards</li>
+                    <li>Mini-games and activities</li>
+                    <li>Quest completions</li>
+                    <li>Event participation</li>
+                    <li>Casino games (risky!)</li>
+                </ul>
+                
+                <h3>The Camp Shop</h3>
+                <p>Use <code>/shop</code> to browse items available for purchase:</p>
+                <ul>
+                    <li>Minecraft items (delivered in-game)</li>
+                    <li>Divine blessings and boosts</li>
+                    <li>Shop permits to run your own business</li>
+                    <li>Quest approvals</li>
+                </ul>
+            </div>
+        `
+    },
+    
+    games: {
+        title: "Mini-Games",
+        icon: "🎮",
+        content: `
+            <div class="doc-section">
+                <h2>🎮 Discord Mini-Games</h2>
+                <p>Test your skills and earn Drachma with our mythology-themed games!</p>
+                
+                <h3>Available Games</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>⚡ Godly Trials</h4>
+                        <p>Answer mythology trivia questions to prove your knowledge.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🏃 Reflex Run</h4>
+                        <p>Test your reaction speed against mythological challenges.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>⏱️ Olympian Timed</h4>
+                        <p>Race against the clock in rapid-fire quiz rounds.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>⚡ Lightning Roulette</h4>
+                        <p>High-risk, high-reward chance game blessed by Zeus.</p>
+                    </div>
+                </div>
+                
+                <p>Use <code>/games</code> to see available games and their cooldowns.</p>
+            </div>
+        `
+    },
+    
+    casino: {
+        title: "Casino",
+        icon: "🎰",
+        content: `
+            <div class="doc-section">
+                <h2>🎰 Camp Casino</h2>
+                <p>Feeling lucky? The casino offers high-stakes gambling for brave demigods.</p>
+                
+                <div class="warning-box">
+                    ⚠️ <strong>Warning:</strong> Gambling can result in significant Drachma loss. Play responsibly!
+                </div>
+                
+                <h3>Casino Games</h3>
+                <ul>
+                    <li><strong>Olympus Slots</strong> - Classic slot machine with godly symbols</li>
+                    <li><strong>Hermes Roulette</strong> - Spin the wheel of fortune</li>
+                    <li><strong>Athena Blackjack</strong> - Strategic card game</li>
+                    <li><strong>Apollo Dice</strong> - Roll the sacred dice</li>
+                    <li><strong>Tyche Coinflip</strong> - Double or nothing!</li>
+                </ul>
+            </div>
+        `
+    },
+    
+    arena: {
+        title: "Arena",
+        icon: "⚔️",
+        content: `
+            <div class="doc-section">
+                <h2>⚔️ The Arena</h2>
+                <p>Test your combat skills against other demigods in our arena system!</p>
+                
+                <h3>Battle Modes</h3>
+                <ul>
+                    <li><strong>PvP Duels</strong> - Challenge another player to single combat</li>
+                    <li><strong>PvE Battles</strong> - Fight AI monsters for rewards</li>
+                    <li><strong>Boss Fights</strong> - Team up to defeat powerful monsters</li>
+                </ul>
+                
+                <h3>Betting System</h3>
+                <p>Spectators can place bets on arena matches. Winners split the pot!</p>
+            </div>
+        `
+    },
+    
+    shops: {
+        title: "Player Shops",
+        icon: "🏪",
+        content: `
+            <div class="doc-section">
+                <h2>🏪 Player Shops</h2>
+                <p>With a Shop Permit, you can open your own business at Camp Half-Blood!</p>
+                
+                <h3>Getting a Shop Permit</h3>
+                <p>Purchase a Shop Permit from the camp store for 1,500 Drachma. This allows you to create and manage your own shop.</p>
+                
+                <h3>Shop Types</h3>
+                <ul>
+                    <li>General Store</li>
+                    <li>Weapon Shop</li>
+                    <li>Armor Shop</li>
+                    <li>Potion Shop</li>
+                    <li>Building Materials</li>
+                    <li>Food & Supplies</li>
+                    <li>Enchanting Services</li>
+                </ul>
+            </div>
+        `
+    },
+    
+    quests: {
+        title: "Quests",
+        icon: "📜",
+        content: `
+            <div class="doc-section">
+                <h2>📜 Quest System</h2>
+                <p>True heroes embark on quests! Request permission to undertake dangerous missions for glory and rewards.</p>
+                
+                <h3>How Quests Work</h3>
+                <ol>
+                    <li>Purchase a Quest Approval from the shop</li>
+                    <li>Submit your quest proposal to staff</li>
+                    <li>If approved, gather your party</li>
+                    <li>Complete the quest objectives</li>
+                    <li>Return for your rewards!</li>
+                </ol>
+            </div>
+        `
+    },
+    
+    mclink: {
+        title: "Account Linking",
+        icon: "🔗",
+        content: `
+            <div class="doc-section">
+                <h2>🔗 Minecraft Account Linking</h2>
+                <p>Connect your Discord and Minecraft accounts to unlock special features!</p>
+                
+                <h3>How to Link</h3>
+                <ol>
+                    <li>Join our Minecraft server</li>
+                    <li>Use <code>/mclink</code> on Discord</li>
+                    <li>Enter the code shown in-game</li>
+                    <li>Accounts are now linked!</li>
+                </ol>
+                
+                <h3>Benefits of Linking</h3>
+                <ul>
+                    <li>Colored nametag based on your god parent</li>
+                    <li>Permanent potion effects from your god</li>
+                    <li>Access to skill tree abilities</li>
+                    <li>Shrine benefits in-game</li>
+                    <li>Auto-delivery of shop purchases</li>
+                </ul>
+            </div>
+        `
+    },
+    
+    "mc-commands": {
+        title: "Minecraft Commands",
+        icon: "⌨️",
+        content: `
+            <div class="doc-section">
+                <h2>⌨️ Minecraft Commands</h2>
+                <p>Commands available in-game on our Minecraft server.</p>
+                
+                <div class="command-list">
+                    <div class="command"><code>/spawn</code> - Return to camp spawn</div>
+                    <div class="command"><code>/cabin</code> - Teleport to your cabin</div>
+                    <div class="command"><code>/skills</code> - Open skill tree menu</div>
+                    <div class="command"><code>/shrine</code> - View nearby shrine info</div>
+                    <div class="command"><code>/bal</code> - Check your Drachma balance</div>
+                    <div class="command"><code>/msg [player] [message]</code> - Private message</div>
+                </div>
+            </div>
+        `
+    },
+    
+    "mc-gods": {
+        title: "God Effects",
+        icon: "✨",
+        content: `
+            <div class="doc-section">
+                <h2>✨ God Effects in Minecraft</h2>
+                <p>Your divine heritage grants you permanent effects when playing on our Minecraft server!</p>
+                
+                <h3>Nametag Colors</h3>
+                <p>Your name appears in a color matching your god parent, visible to all players.</p>
+                
+                <h3>Permanent Effects</h3>
+                <p>Each god grants a unique potion effect:</p>
+                <ul>
+                    <li><strong>Zeus</strong> - Jump Boost</li>
+                    <li><strong>Poseidon</strong> - Water Breathing</li>
+                    <li><strong>Hades</strong> - Resistance</li>
+                    <li><strong>Athena</strong> - Haste</li>
+                    <li><strong>Apollo</strong> - Regeneration</li>
+                    <li><strong>Artemis</strong> - Speed</li>
+                    <li><strong>Ares</strong> - Strength</li>
+                    <li><strong>And more...</strong></li>
+                </ul>
+            </div>
+        `
+    },
+    
+    skills: {
+        title: "Skill Trees",
+        icon: "📊",
+        content: `
+            <div class="doc-section">
+                <h2>📊 Skill Tree System</h2>
+                <p>Customize your character's abilities with our skill tree system!</p>
+                
+                <h3>Skill Branches</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>⚔️ Warfare</h4>
+                        <p>Melee combat mastery with damage and knockback bonuses</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🏹 Marksmanship</h4>
+                        <p>Ranged combat with attack speed and special arrows</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>⚒️ Forging</h4>
+                        <p>Mining and crafting with haste and auto-smelt</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🏃 Athletics</h4>
+                        <p>Movement speed and jump boost abilities</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🛡️ Fortitude</h4>
+                        <p>Defense and health bonuses</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🥷 Stealth</h4>
+                        <p>Sneaking bonuses and night vision</p>
+                    </div>
+                </div>
+                
+                <h3>How It Works</h3>
+                <p>Earn skill XP through activities. Invest in skills to unlock tiers. Choose one Major and one Minor skill to specialize in!</p>
+            </div>
+        `
+    },
+    
+    shrines: {
+        title: "Shrines",
+        icon: "🏛️",
+        content: `
+            <div class="doc-section">
+                <h2>🏛️ Shrine System</h2>
+                <p>Build shrines to honor the gods and gain powerful cabin-wide buffs!</p>
+                
+                <h3>How Shrines Work</h3>
+                <ol>
+                    <li>Your cabin can build up to 2 shrines</li>
+                    <li>Each shrine requires a specific core block</li>
+                    <li>Offer items to fuel the shrine</li>
+                    <li>When fueled, all cabin members get effects</li>
+                </ol>
+                
+                <h3>Shrine Synergies</h3>
+                <p>Having two complementary shrines active unlocks special bonus effects!</p>
+                <p>Example: Zeus + Poseidon = Tempest Unleashed (2x lightning strikes during rain)</p>
+            </div>
+        `
+    },
+    
+    announcements: {
+        title: "Announcements",
+        icon: "📢",
+        content: `
+            <div class="doc-section">
+                <h2>📢 Announcements</h2>
+                <div id="announcements-list">
+                    <p class="loading">Loading announcements...</p>
+                </div>
+            </div>
+        `
+    },
+    
+    events: {
+        title: "Events",
+        icon: "📅",
+        content: `
+            <div class="doc-section">
+                <h2>📅 Camp Events</h2>
+                <p>Regular events bring the camp together for competitions and fun!</p>
+                
+                <h3>Event Types</h3>
+                <ul>
+                    <li><strong>Chariot Racing</strong> - Race around the track for glory</li>
+                    <li><strong>Capture the Flag</strong> - Classic camp competition</li>
+                    <li><strong>Monster Hunts</strong> - Track and defeat dangerous creatures</li>
+                    <li><strong>Olympian Games</strong> - Multi-event athletic competition</li>
+                </ul>
+            </div>
+        `
+    },
+    
+    timeline: {
+        title: "Timeline",
+        icon: "📜",
+        content: `
+            <div class="doc-section">
+                <h2>📜 Camp Timeline</h2>
+                <p>The history of our camp and major events that shaped our community.</p>
+                
+                <div id="timeline-content">
+                    <p>Timeline content coming soon...</p>
+                </div>
+            </div>
+        `
+    },
+    
+    lore: {
+        title: "Lore",
+        icon: "📖",
+        content: `
+            <div class="doc-section">
+                <h2>📖 Camp Lore</h2>
+                <p>The ongoing story of Camp Half-Blood and its brave demigods.</p>
+                
+                <h3>The Story So Far</h3>
+                <p>Check back for updates on our ongoing narrative and major plot events!</p>
+            </div>
+        `
+    }
+};
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// PAGE RENDERING
+// ═══════════════════════════════════════════════════════════════════════════════
+
+function renderPage(pageId) {
+    const page = PAGES[pageId];
+    if (!page) return '';
+    
+    return `
+        <div class="doc-page" id="page-${pageId}">
+            <div class="doc-header">
+                <h1><span class="page-icon">${page.icon}</span> ${page.title}</h1>
+            </div>
+            ${page.content}
+        </div>
+    `;
+}
+
+function initializeDocumentation() {
+    const container = document.getElementById('doc-content');
+    if (!container) return;
+    
+    // Render all pages
+    let pagesHTML = '';
+    for (const pageId in PAGES) {
+        pagesHTML += renderPage(pageId);
+    }
+    container.innerHTML = pagesHTML;
+    
+    // Initialize gods grid if on gods page
+    initGodsGrid();
+}
+
+function initGodsGrid() {
+    const grid = document.getElementById('gods-grid');
+    if (!grid) return;
+    
+    const gods = [
+        { name: "Zeus", emoji: "⚡", domain: "Sky & Thunder", effect: "Jump Boost", color: "#FFD700" },
+        { name: "Poseidon", emoji: "🔱", domain: "Sea & Earthquakes", effect: "Water Breathing", color: "#00CED1" },
+        { name: "Hades", emoji: "💀", domain: "Underworld", effect: "Resistance", color: "#4A4A4A" },
+        { name: "Athena", emoji: "🦉", domain: "Wisdom & Strategy", effect: "Haste", color: "#C0C0C0" },
+        { name: "Apollo", emoji: "☀️", domain: "Sun & Healing", effect: "Regeneration", color: "#FFB800" },
+        { name: "Artemis", emoji: "🏹", domain: "Hunt & Moon", effect: "Speed", color: "#E8E8E8" },
+        { name: "Ares", emoji: "⚔️", domain: "War", effect: "Strength", color: "#8B0000" },
+        { name: "Aphrodite", emoji: "💕", domain: "Love & Beauty", effect: "Regeneration", color: "#FFB6C1" },
+        { name: "Hephaestus", emoji: "🔨", domain: "Forge & Fire", effect: "Fire Resistance", color: "#FF4500" },
+        { name: "Hermes", emoji: "👟", domain: "Travel & Thieves", effect: "Speed", color: "#4169E1" },
+        { name: "Demeter", emoji: "🌾", domain: "Agriculture", effect: "Saturation", color: "#228B22" },
+        { name: "Dionysus", emoji: "🍇", domain: "Wine & Festivity", effect: "Luck", color: "#800080" },
+        { name: "Hera", emoji: "👑", domain: "Marriage & Family", effect: "Resistance", color: "#008B8B" },
+        { name: "Hecate", emoji: "🌙", domain: "Magic", effect: "Slow Falling", color: "#191970" },
+        { name: "Hypnos", emoji: "😴", domain: "Sleep & Dreams", effect: "Slow Falling", color: "#6A5ACD" },
+        { name: "Nike", emoji: "🏆", domain: "Victory", effect: "Speed", color: "#FFD700" },
+        { name: "Nemesis", emoji: "⚖️", domain: "Revenge & Balance", effect: "Resistance", color: "#696969" },
+        { name: "Iris", emoji: "🌈", domain: "Rainbows", effect: "Glowing", color: "#FF69B4" },
+        { name: "Tyche", emoji: "🎲", domain: "Fortune & Luck", effect: "Luck", color: "#32CD32" }
+    ];
+    
+    grid.innerHTML = gods.map(god => `
+        <div class="god-card" style="border-color: ${god.color}">
+            <span class="god-emoji">${god.emoji}</span>
+            <h4 style="color: ${god.color}">${god.name}</h4>
+            <p class="god-domain">${god.domain}</p>
+            <span class="god-effect">🎮 ${god.effect}</span>
+        </div>
+    `).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// INITIALIZE ON LOAD
+// ═══════════════════════════════════════════════════════════════════════════════
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeDocumentation();
+});
