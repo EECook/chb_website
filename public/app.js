@@ -7,7 +7,7 @@
 // CONFIGURATION
 // ═══════════════════════════════════════════════════════════════════════════════
 
-const API_BASE = 'https://chb-api.example.com'; // Replace with your actual API URL
+const API_BASE = 'chbwebsite-production.up.railway.app';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // SESSION MANAGEMENT
