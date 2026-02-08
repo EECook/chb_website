@@ -6,14 +6,14 @@
     position: relative;
     width: 100%;
     min-height: 100vh;
+    padding-top: var(--nav-height);
     background: var(--deep-night);
 }
 
 /* ── CHAPTER TABS ── */
 
 .quest-tabs {
-    position: sticky;
-    top: 0;
+    position: relative;
     z-index: 20;
     display: flex;
     align-items: center;
@@ -102,7 +102,7 @@
 .quest-canvas-area {
     position: relative;
     width: 100%;
-    height: calc(100vh - 54px);
+    height: calc(100vh - var(--nav-height) - 50px);
     overflow: hidden;
 }
 
@@ -423,7 +423,7 @@
 .bp-container {
     padding: 1.5rem;
     overflow-y: auto;
-    height: calc(100vh - 54px);
+    height: calc(100vh - var(--nav-height) - 50px);
 }
 
 .bp-header {
