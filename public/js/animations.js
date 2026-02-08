@@ -444,7 +444,7 @@
         }
 
         function doShootingStar() {
-            var delay = 10000 + Math.random() * 25000;
+            var delay = 5000 + Math.random() * 7000;
             var id = setTimeout(function() {
                 var el = document.createElement('div');
                 el.className = 'shooting-star';
