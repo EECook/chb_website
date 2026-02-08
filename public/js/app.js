@@ -18,7 +18,7 @@
     Router.register('/news', window.NewsPage);
     Router.register('/news/admin', window.NewsAdminPage);
     Router.register('/news/story', window.StoryPage);
-    Router.register('/news/quests', window.QuestsPage);
+    Router.register('/news/quests', window.QuestTreePage);
     Router.register('/portal', window.PortalPage);
     Router.register('/portal/profile', window.PortalProfilePage);
     Router.register('/portal/mail', window.PortalMailPage);
