@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/css/home.css">
     <link rel="stylesheet" href="/css/news.css">
     <link rel="stylesheet" href="/css/news-story.css">
+    <link rel="stylesheet" href="/css/portal.css">
 </head>
 <body>
 
@@ -120,25 +121,25 @@
                     <button class="nav-link">Portal <span class="dd-arrow">&#x25BE;</span></button>
                     <div class="dropdown-panel">
                         <a href="/portal" class="dropdown-item" data-link>
-                            <span class="di-icon">&#x1F464;</span>
-                            <div><strong>Profile</strong><small>Your demigod dashboard</small></div>
+                            <span class="di-icon">&#x1F300;</span>
+                            <div><strong>Dashboard</strong><small>Login &amp; overview</small></div>
                         </a>
-                        <a href="/portal/character" class="dropdown-item" data-link>
+                        <a href="/portal/profile" class="dropdown-item" data-link>
                             <span class="di-icon">&#x1F4DD;</span>
-                            <div><strong>Character Sheet</strong><small>Create your identity</small></div>
+                            <div><strong>Character Sheet</strong><small>Your demigod identity</small></div>
                         </a>
                         <a href="/portal/mail" class="dropdown-item" data-link>
                             <span class="di-icon">&#x1F4EC;</span>
                             <div><strong>Mail</strong><small>Messages &amp; invites</small></div>
                         </a>
                         <hr class="dd-divider">
-                        <a href="/portal/games" class="dropdown-item" data-link>
-                            <span class="di-icon">&#x1F3AE;</span>
-                            <div><strong>Games</strong><small>Play &amp; earn Drachma</small></div>
+                        <a href="/portal/leaderboard" class="dropdown-item" data-link>
+                            <span class="di-icon">&#x1F3C6;</span>
+                            <div><strong>Leaderboard</strong><small>Top demigods</small></div>
                         </a>
-                        <a href="/portal/arena" class="dropdown-item" data-link>
-                            <span class="di-icon">&#x2694;</span>
-                            <div><strong>Arena</strong><small>Battles &amp; events</small></div>
+                        <a href="/portal/characters" class="dropdown-item" data-link>
+                            <span class="di-icon">&#x1F465;</span>
+                            <div><strong>Campers</strong><small>Public character gallery</small></div>
                         </a>
                     </div>
                 </div>
@@ -173,7 +174,11 @@
         <a href="/info/lore" class="mm-link" data-link>Lore</a>
         <a href="/info/mods" class="mm-link" data-link>Mod List</a>
         <div class="mm-label">Portal</div>
-        <a href="/portal" class="mm-link" data-link>Profile</a>
+        <a href="/portal" class="mm-link" data-link>Dashboard</a>
+        <a href="/portal/profile" class="mm-link" data-link>Character Sheet</a>
+        <a href="/portal/mail" class="mm-link" data-link>Mail</a>
+        <a href="/portal/leaderboard" class="mm-link" data-link>Leaderboard</a>
+        <a href="/portal/characters" class="mm-link" data-link>Campers</a>
         <a href="/portal/quiz" class="mm-link quiz" data-link>God Quiz</a>
     </div>
 
@@ -187,6 +192,12 @@
     <script src="/js/pages/news-admin.js"></script>
     <script src="/js/pages/news-story.js"></script>
     <script src="/js/pages/news-quests.js"></script>
+    <script src="/js/portal-session.js"></script>
+    <script src="/js/pages/portal.js"></script>
+    <script src="/js/pages/portal-profile.js"></script>
+    <script src="/js/pages/portal-mail.js"></script>
+    <script src="/js/pages/portal-leaderboard.js"></script>
+    <script src="/js/pages/portal-characters.js"></script>
     <script src="/js/app.js"></script>
 </body>
 </html>
