@@ -443,28 +443,28 @@
             weatherTimers.push(id);
         }
 
+        var starId = 0;
+
         function doShootingStar() {
             var delay = 10000 + Math.random() * 25000;
             var id = setTimeout(function() {
+                starId++;
                 var el = document.createElement('div');
                 el.className = 'shooting-star';
 
-                // pick a direction -- generally downward with horizontal variety
-                // 0 = right, 90 = down, 180 = left
-                // two pools: down-right (20-70) and down-left (110-160)
+                // direction: down-right or down-left
                 var angle;
                 if (Math.random() < 0.5) {
-                    angle = 20 + Math.random() * 50;   // streaking down-right
+                    angle = 20 + Math.random() * 50;
                 } else {
-                    angle = 110 + Math.random() * 50;  // streaking down-left
+                    angle = 110 + Math.random() * 50;
                 }
 
-                // vary the length and travel distance
                 var len = 50 + Math.random() * 80;
                 var travel = 250 + Math.random() * 300;
                 var speed = 0.8 + Math.random() * 0.8;
 
-                // color variety: mostly white, occasional warm or cool tint
+                // color variety
                 var r = Math.random();
                 var color, glow;
                 if (r < 0.6) {
@@ -481,19 +481,26 @@
                     glow = 'rgba(212,175,55,0.35)';
                 }
 
-                // position: spawn in upper portion, offset from edges
                 el.style.top = (5 + Math.random() * 35) + '%';
                 el.style.left = (10 + Math.random() * 70) + '%';
                 el.style.width = len + 'px';
-
-                // rotate so the bright end (right side of gradient) points in the travel direction
-                el.style.setProperty('--angle', angle + 'deg');
                 el.style.background = 'linear-gradient(90deg, transparent, ' + color + ')';
                 el.style.boxShadow = '0 0 8px ' + glow;
-                el.style.setProperty('--travel', travel + 'px');
 
-                // animate
-                el.style.animation = 'shoot-straight ' + speed + 's ease-out forwards';
+                // inject a unique keyframe so we can bake the angle + travel in
+                var name = 'ss-' + starId;
+                var rot = 'rotate(' + angle + 'deg)';
+                var rule = '@keyframes ' + name + ' {'
+                    + '0%{transform:' + rot + ' translateX(0);opacity:0}'
+                    + '5%{opacity:1}'
+                    + '65%{opacity:1}'
+                    + '100%{transform:' + rot + ' translateX(' + travel + 'px);opacity:0}'
+                    + '}';
+
+                var sheet = document.styleSheets[0];
+                sheet.insertRule(rule, sheet.cssRules.length);
+
+                el.style.animation = name + ' ' + speed + 's ease-out forwards';
 
                 hero.appendChild(el);
                 setTimeout(function() { if (el.parentNode) el.remove(); }, speed * 1000 + 200);
