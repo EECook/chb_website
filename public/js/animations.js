@@ -449,7 +449,7 @@
                 var el = document.createElement('div');
                 el.className = 'shooting-star';
                 el.style.top = (Math.random() * 40) + '%';
-                el.style.left = (Math.random() * 60) + '%';
+                el.style.right = (Math.random() * 60) + '%';
                 el.style.width = (60 + Math.random() * 60) + 'px';
                 hero.appendChild(el);
                 requestAnimationFrame(function() { el.classList.add('active'); });
