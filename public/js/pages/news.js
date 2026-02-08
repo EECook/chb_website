@@ -1,11 +1,9 @@
-// camp bulletin feed
+// camp bulletin feed - uses /api/announcements
 
 (function() {
 
-    var POSTS_PER_PAGE = 15;
-    var currentOffset = 0;
-    var allLoaded = false;
     var isAdmin = false;
+    var adminUsername = null;
 
     function render(mount) {
         mount.innerHTML = ''
@@ -29,21 +27,18 @@
             +         '<span>Admin Post</span>'
             +       '</a>'
             +     '</div>'
-            +     '<div id="pinned-wrap"></div>'
             +     '<div id="news-feed" class="news-feed">'
             +       '<div class="news-loading"><div class="spinner"></div><div>Loading posts...</div></div>'
             +     '</div>'
-            +     '<div id="load-more-wrap"></div>'
             +   '</div>'
             + '</div>';
 
-        currentOffset = 0;
-        allLoaded = false;
         isAdmin = false;
+        adminUsername = null;
 
-        checkAuth();
-        loadPinned();
-        loadPosts(true);
+        checkAuth(function() {
+            loadPosts();
+        });
 
         Anim.initScrollReveal();
 
@@ -55,76 +50,51 @@
         };
     }
 
-    function checkAuth() {
-        fetch('/api/auth/me', { credentials: 'include' })
+    function checkAuth(cb) {
+        var portalUser = PortalSession.getUsername();
+        if (!portalUser) { cb(); return; }
+
+        adminUsername = portalUser;
+
+        fetch('/api/auth/me?username=' + encodeURIComponent(portalUser))
             .then(function(r) { return r.ok ? r.json() : null; })
             .then(function(user) {
                 if (user && user.isAdmin) isAdmin = true;
+                cb();
             })
-            .catch(function() {});
+            .catch(function() { cb(); });
     }
 
-    function loadPinned() {
-        fetch('/api/news/pinned', { credentials: 'include' })
-            .then(function(r) {
-                if (!r.ok) throw new Error();
-                return r.json();
-            })
-            .then(function(posts) {
-                var wrap = document.getElementById('pinned-wrap');
-                if (!wrap || !posts || !posts.length) return;
-
-                var html = '<div class="pinned-section">'
-                    + '<div class="pinned-label"><span class="pinned-icon">\u{1F4CC}</span> Pinned</div>';
-                posts.forEach(function(p) { html += buildPostCard(p, true); });
-                html += '</div>';
-                wrap.innerHTML = html;
-                bindPostActions(wrap);
-            })
-            .catch(function() {});
-    }
-
-    function loadPosts(fresh) {
-        if (fresh) currentOffset = 0;
-
-        fetch('/api/news?limit=' + POSTS_PER_PAGE + '&offset=' + currentOffset, { credentials: 'include' })
-            .then(function(r) {
-                if (!r.ok) throw new Error();
-                return r.json();
-            })
-            .then(function(posts) {
+    function loadPosts() {
+        fetch('/api/announcements')
+            .then(function(r) { return r.json(); })
+            .then(function(res) {
                 var feed = document.getElementById('news-feed');
-                var moreWrap = document.getElementById('load-more-wrap');
                 if (!feed) return;
-                if (fresh) feed.innerHTML = '';
 
-                if (!posts || !posts.length) {
-                    if (fresh) showEmpty(feed);
-                    allLoaded = true;
-                    if (moreWrap) moreWrap.innerHTML = '';
+                var posts = res.announcements || [];
+
+                if (!posts.length) {
+                    showEmpty(feed);
                     return;
                 }
 
-                posts.forEach(function(p) {
-                    feed.insertAdjacentHTML('beforeend', buildPostCard(p, false));
-                });
+                // split pinned and regular
+                var pinned = posts.filter(function(p) { return p.is_pinned; });
+                var regular = posts.filter(function(p) { return !p.is_pinned; });
 
-                currentOffset += posts.length;
-                allLoaded = posts.length < POSTS_PER_PAGE;
+                var html = '';
 
-                if (moreWrap) {
-                    if (allLoaded) {
-                        moreWrap.innerHTML = '';
-                    } else {
-                        moreWrap.innerHTML = '<div class="load-more-wrap"><button class="load-more-btn" id="load-more">Load more</button></div>';
-                        document.getElementById('load-more').addEventListener('click', function() {
-                            this.textContent = 'Loading...';
-                            this.disabled = true;
-                            loadPosts(false);
-                        });
-                    }
+                if (pinned.length) {
+                    html += '<div class="pinned-section">';
+                    html += '<div class="pinned-label"><span class="pinned-icon">\u{1F4CC}</span> Pinned</div>';
+                    pinned.forEach(function(p) { html += buildPostCard(p); });
+                    html += '</div>';
                 }
 
+                regular.forEach(function(p) { html += buildPostCard(p); });
+
+                feed.innerHTML = html;
                 bindPostActions(feed);
                 Anim.initScrollReveal();
             })
@@ -149,34 +119,35 @@
             + '</div>';
     }
 
-    function buildPostCard(post, inPinnedSection) {
-        var pinClass = post.pinned ? ' pinned' : '';
+    function buildPostCard(post) {
+        var pinClass = post.is_pinned ? ' pinned' : '';
         var date = formatDate(post.created_at);
+        var avatar = post.author_avatar || '\u{1F4AC}';
 
         var html = '<div class="post-card' + pinClass + '" data-id="' + post.id + '">';
+
         html += '<div class="post-head">';
         html += '<div class="post-title">' + esc(post.title) + '</div>';
         html += '<div class="post-meta">';
-        if (post.pinned && !inPinnedSection) html += '<span class="post-pin-badge">\u{1F4CC}</span>';
-        if (post.posted_to_discord) html += '<span class="discord-badge">\u{1F4E3} Discord</span>';
+        if (post.is_pinned) html += '<span class="post-pin-badge">\u{1F4CC}</span>';
+        html += '<span class="post-author">' + avatar + ' ' + esc(post.author || 'Admin') + '</span>';
         html += '<span class="post-date">' + date + '</span>';
         html += '</div></div>';
 
         html += '<div class="post-body">' + formatContent(post.content) + '</div>';
 
-        if (post.file_url) {
-            html += '<a href="' + esc(post.file_url) + '" class="post-attachment" target="_blank" download>';
-            html += '<span class="attach-icon">\u{1F4CE}</span>';
-            html += '<span>' + esc(post.file_name || 'Download') + '</span>';
-            html += '</a>';
+        if (post.notes) {
+            html += '<div class="post-notes">';
+            html += '<div class="pn-label">\u{1F4DD} Notes</div>';
+            html += '<div class="pn-content">' + formatContent(post.notes) + '</div>';
+            html += '</div>';
         }
 
         if (isAdmin) {
             html += '<div class="post-admin">';
-            html += '<button class="post-action pin-btn" data-action="pin" data-id="' + post.id + '">' + (post.pinned ? 'Unpin' : 'Pin') + '</button>';
-            if (!post.posted_to_discord) {
-                html += '<button class="post-action discord-btn" data-action="discord" data-id="' + post.id + '">Send to Discord</button>';
-            }
+            html += '<button class="post-action pin-btn" data-action="pin" data-id="' + post.id + '" data-pinned="' + (post.is_pinned ? '1' : '0') + '">';
+            html += post.is_pinned ? 'Unpin' : 'Pin';
+            html += '</button>';
             html += '<button class="post-action del-btn" data-action="delete" data-id="' + post.id + '">Delete</button>';
             html += '</div>';
         }
@@ -193,42 +164,33 @@
             btn.addEventListener('click', function() {
                 var action = this.getAttribute('data-action');
                 var id = this.getAttribute('data-id');
-                if (action === 'pin') handlePin(id);
+                if (action === 'pin') handlePin(id, this);
                 else if (action === 'delete') handleDelete(id);
-                else if (action === 'discord') handleDiscordPost(id, this);
             });
         });
     }
 
-    function handlePin(id) {
-        fetch('/api/news/' + id + '/pin', { method: 'PUT', credentials: 'include' })
+    function handlePin(id, btn) {
+        var currentlyPinned = btn.getAttribute('data-pinned') === '1';
+        fetch('/api/announcements/' + id + '/pin', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ is_pinned: !currentlyPinned, username: adminUsername })
+        })
             .then(function(r) { return r.json(); })
-            .then(function() { loadPinned(); currentOffset = 0; loadPosts(true); })
+            .then(function(res) {
+                if (res.error) { alert(res.error); return; }
+                loadPosts();
+            })
             .catch(function() {});
     }
 
     function handleDelete(id) {
-        if (!confirm('Delete this post? This cannot be undone.')) return;
-        fetch('/api/news/' + id, { method: 'DELETE', credentials: 'include' })
+        if (!confirm('Delete this announcement? This cannot be undone.')) return;
+        fetch('/api/announcements/' + id + '?username=' + encodeURIComponent(adminUsername), { method: 'DELETE' })
             .then(function(r) { return r.json(); })
-            .then(function() {
-                var card = document.querySelector('.post-card[data-id="' + id + '"]');
-                if (card) card.remove();
-                loadPinned();
-            })
+            .then(function() { loadPosts(); })
             .catch(function() {});
-    }
-
-    function handleDiscordPost(id, btn) {
-        btn.textContent = 'Sending...';
-        btn.disabled = true;
-        fetch('/api/news/' + id + '/discord', { method: 'POST', credentials: 'include' })
-            .then(function(r) { return r.json(); })
-            .then(function(res) {
-                btn.textContent = res.error ? 'Failed' : 'Sent \u2713';
-                if (res.error) btn.disabled = false;
-            })
-            .catch(function() { btn.textContent = 'Failed'; btn.disabled = false; });
     }
 
     function esc(str) {
