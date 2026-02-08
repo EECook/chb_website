@@ -1,5 +1,5 @@
 // ══════════════════════════════════════════════════════════════════════════
-// CAMP HALF-BLOOD - BACKEND SERVER (v4 - Full Mail System + Announcements
+// CAMP HALF-BLOOD - BACKEND SERVER (v4 - Full Mail System + Announcements)
 // ══════════════════════════════════════════════════════════════════════════
 
 const express = require('express');
@@ -68,6 +68,15 @@ async function createWebTables() {
                 is_public TINYINT DEFAULT 1,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+        await pool.execute(`
+            CREATE TABLE IF NOT EXISTS server_info (
+                id INT PRIMARY KEY DEFAULT 1,
+                ip VARCHAR(100),
+                version VARCHAR(50),
+                whitelist VARCHAR(500),
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             )
         `);
         console.log('✅ Web tables ready');
@@ -661,6 +670,8 @@ app.post('/api/player/:username/character', async (req, res) => {
 // Configuration
 const ANNOUNCEMENT_ADMIN_USERS = ['lizzzerd', 'ussdylan'];
 const DISCORD_ANNOUNCEMENTS_WEBHOOK = process.env.DISCORD_ANNOUNCEMENTS_WEBHOOK || null;
+const DISCORD_ANNOUNCEMENTS_CHANNEL = '1454707501282103427';
+const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN || null;
 
 // Helper: Check if user is announcement admin
 function isAnnouncementAdmin(username) {
@@ -677,48 +688,65 @@ function getAuthorAvatar(author) {
     return avatars[(author || '').toLowerCase()] || '👤';
 }
 
-// Helper: Post to Discord webhook
+// Helper: Post to Discord webhook or bot channel
 async function postAnnouncementToDiscord(title, content, notes, author, announcementId) {
-    if (!DISCORD_ANNOUNCEMENTS_WEBHOOK) {
-        console.log('[Announcements] No Discord webhook configured');
-        return;
-    }
+    const embed = {
+        title: `📢 ${title}`,
+        description: content.length > 2000 ? content.substring(0, 1997) + '...' : content,
+        color: 0xD4AF37,
+        author: { name: author },
+        footer: { text: `Camp Half-Blood Announcements • #${announcementId}` },
+        timestamp: new Date().toISOString()
+    };
     
-    try {
-        const embed = {
-            title: `📢 ${title}`,
-            description: content.length > 2000 ? content.substring(0, 1997) + '...' : content,
-            color: 0xD4AF37,
-            author: { name: author },
-            footer: { text: `Camp Half-Blood Announcements • #${announcementId}` },
-            timestamp: new Date().toISOString()
-        };
-        
-        if (notes) {
-            embed.fields = [{
-                name: '📝 Additional Notes',
-                value: notes.length > 1000 ? notes.substring(0, 997) + '...' : notes,
-                inline: false
-            }];
-        }
-        
-        const response = await fetch(DISCORD_ANNOUNCEMENTS_WEBHOOK, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                username: 'Camp Half-Blood',
-                embeds: [embed]
-            })
-        });
-        
-        if (!response.ok) {
-            console.error('[Announcements] Discord webhook failed:', response.status);
-        } else {
-            console.log('[Announcements] Posted to Discord successfully');
-        }
-    } catch (error) {
-        console.error('[Announcements] Discord webhook error:', error);
+    if (notes) {
+        embed.fields = [{
+            name: '📝 Additional Notes',
+            value: notes.length > 1000 ? notes.substring(0, 997) + '...' : notes,
+            inline: false
+        }];
     }
+
+    // Try webhook first
+    if (DISCORD_ANNOUNCEMENTS_WEBHOOK) {
+        try {
+            const response = await fetch(DISCORD_ANNOUNCEMENTS_WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: 'Camp Half-Blood', embeds: [embed] })
+            });
+            if (response.ok) {
+                console.log('[Announcements] Posted to Discord via webhook');
+                return;
+            }
+            console.error('[Announcements] Webhook failed:', response.status);
+        } catch (error) {
+            console.error('[Announcements] Webhook error:', error);
+        }
+    }
+
+    // Fallback: bot token + channel ID
+    if (DISCORD_BOT_TOKEN && DISCORD_ANNOUNCEMENTS_CHANNEL) {
+        try {
+            const response = await fetch(`https://discord.com/api/v10/channels/${DISCORD_ANNOUNCEMENTS_CHANNEL}/messages`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bot ${DISCORD_BOT_TOKEN}`
+                },
+                body: JSON.stringify({ embeds: [embed] })
+            });
+            if (response.ok) {
+                console.log('[Announcements] Posted to Discord via bot');
+                return;
+            }
+            console.error('[Announcements] Bot post failed:', response.status);
+        } catch (error) {
+            console.error('[Announcements] Bot post error:', error);
+        }
+    }
+
+    console.log('[Announcements] No Discord delivery method configured');
 }
 
 // Get all announcements
@@ -984,6 +1012,54 @@ function getDemoPlayer(username) {
     };
 }
 
+// ══════════════════════════════════════════════════════════════════════════
+// SERVER INFO (shown on bulletin)
+// ══════════════════════════════════════════════════════════════════════════
+
+app.get('/api/server-info', async (req, res) => {
+    if (!pool) return res.json({ ip: '', version: '', whitelist: '' });
+    
+    try {
+        const [rows] = await pool.execute('SELECT * FROM server_info WHERE id = 1');
+        if (rows.length === 0) {
+            return res.json({ ip: '', version: '', whitelist: '' });
+        }
+        res.json({
+            ip: rows[0].ip || '',
+            version: rows[0].version || '',
+            whitelist: rows[0].whitelist || ''
+        });
+    } catch (error) {
+        console.error('[ServerInfo] Get error:', error.message);
+        res.json({ ip: '', version: '', whitelist: '' });
+    }
+});
+
+app.put('/api/server-info', async (req, res) => {
+    if (!pool) return res.status(500).json({ error: 'Database not connected' });
+    
+    try {
+        const { ip, version, whitelist, username } = req.body;
+        
+        if (!isAnnouncementAdmin(username)) {
+            return res.status(403).json({ error: 'Admin access required' });
+        }
+        
+        // Upsert: insert or update the single row
+        await pool.execute(`
+            INSERT INTO server_info (id, ip, version, whitelist)
+            VALUES (1, ?, ?, ?)
+            ON DUPLICATE KEY UPDATE ip = ?, version = ?, whitelist = ?
+        `, [ip || '', version || '', whitelist || '', ip || '', version || '', whitelist || '']);
+        
+        console.log('[ServerInfo] Updated by', username);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('[ServerInfo] Update error:', error);
+        res.status(500).json({ error: 'Failed to save server info' });
+    }
+});
+
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -995,9 +1071,5 @@ async function start() {
         console.log(`Database: ${pool ? 'Connected' : 'Demo Mode'}`);
     });
 }
-
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
 
 start();
