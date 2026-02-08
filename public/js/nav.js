@@ -14,14 +14,11 @@
         var threshold = window.innerHeight * 0.7;
         var onHome = location.pathname === '/' || location.pathname === '';
 
-        // on home: nav shows after scrolling past hero
-        // on other pages: always show
         var shouldShow = onHome ? scroll > threshold : true;
 
-        if (shouldShow !== isVisible) {
-            isVisible = shouldShow;
-            nav.classList.toggle('visible', shouldShow);
-        }
+        // always force correct state, don't skip via cache
+        nav.classList.toggle('visible', shouldShow);
+        isVisible = shouldShow;
 
         var scrolled = scroll > 50;
         if (scrolled !== isScrolled) {
@@ -32,9 +29,9 @@
 
     window.addEventListener('scroll', update, { passive: true });
 
-    // re-evaluate on route change
     window.addEventListener('routechange', function() {
-        update();
+        // small delay so scroll resets first
+        setTimeout(function() { update(); }, 50);
         closeMenu();
     });
 
