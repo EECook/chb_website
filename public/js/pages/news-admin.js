@@ -1,4 +1,4 @@
-// admin post page
+// admin post page - uses /api/announcements
 
 (function() {
 
@@ -18,31 +18,27 @@
 
         checkAuth();
         Anim.initScrollReveal();
-
-        return {
-            cleanup: function() {
-                var obs = Anim.getRevealObserver();
-                if (obs) obs.disconnect();
-            }
-        };
+        return { cleanup: function() {} };
     }
 
     function checkAuth() {
         var container = document.getElementById('admin-content');
         if (!container) return;
 
-        fetch('/api/auth/me', { credentials: 'include' })
+        var portalUser = PortalSession.getUsername();
+        if (!portalUser) {
+            showLocked(container, 'You need to be logged in via the Portal to access this page.');
+            return;
+        }
+
+        fetch('/api/auth/me?username=' + encodeURIComponent(portalUser))
             .then(function(r) { return r.ok ? r.json() : null; })
             .then(function(user) {
-                if (!user) {
-                    showLocked(container, 'You need to be logged in via the Portal to access this page.');
-                    return;
-                }
-                if (!user.isAdmin) {
+                if (!user || !user.isAdmin) {
                     showLocked(container, 'This page is restricted to camp administrators.');
                     return;
                 }
-                buildComposer(container);
+                buildComposer(container, portalUser);
             })
             .catch(function() {
                 showLocked(container, 'Could not verify your permissions. Make sure you\'re logged in through the Portal.');
@@ -61,7 +57,7 @@
             + '</div>';
     }
 
-    function buildComposer(container) {
+    function buildComposer(container, username) {
         container.innerHTML = ''
             + '<div class="compose-area reveal" style="border:none;background:none;backdrop-filter:none">'
             +   '<div class="compose-form visible" style="padding:0">'
@@ -71,15 +67,11 @@
             +     '</div>'
             +     '<div class="compose-field">'
             +       '<label>Content</label>'
-            +       '<textarea class="compose-input" id="post-content" placeholder="Write your message...\n\nUse **bold** and *italic* markdown. URLs will auto-link."></textarea>'
+            +       '<textarea class="compose-input" id="post-content" placeholder="Write your announcement..."></textarea>'
             +     '</div>'
             +     '<div class="compose-field">'
-            +       '<label>Attachment (optional)</label>'
-            +       '<div class="file-drop" id="file-drop">'
-            +         '<span>\u{1F4CE}</span> <span id="file-label">Drop a file or click to upload</span>'
-            +         '<input type="file" id="file-input">'
-            +       '</div>'
-            +       '<div style="font-size:0.75rem;color:var(--marble-muted);margin-top:0.4rem">Modpacks, resource packs, images, documents -- up to 50MB</div>'
+            +       '<label>Notes (optional)</label>'
+            +       '<textarea class="compose-input" id="post-notes" placeholder="Additional notes, links, instructions..." style="min-height:60px"></textarea>'
             +     '</div>'
             +     '<div class="compose-options">'
             +       '<label class="compose-check">'
@@ -101,32 +93,10 @@
             +   '<a href="/news" class="view-all" data-link>\u2190 Back to Bulletin</a>'
             + '</div>';
 
-        // file handling
-        var fileInput = document.getElementById('file-input');
-        var fileDrop = document.getElementById('file-drop');
-        var fileLabel = document.getElementById('file-label');
-        var selectedFile = null;
-
-        fileInput.addEventListener('change', function() {
-            if (this.files && this.files[0]) {
-                selectedFile = this.files[0];
-                fileDrop.classList.add('has-file');
-                fileLabel.innerHTML = '<span class="file-name">' + esc(selectedFile.name) + '</span> <button class="file-clear" id="file-clear">\u2715</button>';
-                document.getElementById('file-clear').addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    selectedFile = null;
-                    fileInput.value = '';
-                    fileDrop.classList.remove('has-file');
-                    fileLabel.textContent = 'Drop a file or click to upload';
-                });
-            }
-        });
-
-        // submit
         document.getElementById('submit-post').addEventListener('click', function() {
             var title = document.getElementById('post-title').value.trim();
             var content = document.getElementById('post-content').value.trim();
+            var notes = document.getElementById('post-notes').value.trim();
             var pinned = document.getElementById('opt-pin').checked;
             var toDiscord = document.getElementById('opt-discord').checked;
             var statusEl = document.getElementById('compose-status');
@@ -138,14 +108,18 @@
             btn.disabled = true;
             showStatus(statusEl, 'Publishing...', '');
 
-            var formData = new FormData();
-            formData.append('title', title);
-            formData.append('content', content);
-            formData.append('pinned', pinned ? '1' : '0');
-            formData.append('postToDiscord', toDiscord ? '1' : '0');
-            if (selectedFile) formData.append('file', selectedFile);
-
-            fetch('/api/news', { method: 'POST', credentials: 'include', body: formData })
+            fetch('/api/announcements', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: title,
+                    content: content,
+                    notes: notes || null,
+                    is_pinned: pinned,
+                    post_to_discord: toDiscord,
+                    username: username
+                })
+            })
                 .then(function(r) { return r.json(); })
                 .then(function(res) {
                     btn.disabled = false;
@@ -156,15 +130,11 @@
 
                     showStatus(statusEl, 'Published! Redirecting...', 'ok');
 
-                    // clear
                     document.getElementById('post-title').value = '';
                     document.getElementById('post-content').value = '';
+                    document.getElementById('post-notes').value = '';
                     document.getElementById('opt-pin').checked = false;
                     document.getElementById('opt-discord').checked = false;
-                    selectedFile = null;
-                    fileInput.value = '';
-                    fileDrop.classList.remove('has-file');
-                    fileLabel.textContent = 'Drop a file or click to upload';
 
                     setTimeout(function() { Router.navigate('/news'); }, 1500);
                 })
