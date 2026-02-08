@@ -1,0 +1,392 @@
+/* bulletin quick links */
+
+.bulletin-quick-links {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.bql-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.82rem;
+    color: var(--marble-dim);
+    transition: all 0.2s ease;
+    background: rgba(10, 10, 30, 0.3);
+}
+
+.bql-item:hover {
+    border-color: var(--border-gold);
+    color: var(--gold);
+    background: var(--gold-dim);
+}
+
+.bql-admin {
+    margin-left: auto;
+    color: var(--gold-dark);
+    border-color: rgba(212, 175, 55, 0.15);
+}
+
+
+/* empty state examples */
+
+.empty-examples {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    max-width: 420px;
+    margin: 1.5rem auto 0;
+    text-align: left;
+}
+
+.empty-ex {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--marble-muted);
+    background: rgba(10, 10, 30, 0.3);
+}
+
+
+/* phase nav dots */
+
+.phase-nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-subtle);
+    flex-wrap: wrap;
+}
+
+.phase-dot {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 100px;
+    border: 1px solid var(--border-subtle);
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    color: var(--marble-muted);
+    transition: all 0.2s ease;
+    cursor: default;
+}
+
+.phase-dot.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: var(--gold-dim);
+}
+
+.phase-dot.locked {
+    opacity: 0.4;
+    border-style: dashed;
+}
+
+.pd-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--border-subtle);
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.phase-dot.active .pd-num {
+    background: var(--gold);
+    color: var(--sky-1);
+}
+
+
+/* phase card */
+
+.phase-card {
+    padding: 2rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    background: rgba(10, 10, 30, 0.45);
+    backdrop-filter: blur(8px);
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.phase-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--purple), var(--lightning));
+    border-radius: 16px 16px 0 0;
+    opacity: 0.6;
+}
+
+.phase-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.phase-number {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.75rem;
+    color: var(--marble-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.phase-badge {
+    padding: 0.2rem 0.7rem;
+    border-radius: 100px;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+}
+
+.phase-badge.current {
+    background: var(--gold-dim);
+    color: var(--gold);
+    border: 1px solid var(--border-gold);
+}
+
+.phase-badge.complete {
+    background: rgba(74, 222, 128, 0.1);
+    color: var(--success);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.phase-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+}
+
+.phase-intro {
+    font-style: italic;
+    color: var(--marble-dim);
+    font-size: 1.05rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+}
+
+
+/* phase sections */
+
+.phase-section {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.ps-heading {
+    font-family: 'Cinzel', serif;
+    font-size: 1.05rem;
+    color: var(--gold-light);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.ps-body p {
+    color: var(--marble-dim);
+    line-height: 1.8;
+    margin-bottom: 0.2rem;
+}
+
+.ps-list {
+    padding-left: 0;
+}
+
+.ps-list li {
+    position: relative;
+    padding: 0.4rem 0 0.4rem 1.5rem;
+    color: var(--marble-dim);
+    line-height: 1.6;
+}
+
+.ps-list li::before {
+    content: '\u2022';
+    position: absolute;
+    left: 0.4rem;
+    color: var(--gold-dark);
+}
+
+.story-back {
+    margin-top: 1rem;
+    padding-bottom: 2rem;
+}
+
+
+/* quest page */
+
+.quest-intro-card {
+    text-align: center;
+    padding: 3rem 2rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    background: rgba(10, 10, 30, 0.45);
+    backdrop-filter: blur(8px);
+    margin-bottom: 2rem;
+}
+
+.qi-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.qi-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+}
+
+.qi-desc {
+    color: var(--marble-muted);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+
+/* player card */
+
+.quest-player-card {
+    padding: 1.5rem;
+    border: 1px solid var(--border-gold);
+    border-radius: 12px;
+    background: var(--gold-dim);
+    margin-bottom: 2rem;
+}
+
+.qpc-greeting {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--marble);
+}
+
+.qpc-note {
+    color: var(--marble-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+
+/* quest preview grid */
+
+.qp-heading {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    color: var(--gold);
+    margin-bottom: 0.3rem;
+}
+
+.qp-sub {
+    color: var(--marble-muted);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+.qp-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.qp-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    background: rgba(10, 10, 30, 0.4);
+    transition: all 0.2s ease;
+}
+
+.qp-card:hover {
+    border-color: rgba(212, 175, 55, 0.2);
+    background: rgba(12, 12, 35, 0.5);
+}
+
+.qp-icon {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+    width: 40px;
+    text-align: center;
+}
+
+.qp-info { flex: 1; }
+
+.qp-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    color: var(--gold-light);
+    margin-bottom: 0.2rem;
+}
+
+.qp-desc {
+    font-size: 0.85rem;
+    color: var(--marble-muted);
+    line-height: 1.5;
+}
+
+.qp-status {
+    flex-shrink: 0;
+    padding: 0.2rem 0.65rem;
+    border-radius: 100px;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.05em;
+}
+
+.qp-status.in-progress {
+    color: var(--gold);
+    border: 1px solid var(--border-gold);
+    background: var(--gold-dim);
+}
+
+.qp-status.available {
+    color: var(--success);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    background: rgba(74, 222, 128, 0.08);
+}
+
+.qp-status.seasonal {
+    color: var(--lightning);
+    border: 1px solid rgba(79, 195, 247, 0.3);
+    background: rgba(79, 195, 247, 0.08);
+}
+
+.qp-status.locked {
+    color: var(--marble-muted);
+    border: 1px solid var(--border-subtle);
+    border-style: dashed;
+    opacity: 0.6;
+}
+
+
+/* responsive */
+
+@media (max-width: 768px) {
+    .empty-examples { grid-template-columns: 1fr; }
+    .bulletin-quick-links { flex-direction: column; }
+    .bql-admin { margin-left: 0; }
+    .qp-card { flex-wrap: wrap; }
+    .qp-status { align-self: flex-start; }
+}
