@@ -1,0 +1,666 @@
+/* ═══════════════════════════════════════
+   GETTING STARTED + MOD LIST
+   Celestial Camp Half-Blood aesthetic
+   ═══════════════════════════════════════ */
+
+/* ── SHARED HERO ── */
+
+.gs-page, .mods-page {
+    position: relative;
+    min-height: 100vh;
+    padding-top: var(--nav-height);
+    padding-bottom: 4rem;
+}
+
+.gs-hero, .mods-hero {
+    position: relative;
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+    overflow: hidden;
+}
+
+.gs-hero-glow, .mods-hero-glow {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 30% 30%, rgba(212, 175, 55, 0.06) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 70%, rgba(139, 92, 246, 0.04) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.gs-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+}
+
+.gs-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    color: var(--gold);
+    text-shadow: 0 0 40px rgba(212, 175, 55, 0.3), 0 0 80px rgba(212, 175, 55, 0.1);
+    letter-spacing: 0.04em;
+    margin-bottom: 0.6rem;
+}
+
+.gs-subtitle {
+    font-family: 'Crimson Text', serif;
+    font-style: italic;
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    color: var(--marble-muted);
+    letter-spacing: 0.02em;
+}
+
+
+/* ═══ GETTING STARTED ═══ */
+
+/* ── Server Banner ── */
+
+.gs-banner {
+    max-width: 880px;
+    margin: 0 auto 3rem;
+    padding: 0 1.5rem;
+}
+
+.gs-banner-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    padding: 1rem 1.5rem;
+    border: 1px solid var(--border-gold);
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.04), rgba(10, 5, 32, 0.6));
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(212, 175, 55, 0.08);
+}
+
+.gs-banner-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.gs-banner-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--marble-muted);
+}
+
+.gs-banner-value {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.88rem;
+    color: var(--gold-light);
+    letter-spacing: 0.02em;
+}
+
+.gs-copyable {
+    cursor: pointer;
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.gs-copyable:hover {
+    background: rgba(212, 175, 55, 0.1);
+}
+
+.gs-copy-icon {
+    margin-left: 0.4rem;
+    font-size: 0.72rem;
+    opacity: 0.4;
+    transition: opacity 0.2s;
+}
+
+.gs-copyable:hover .gs-copy-icon { opacity: 0.8; }
+
+.gs-copyable.copied {
+    background: rgba(74, 222, 128, 0.1);
+    color: var(--success);
+}
+
+.gs-banner-divider {
+    width: 1px;
+    height: 28px;
+    background: var(--border-subtle);
+}
+
+
+/* ── Step Path ── */
+
+.gs-path {
+    position: relative;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 1.5rem 2rem;
+}
+
+.gs-path-line {
+    position: absolute;
+    left: calc(1.5rem + 22px);
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg,
+        rgba(212, 175, 55, 0.3) 0%,
+        rgba(139, 92, 246, 0.2) 40%,
+        rgba(79, 195, 247, 0.2) 70%,
+        rgba(212, 175, 55, 0.15) 100%
+    );
+}
+
+.gs-step {
+    position: relative;
+    display: flex;
+    gap: 1.2rem;
+    padding-bottom: 1.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+}
+
+.gs-step.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* ── Step Marker ── */
+
+.gs-step-marker {
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+    width: 46px;
+    display: flex;
+    justify-content: center;
+    padding-top: 0.2rem;
+}
+
+.gs-step-dot {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 2px solid var(--border-gold);
+    background: linear-gradient(135deg, rgba(10, 5, 32, 0.95), rgba(20, 12, 50, 0.9));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    transition: all 0.3s ease;
+}
+
+.gs-step:hover .gs-step-dot {
+    border-color: var(--gold);
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.2), 0 0 50px rgba(212, 175, 55, 0.05);
+}
+
+.gs-step-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--gold);
+}
+
+
+/* ── Step Card ── */
+
+.gs-step-card {
+    flex: 1;
+    display: flex;
+    gap: 1rem;
+    padding: 1.2rem 1.4rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    background: rgba(10, 10, 30, 0.45);
+    backdrop-filter: blur(8px);
+    transition: all 0.35s ease;
+    overflow: hidden;
+    position: relative;
+}
+
+.gs-step-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    background: radial-gradient(ellipse at 20% 20%, rgba(212, 175, 55, 0.04), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.35s;
+}
+
+.gs-step:hover .gs-step-card {
+    border-color: var(--border-gold);
+    transform: translateX(4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25), 0 0 20px rgba(212, 175, 55, 0.04);
+}
+
+.gs-step:hover .gs-step-card::before { opacity: 1; }
+
+.gs-step-icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.2));
+    transition: transform 0.3s var(--ease-spring);
+    line-height: 1;
+}
+
+.gs-step:hover .gs-step-icon { transform: scale(1.12); }
+
+.gs-step-body { position: relative; z-index: 1; }
+
+.gs-step-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.05rem;
+    color: var(--gold-light);
+    margin-bottom: 0.35rem;
+}
+
+.gs-step-desc {
+    font-family: 'Crimson Text', serif;
+    font-size: 0.95rem;
+    color: var(--marble-muted);
+    line-height: 1.6;
+}
+
+.gs-step-desc strong { color: var(--marble); font-weight: 600; }
+
+
+/* ── Command Chip ── */
+
+.gs-cmd {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.6rem;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid rgba(139, 92, 246, 0.25);
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.06), rgba(10, 5, 32, 0.5));
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+}
+
+.gs-cmd code {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.85rem;
+    color: #c4b5fd;
+    letter-spacing: 0.02em;
+}
+
+.gs-cmd-copy {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--marble-muted);
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.gs-cmd-done {
+    position: absolute;
+    right: 0.85rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    color: var(--success);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.gs-cmd:hover {
+    border-color: rgba(139, 92, 246, 0.45);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(10, 5, 32, 0.6));
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.08);
+}
+
+.gs-cmd:hover .gs-cmd-copy { opacity: 1; }
+
+.gs-cmd.copied {
+    border-color: rgba(74, 222, 128, 0.3);
+    background: linear-gradient(135deg, rgba(74, 222, 128, 0.06), rgba(10, 5, 32, 0.5));
+}
+
+.gs-cmd.copied .gs-cmd-copy { opacity: 0; }
+.gs-cmd.copied .gs-cmd-done { opacity: 1; }
+.gs-cmd.copied code { color: var(--success); }
+
+
+/* ── Step Hint ── */
+
+.gs-step-hint {
+    margin-top: 0.5rem;
+    padding: 0.3rem 0.7rem;
+    border-left: 2px solid rgba(212, 175, 55, 0.25);
+    font-size: 0.78rem;
+    font-style: italic;
+    color: var(--marble-muted);
+    opacity: 0.7;
+}
+
+
+/* ── Closing ── */
+
+.gs-closing {
+    text-align: center;
+    max-width: 600px;
+    margin: 2rem auto 0;
+    padding: 0 1.5rem;
+}
+
+.gs-closing-line {
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0 auto 1.5rem;
+}
+
+.gs-closing-text {
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: var(--marble-muted);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+}
+
+.gs-closing-text strong { color: var(--gold-light); }
+
+.gs-closing-links {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.gs-closing-links .cta-secondary {
+    font-size: 0.85rem;
+    padding: 0.65rem 1.4rem;
+}
+
+
+/* ═══════════════════════════════════════
+   MOD LIST
+   ═══════════════════════════════════════ */
+
+/* ── Search ── */
+
+.mods-search-wrap {
+    max-width: 500px;
+    margin: 0 auto 1.5rem;
+    padding: 0 1.5rem;
+}
+
+.mods-search {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.65rem 1rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    background: rgba(10, 10, 30, 0.5);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.mods-search:focus-within {
+    border-color: var(--border-gold);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.08);
+}
+
+.mods-search-icon { font-size: 1rem; opacity: 0.4; }
+
+.mods-search-input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--marble);
+    font-family: 'Crimson Text', serif;
+    font-size: 1rem;
+}
+
+.mods-search-input::placeholder { color: var(--marble-muted); opacity: 0.5; }
+
+
+/* ── Category Pills ── */
+
+.mods-cats {
+    display: flex;
+    gap: 0.35rem;
+    padding: 0 1.5rem 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.mods-cats::-webkit-scrollbar { display: none; }
+
+.mods-cat {
+    padding: 0.4rem 0.85rem;
+    border: 1px solid rgba(212, 175, 55, 0.1);
+    border-radius: 100px;
+    background: rgba(15, 10, 48, 0.4);
+    color: var(--marble-muted);
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.25s;
+    flex-shrink: 0;
+}
+
+.mods-cat:hover {
+    color: var(--marble);
+    border-color: rgba(212, 175, 55, 0.25);
+    background: rgba(212, 175, 55, 0.04);
+}
+
+.mods-cat.active {
+    color: var(--gold-light);
+    border-color: var(--gold);
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(139, 92, 246, 0.04));
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.08);
+}
+
+.mods-cat-count {
+    margin-left: 0.3rem;
+    padding: 0.05rem 0.35rem;
+    border-radius: 100px;
+    background: rgba(212, 175, 55, 0.08);
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.55rem;
+}
+
+.mods-cat.active .mods-cat-count { background: rgba(212, 175, 55, 0.18); color: var(--gold); }
+
+
+/* ── Mod Grid ── */
+
+.mods-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.mods-section { margin-bottom: 2.5rem; }
+
+.mods-section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.75rem 0;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.mods-section-icon {
+    font-size: 1.6rem;
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.25));
+}
+
+.mods-section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.15rem;
+    color: var(--gold);
+}
+
+.mods-section-desc {
+    font-family: 'Crimson Text', serif;
+    font-size: 0.85rem;
+    color: var(--marble-muted);
+    font-style: italic;
+    margin-top: 0.1rem;
+}
+
+.mods-section-count {
+    margin-left: auto;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.7rem;
+    color: var(--marble-muted);
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 100px;
+    flex-shrink: 0;
+}
+
+.mods-section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 0.6rem;
+}
+
+
+/* ── Mod Card ── */
+
+.mod-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    background: rgba(10, 10, 30, 0.4);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    animation: modFadeIn 0.4s var(--ease-out) both;
+}
+
+@keyframes modFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.mod-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    background: radial-gradient(ellipse at 15% 30%, rgba(212, 175, 55, 0.03), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.mod-card:hover {
+    border-color: var(--border-gold);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25), 0 0 15px rgba(212, 175, 55, 0.04);
+}
+
+.mod-card:hover::before { opacity: 1; }
+
+.mod-card-compact { padding: 0.55rem 1rem; }
+.mod-card-compact .mod-card-icon { font-size: 1rem; }
+
+.mod-card-icon {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    filter: drop-shadow(0 0 4px rgba(212, 175, 55, 0.15));
+    transition: transform 0.25s var(--ease-spring);
+}
+
+.mod-card:hover .mod-card-icon { transform: scale(1.15); }
+
+.mod-card-body { flex: 1; min-width: 0; position: relative; z-index: 1; }
+
+.mod-card-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.88rem;
+    color: var(--gold-light);
+    line-height: 1.3;
+    margin-bottom: 0.15rem;
+}
+
+.mod-card-desc {
+    font-family: 'Crimson Text', serif;
+    font-size: 0.85rem;
+    color: var(--marble-muted);
+    line-height: 1.45;
+}
+
+.mod-card-cat {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.7rem;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--marble-muted);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.mod-card:hover .mod-card-cat { opacity: 0.5; }
+
+.mods-empty {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--marble-muted);
+    font-style: italic;
+}
+
+
+/* ═══ RESPONSIVE ═══ */
+
+@media (max-width: 768px) {
+    .gs-banner-inner {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    .gs-banner-divider {
+        width: 60px;
+        height: 1px;
+    }
+    .gs-path { padding: 0 1rem 2rem; }
+    .gs-path-line { left: calc(1rem + 22px); }
+    .gs-step-card { flex-direction: column; gap: 0.5rem; }
+    .gs-step-icon { font-size: 1.4rem; }
+    .gs-closing-links { flex-direction: column; align-items: center; }
+
+    .mods-section-grid { grid-template-columns: 1fr; }
+    .mods-section-header { flex-wrap: wrap; }
+}
+
+@media (max-width: 480px) {
+    .gs-step { gap: 0.8rem; }
+    .gs-step-marker { width: 36px; }
+    .gs-step-dot { width: 36px; height: 36px; }
+    .gs-step-num { font-size: 0.75rem; }
+}
