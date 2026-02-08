@@ -549,6 +549,241 @@ textarea.compose-input {
 }
 
 
+/* ── server info banner ── */
+
+.server-info-card {
+    border: 1px solid var(--border-gold);
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.06), rgba(100, 100, 200, 0.04));
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.sic-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.sic-icon {
+    font-size: 1.1rem;
+    font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+}
+
+.sic-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    color: var(--gold);
+    letter-spacing: 0.03em;
+}
+
+.sic-grid {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.sic-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sic-wide {
+    flex-basis: 100%;
+}
+
+.sic-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    color: var(--marble-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.sic-value {
+    font-size: 0.9rem;
+    color: var(--marble-dim);
+}
+
+.sic-mono {
+    font-family: 'Source Code Pro', monospace;
+    color: var(--gold-light);
+    background: rgba(10, 10, 30, 0.4);
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-subtle);
+    user-select: all;
+}
+
+.sic-copy {
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--marble-muted);
+    padding: 0.15rem 0.5rem;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.sic-copy:hover {
+    border-color: var(--border-gold);
+    color: var(--gold);
+}
+
+
+/* ── bulletin post cards ── */
+
+.bulletin-post {
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    background: rgba(10, 10, 30, 0.4);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 0.75rem;
+    transition: border-color 0.2s;
+}
+
+.bulletin-post:hover {
+    border-color: rgba(212, 175, 55, 0.15);
+}
+
+.bp-head {
+    margin-bottom: 0.75rem;
+}
+
+.bp-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.05rem;
+    color: var(--gold-light);
+    margin-bottom: 0.3rem;
+}
+
+.bp-meta {
+    font-size: 0.78rem;
+    color: var(--marble-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.bp-pin {
+    font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+}
+
+.bp-dot { opacity: 0.4; }
+
+.bp-body {
+    color: var(--marble-dim);
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+.bp-notes {
+    margin-top: 0.75rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    background: rgba(10, 10, 30, 0.3);
+    font-size: 0.88rem;
+    color: var(--marble-dim);
+    line-height: 1.6;
+}
+
+.bp-notes-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: var(--marble-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.3rem;
+}
+
+.bp-file {
+    margin-top: 0.75rem;
+}
+
+.bp-file-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0.75rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    color: var(--lightning);
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.bp-file-link:hover {
+    border-color: var(--lightning);
+    background: rgba(100, 149, 237, 0.08);
+}
+
+.bp-admin {
+    margin-top: 0.75rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    gap: 0.5rem;
+}
+
+.bp-action {
+    padding: 0.3rem 0.7rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 5px;
+    background: transparent;
+    color: var(--marble-muted);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.bp-action:hover {
+    border-color: var(--border-gold);
+    color: var(--gold);
+}
+
+.bp-action-del:hover {
+    border-color: var(--error);
+    color: var(--error);
+}
+
+
+/* ── admin file drop zone ── */
+
+.admin-file-drop {
+    position: relative;
+    border: 2px dashed var(--border-subtle);
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: border-color 0.2s, background 0.2s;
+    cursor: pointer;
+}
+
+.admin-file-drop:hover,
+.admin-file-drop.dragover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.04);
+}
+
+.admin-file-drop #file-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    pointer-events: none;
+}
+
+.admin-file-drop #file-display button {
+    pointer-events: auto;
+}
+
+
 /* responsive */
 
 @media (max-width: 768px) {
@@ -556,4 +791,6 @@ textarea.compose-input {
     .post-head { flex-direction: column; gap: 0.4rem; }
     .post-meta { align-self: flex-start; }
     .compose-options { flex-direction: column; gap: 0.75rem; }
+    .sic-grid { gap: 1rem; }
+    .bulletin-post { padding: 1rem; }
 }
