@@ -24,7 +24,9 @@
     Router.register('/portal/mail', window.PortalMailPage);
     Router.register('/portal/leaderboard', window.PortalLeaderboardPage);
     Router.register('/portal/characters', window.PortalCharactersPage);
-    Router.register('/info*', placeholder('Server Info'));
+    Router.register('/info/new-players', window.GettingStartedPage);
+    Router.register('/info/mods', window.ModListPage);
+    Router.register('/info*', placeholder('Coming Soon'));
     Router.register('/integrations*', placeholder('Integrations'));
     Router.register('/portal*', placeholder('Portal'));
 
