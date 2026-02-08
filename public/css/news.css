@@ -518,6 +518,37 @@ textarea.compose-input {
 }
 
 
+/* post notes */
+
+.post-notes {
+    margin-top: 0.75rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    background: rgba(10, 10, 30, 0.3);
+}
+
+.pn-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    color: var(--marble-muted);
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.pn-content {
+    font-size: 0.9rem;
+    color: var(--marble-dim);
+    line-height: 1.6;
+}
+
+.post-author {
+    font-size: 0.78rem;
+    color: var(--marble-muted);
+}
+
+
 /* responsive */
 
 @media (max-width: 768px) {
