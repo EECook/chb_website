@@ -219,7 +219,7 @@
 }
 
 .ps-list li::before {
-    content: '\u2022';
+    content: '\2022';
     position: absolute;
     left: 0.4rem;
     color: var(--gold-dark);
