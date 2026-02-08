@@ -20,14 +20,16 @@
     z-index: 20;
     display: flex;
     align-items: center;
-    gap: 0;
-    padding: 0.5rem 0.75rem;
-    background: linear-gradient(180deg, rgba(6, 6, 20, 0.95) 0%, rgba(6, 6, 20, 0.8) 80%, transparent 100%);
+    gap: 0.25rem;
+    padding: 0.6rem 0.75rem;
+    background: rgba(6, 6, 20, 0.97);
+    border-bottom: 1px solid var(--border-gold);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     overflow-x: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
 .quest-tabs::-webkit-scrollbar { display: none; }
@@ -56,13 +58,13 @@
 }
 
 .qt-tab {
-    padding: 0.45rem 0.85rem;
-    border: 1px solid transparent;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-subtle);
     border-radius: 8px;
-    background: transparent;
-    color: var(--marble-muted);
+    background: rgba(20, 20, 50, 0.6);
+    color: var(--marble-dim);
     font-family: 'Cinzel', serif;
-    font-size: 0.72rem;
+    font-size: 0.78rem;
     letter-spacing: 0.02em;
     cursor: pointer;
     white-space: nowrap;
@@ -77,9 +79,9 @@
 
 .qt-tab.active {
     color: var(--gold);
-    border-color: var(--border-gold);
-    background: rgba(212, 175, 55, 0.08);
-    box-shadow: 0 0 12px rgba(212, 175, 55, 0.1);
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.12);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.15), inset 0 0 10px rgba(212, 175, 55, 0.05);
 }
 
 .qt-count {
