@@ -15,7 +15,7 @@
 
     // register all routes
     Router.register('/', window.HomePage);
-    Router.register('/news*', placeholder('News'));
+    Router.register('/news*', window.NewsPage);
     Router.register('/info*', placeholder('Server Info'));
     Router.register('/integrations*', placeholder('Integrations'));
     Router.register('/portal*', placeholder('Portal'));
