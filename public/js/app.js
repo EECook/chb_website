@@ -19,6 +19,11 @@
     Router.register('/news/admin', window.NewsAdminPage);
     Router.register('/news/story', window.StoryPage);
     Router.register('/news/quests', window.QuestsPage);
+    Router.register('/portal', window.PortalPage);
+    Router.register('/portal/profile', window.PortalProfilePage);
+    Router.register('/portal/mail', window.PortalMailPage);
+    Router.register('/portal/leaderboard', window.PortalLeaderboardPage);
+    Router.register('/portal/characters', window.PortalCharactersPage);
     Router.register('/info*', placeholder('Server Info'));
     Router.register('/integrations*', placeholder('Integrations'));
     Router.register('/portal*', placeholder('Portal'));
