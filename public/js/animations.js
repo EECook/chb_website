@@ -443,16 +443,12 @@
             weatherTimers.push(id);
         }
 
-        var starId = 0;
-
         function doShootingStar() {
             var delay = 10000 + Math.random() * 25000;
             var id = setTimeout(function() {
-                starId++;
                 var el = document.createElement('div');
                 el.className = 'shooting-star';
 
-                // direction: down-right or down-left
                 var angle;
                 if (Math.random() < 0.5) {
                     angle = 20 + Math.random() * 50;
@@ -462,9 +458,8 @@
 
                 var len = 50 + Math.random() * 80;
                 var travel = 250 + Math.random() * 300;
-                var speed = 0.8 + Math.random() * 0.8;
+                var speed = 800 + Math.random() * 800;
 
-                // color variety
                 var r = Math.random();
                 var color, glow;
                 if (r < 0.6) {
@@ -487,23 +482,21 @@
                 el.style.background = 'linear-gradient(90deg, transparent, ' + color + ')';
                 el.style.boxShadow = '0 0 8px ' + glow;
 
-                // inject a unique keyframe so we can bake the angle + travel in
-                var name = 'ss-' + starId;
-                var rot = 'rotate(' + angle + 'deg)';
-                var rule = '@keyframes ' + name + ' {'
-                    + '0%{transform:' + rot + ' translateX(0);opacity:0}'
-                    + '5%{opacity:1}'
-                    + '65%{opacity:1}'
-                    + '100%{transform:' + rot + ' translateX(' + travel + 'px);opacity:0}'
-                    + '}';
-
-                var sheet = document.styleSheets[0];
-                sheet.insertRule(rule, sheet.cssRules.length);
-
-                el.style.animation = name + ' ' + speed + 's ease-out forwards';
-
                 hero.appendChild(el);
-                setTimeout(function() { if (el.parentNode) el.remove(); }, speed * 1000 + 200);
+
+                var rot = 'rotate(' + angle + 'deg)';
+                el.animate([
+                    { transform: rot + ' translateX(0)', opacity: 0 },
+                    { transform: rot + ' translateX(0)', opacity: 1, offset: 0.05 },
+                    { transform: rot + ' translateX(' + (travel * 0.65) + 'px)', opacity: 1, offset: 0.65 },
+                    { transform: rot + ' translateX(' + travel + 'px)', opacity: 0 }
+                ], {
+                    duration: speed,
+                    easing: 'ease-out',
+                    fill: 'forwards'
+                });
+
+                setTimeout(function() { if (el.parentNode) el.remove(); }, speed + 200);
                 doShootingStar();
             }, delay);
             weatherTimers.push(id);
