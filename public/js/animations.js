@@ -448,12 +448,55 @@
             var id = setTimeout(function() {
                 var el = document.createElement('div');
                 el.className = 'shooting-star';
-                el.style.top = (Math.random() * 40) + '%';
-                el.style.right = (Math.random() * 60) + '%';
-                el.style.width = (60 + Math.random() * 60) + 'px';
+
+                // pick a direction -- generally downward with horizontal variety
+                // 0 = right, 90 = down, 180 = left
+                // two pools: down-right (20-70) and down-left (110-160)
+                var angle;
+                if (Math.random() < 0.5) {
+                    angle = 20 + Math.random() * 50;   // streaking down-right
+                } else {
+                    angle = 110 + Math.random() * 50;  // streaking down-left
+                }
+
+                // vary the length and travel distance
+                var len = 50 + Math.random() * 80;
+                var travel = 250 + Math.random() * 300;
+                var speed = 0.8 + Math.random() * 0.8;
+
+                // color variety: mostly white, occasional warm or cool tint
+                var r = Math.random();
+                var color, glow;
+                if (r < 0.6) {
+                    color = 'rgba(255,255,255,0.9)';
+                    glow = 'rgba(255,255,255,0.5)';
+                } else if (r < 0.8) {
+                    color = 'rgba(255,240,200,0.9)';
+                    glow = 'rgba(255,220,150,0.4)';
+                } else if (r < 0.92) {
+                    color = 'rgba(200,220,255,0.9)';
+                    glow = 'rgba(180,200,255,0.4)';
+                } else {
+                    color = 'rgba(212,195,120,0.85)';
+                    glow = 'rgba(212,175,55,0.35)';
+                }
+
+                // position: spawn in upper portion, offset from edges
+                el.style.top = (5 + Math.random() * 35) + '%';
+                el.style.left = (10 + Math.random() * 70) + '%';
+                el.style.width = len + 'px';
+
+                // rotate so the bright end (right side of gradient) points in the travel direction
+                el.style.setProperty('--angle', angle + 'deg');
+                el.style.background = 'linear-gradient(90deg, transparent, ' + color + ')';
+                el.style.boxShadow = '0 0 8px ' + glow;
+                el.style.setProperty('--travel', travel + 'px');
+
+                // animate
+                el.style.animation = 'shoot-straight ' + speed + 's ease-out forwards';
+
                 hero.appendChild(el);
-                requestAnimationFrame(function() { el.classList.add('active'); });
-                setTimeout(function() { if (el.parentNode) el.remove(); }, 1500);
+                setTimeout(function() { if (el.parentNode) el.remove(); }, speed * 1000 + 200);
                 doShootingStar();
             }, delay);
             weatherTimers.push(id);
