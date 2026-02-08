@@ -33,6 +33,9 @@
     }
 
     function register(pattern, handler) {
+        if (typeof handler !== 'function') {
+            console.warn('Router: handler for ' + pattern + ' is not a function, got', typeof handler);
+        }
         routes.push({ pattern: pattern, handler: handler });
     }
 
@@ -58,8 +61,10 @@
     function loadRoute(path, transition) {
         var handler = findHandler(path);
 
-        if (!handler) {
-            // try home as fallback
+        if (!handler || typeof handler !== 'function') {
+            if (path !== '/') {
+                console.warn('Router: no valid handler for', path);
+            }
             handler = findHandler('/');
         }
 
