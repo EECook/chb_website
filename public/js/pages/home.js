@@ -202,23 +202,33 @@
         var container = document.getElementById('admin-posts');
         if (!container) return;
 
-        // will hit /api/admin-posts?limit=2 when the news admin panel is built
-        // for now the empty state shows by default
-        // example of populated state:
-        //
-        // fetch('/api/admin-posts?limit=2')
-        //   .then(function(r) { return r.json(); })
-        //   .then(function(posts) {
-        //     if (!posts.length) return;
-        //     container.innerHTML = posts.map(function(p) {
-        //       return '<div class="ann-item">'
-        //         + '<div class="ann-date">' + new Date(p.created_at).toLocaleDateString() + '</div>'
-        //         + '<div class="ann-title">' + p.title + '</div>'
-        //         + '<div class="ann-preview">' + p.preview + '</div>'
-        //         + '</div>';
-        //     }).join('');
-        //   })
-        //   .catch(function() {});
+        fetch('/api/announcements')
+            .then(function(r) { return r.json(); })
+            .then(function(res) {
+                var posts = (res.announcements || []).slice(0, 2);
+                if (!posts.length) return;
+                var html = '';
+                posts.forEach(function(p) {
+                    var date = p.created_at ? new Date(p.created_at).toLocaleDateString() : '';
+                    var preview = (p.content || '').substring(0, 120);
+                    if (p.content && p.content.length > 120) preview += '...';
+
+                    // escape html
+                    var tmp = document.createElement('div');
+                    tmp.textContent = p.title;
+                    var safeTitle = tmp.innerHTML;
+                    tmp.textContent = preview;
+                    var safePreview = tmp.innerHTML;
+
+                    html += '<div class="ann-item">'
+                        + '<div class="ann-date">' + date + '</div>'
+                        + '<div class="ann-title">' + safeTitle + '</div>'
+                        + '<div class="ann-preview">' + safePreview + '</div>'
+                        + '</div>';
+                });
+                container.innerHTML = html;
+            })
+            .catch(function() {});
     }
 
     function loadStats() {
