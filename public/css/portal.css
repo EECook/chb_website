@@ -681,6 +681,106 @@
 
 
 /* ═══════════════════════════════════════
+   EDIT MODE
+   ═══════════════════════════════════════ */
+
+.edit-toggle-btn {
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--border-gold);
+    border-radius: 6px;
+    background: var(--gold-dim);
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.edit-toggle-btn:hover {
+    background: rgba(212, 175, 55, 0.2);
+}
+
+.cs-visibility {
+    padding: 0.2rem 0.6rem;
+    border-radius: 100px;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.03em;
+}
+
+.cs-visibility.vis-public {
+    color: var(--success);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    background: rgba(74, 222, 128, 0.08);
+}
+
+.cs-visibility.vis-private {
+    color: var(--marble-muted);
+    border: 1px solid var(--border-subtle);
+}
+
+.cs-edit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.cs-edit-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.cs-edit-field.full {
+    grid-column: 1 / -1;
+}
+
+.cs-edit-input {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    background: rgba(10, 10, 30, 0.5);
+    color: var(--marble);
+    font-family: 'Crimson Text', serif;
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+}
+
+.cs-edit-input:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+
+.cs-edit-textarea {
+    resize: vertical;
+    min-height: 70px;
+    line-height: 1.6;
+}
+
+.cs-public-toggle {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    background: rgba(10, 10, 30, 0.3);
+}
+
+.cs-save-row {
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.cs-save-row .login-btn {
+    max-width: 280px;
+}
+
+
+/* ═══════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════ */
 
@@ -688,6 +788,7 @@
     .profile-top { flex-direction: column; align-items: center; text-align: center; }
     .profile-stats { justify-content: center; }
     .cs-grid { grid-template-columns: 1fr; }
+    .cs-edit-grid { grid-template-columns: 1fr; }
     .char-grid { grid-template-columns: 1fr 1fr; }
     .mail-overlay { padding: 1rem; }
     .mail-detail { padding: 1.5rem; }
