@@ -198,10 +198,12 @@
 .dropdown-item:hover { background: var(--gold-dim); }
 
 .di-icon {
-    font-size: 1rem;
+    font-size: 1.1rem;
     width: 24px;
     text-align: center;
     flex-shrink: 0;
+    font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+    line-height: 1;
 }
 
 .dropdown-item strong {
