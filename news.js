@@ -1,6 +1,5 @@
 // news api routes
 // usage: require this and call setup(app, db, discordClient)
-// in your server.js after your other routes
 
 const multer = require('multer');
 const path = require('path');
