@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camp Half-Blood</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cinzel+Decorative:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/core.css">
+    <link rel="stylesheet" href="/css/nav.css">
+    <link rel="stylesheet" href="/css/home.css">
+</head>
+<body>
+
+    <!-- bg canvases -->
+    <canvas id="star-canvas" aria-hidden="true"></canvas>
+    <canvas id="ember-canvas" aria-hidden="true"></canvas>
+
+    <!-- time of day toggle -->
+    <button class="tod-btn" id="tod-toggle" title="Cycle time of day">
+        <span id="tod-icon">&#x1f504;</span>
+        <span id="tod-label">Auto</span>
+    </button>
+
+    <!-- main nav -->
+    <nav id="main-nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-brand" data-link>
+                <span class="brand-icon">&#x26A1;</span>
+                <span class="brand-text">Camp Half-Blood</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="/" class="nav-link" data-link>Home</a>
+
+                <div class="nav-dropdown">
+                    <button class="nav-link">News <span class="dd-arrow">&#x25BE;</span></button>
+                    <div class="dropdown-panel">
+                        <a href="/news/gods" class="dropdown-item" data-link>
+                            <span class="di-icon">&#x1F3DB;</span>
+                            <div><strong>Gods</strong><small>The Olympian pantheon</small></div>
+                        </a>
+                        <a href="/news/story" class="dropdown-item" data-link>
+                            <span class="di-icon">&#x1F4D6;</span>
+                            <div><strong>Story Phases</strong><small>The unfolding narrative</small></div>
+                        </a>
+                        <a href="/news/quests" class="dropdown-item" data-link>
+                            <span class="di-icon">&#x1F4DC;</span>
+                            <div><strong>Quests</strong><small>Community adventures</small></div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-dropdown">
+                    <button class="nav-link">Server Info <span class="dd-arrow">&#x25BE;</span></button>
+                    <div class="dropdown-panel">
+                        <a href="/info/new-players" class="dropdown-item" data-link>
+                            <span class="di-icon">&#x1F31F;</span>
+                            <div><strong>New Players</strong><small>Get started quickly</small></div>
+                        </a>
+                        <a href="/info/lore" class="dropdown-item" data-link>
+                            <span class="di-icon">&#x1F4D6;</span>
+                            <div><strong>Lore</strong><small>The world &amp; story</small></div>
+                        </a>
+                        <a href="/info/mods" class="dropdown-item" data-link>
+                            <span class="di-icon">&#x1F4E6;</span>
+                            <div><strong>Mod List</strong><small>Server mods &amp; configs</small></div>
+                        </a>
+                        <a href="/info/origins" class="dropdown-item" data-link>
+                            <span class="di-icon">&#x1F9EC;</span>
+                            <div><strong>Origins</strong><small>Playable origin classes</small></div>
+                        </a>
+                        <a href="/info/map" class="dropdown-item" data-link>
+                            <span class="di-icon">&#x1F5FA;</span>
+                            <div><strong>Map</strong><small>Explore camp grounds</small></div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-dropdown">
+                    <button class="nav-link">Integrations <span class="dd-arrow">&#x25BE;</span></button>
+                    <div class="dropdown-panel dropdown-wide">
+                        <div class="dropdown-cols">
+                            <div>
+                                <span class="dd-col-label">Quick Reference</span>
+                                <a href="/integrations/quickref" class="dropdown-item" data-link>
+                                    <span class="di-icon">&#x26A1;</span>
+                                    <div><strong>Cheatsheet</strong></div>
+                                </a>
+                            </div>
+                            <div>
+                                <span class="dd-col-label">Discord</span>
+                                <a href="/integrations/discord/gods" class="dropdown-item" data-link><span class="di-icon">&#x1F3DB;</span><div><strong>Gods</strong></div></a>
+                                <a href="/integrations/discord/profile" class="dropdown-item" data-link><span class="di-icon">&#x1F464;</span><div><strong>Profile</strong></div></a>
+                                <a href="/integrations/discord/economy" class="dropdown-item" data-link><span class="di-icon">&#x1F4B0;</span><div><strong>Economy</strong></div></a>
+                                <a href="/integrations/discord/games" class="dropdown-item" data-link><span class="di-icon">&#x1F3AE;</span><div><strong>Games</strong></div></a>
+                                <a href="/integrations/discord/arena" class="dropdown-item" data-link><span class="di-icon">&#x2694;</span><div><strong>Arena</strong></div></a>
+                            </div>
+                            <div>
+                                <span class="dd-col-label">Minecraft</span>
+                                <a href="/integrations/mc/gods" class="dropdown-item" data-link><span class="di-icon">&#x2728;</span><div><strong>Gods</strong></div></a>
+                                <a href="/integrations/mc/skills" class="dropdown-item" data-link><span class="di-icon">&#x1F4CA;</span><div><strong>Skills</strong></div></a>
+                                <a href="/integrations/mc/shrines" class="dropdown-item" data-link><span class="di-icon">&#x1F3DB;</span><div><strong>Shrines</strong></div></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav-dropdown">
+                    <button class="nav-link">Portal <span class="dd-arrow">&#x25BE;</span></button>
+                    <div class="dropdown-panel">
+                        <a href="/portal" class="dropdown-item" data-link>
+                            <span class="di-icon">&#x1F464;</span>
+                            <div><strong>Profile</strong><small>Your demigod dashboard</small></div>
+                        </a>
+                        <a href="/portal/character" class="dropdown-item" data-link>
+                            <span class="di-icon">&#x1F4DD;</span>
+                            <div><strong>Character Sheet</strong><small>Create your identity</small></div>
+                        </a>
+                        <a href="/portal/mail" class="dropdown-item" data-link>
+                            <span class="di-icon">&#x1F4EC;</span>
+                            <div><strong>Mail</strong><small>Messages &amp; invites</small></div>
+                        </a>
+                        <hr class="dd-divider">
+                        <a href="/portal/games" class="dropdown-item" data-link>
+                            <span class="di-icon">&#x1F3AE;</span>
+                            <div><strong>Games</strong><small>Play &amp; earn Drachma</small></div>
+                        </a>
+                        <a href="/portal/arena" class="dropdown-item" data-link>
+                            <span class="di-icon">&#x2694;</span>
+                            <div><strong>Arena</strong><small>Battles &amp; events</small></div>
+                        </a>
+                    </div>
+                </div>
+
+                <a href="/portal/quiz" class="nav-link quiz-btn" data-link>
+                    <span>&#x1F52E;</span> God Quiz
+                </a>
+            </div>
+
+            <div class="nav-right">
+                <a href="/portal" class="portal-btn" data-link>
+                    <span>&#x1F300;</span>
+                    <span class="portal-text">Portal</span>
+                </a>
+                <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- mobile menu overlay -->
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="/" class="mm-link" data-link>Home</a>
+        <div class="mm-label">News</div>
+        <a href="/news/gods" class="mm-link" data-link>Gods</a>
+        <a href="/news/story" class="mm-link" data-link>Story Phases</a>
+        <a href="/news/quests" class="mm-link" data-link>Quests</a>
+        <div class="mm-label">Server Info</div>
+        <a href="/info/new-players" class="mm-link" data-link>New Players</a>
+        <a href="/info/lore" class="mm-link" data-link>Lore</a>
+        <a href="/info/mods" class="mm-link" data-link>Mod List</a>
+        <div class="mm-label">Portal</div>
+        <a href="/portal" class="mm-link" data-link>Profile</a>
+        <a href="/portal/quiz" class="mm-link quiz" data-link>God Quiz</a>
+    </div>
+
+    <main id="app"></main>
+
+    <script src="/js/router.js"></script>
+    <script src="/js/animations.js"></script>
+    <script src="/js/nav.js"></script>
+    <script src="/js/pages/home.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
