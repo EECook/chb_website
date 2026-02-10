@@ -1,7 +1,5 @@
 // bootstrap
-
 (function() {
-
     // placeholder for pages not built yet
     function placeholder(title) {
         return function(mount) {
@@ -12,7 +10,6 @@
             return { cleanup: function() {} };
         };
     }
-
     // register all routes
     Router.register('/', window.HomePage);
     Router.register('/news', window.NewsPage);
@@ -26,11 +23,10 @@
     Router.register('/portal/characters', window.PortalCharactersPage);
     Router.register('/info/new-players', window.GettingStartedPage);
     Router.register('/info/mods', window.ModListPage);
+    Router.register('/info/timeline', window.TimelinePage);
     Router.register('/info*', placeholder('Coming Soon'));
     Router.register('/integrations*', placeholder('Integrations'));
     Router.register('/portal*', placeholder('Portal'));
-
     // go
     Router.init();
-
 })();
