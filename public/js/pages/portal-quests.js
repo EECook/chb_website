@@ -182,7 +182,7 @@ function buildTabs() {
     var icons = { story_quests:'\u{1F3E0}', the_overworld:'\u{1F30D}', the_nether:'\u{1F525}', the_end:'\u{1F30C}', battle_pass:'\u{1F3C6}', armor:'\u{1F6E1}', husbandry:'\u{1F33E}', alexs_caves:'\u{1F9EB}', zues_trials:'\u26A1', easter_eggs:'\u{1F95A}', hourly_reward:'\u23F0' };
     var h = '<a href="/news" class="qt-back" data-link>\u2190</a>';
     chapters.forEach(function(ch) {
-        if (ch.quests.length < 1) return;
+        if (ch.quests.length < 1 || ch.filename === 'armor') return;
         h += '<button class="qt-tab" data-chapter="' + ch.filename + '">' + (icons[ch.filename]||'\u{1F5FA}') + ' ' + ch.title + '<span class="qt-count">' + ch.quests.length + '</span></button>';
     });
     el.innerHTML = h;
