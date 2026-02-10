@@ -1153,7 +1153,9 @@ app.get('/api/public/timeline', async (req, res) => {
 
     try {
         const category = req.query.category;
-        const limit = Math.min(parseInt(req.query.limit) || 100, 200);
+        // mysql2 execute() (prepared statements) can choke on LIMIT ?,
+        // so we sanitize and inline it instead
+        const limit = Math.min(Math.max(parseInt(req.query.limit) || 100, 1), 200);
         let query, params;
 
         if (category && category.toLowerCase() !== 'all') {
@@ -1163,18 +1165,18 @@ app.get('/api/public/timeline', async (req, res) => {
                 LEFT JOIN players p ON CAST(te.user_id AS CHAR) = CAST(p.user_id AS CHAR)
                 WHERE te.category = ?
                 ORDER BY te.event_date DESC, te.entry_id DESC
-                LIMIT ?
+                LIMIT ${limit}
             `;
-            params = [category, limit];
+            params = [category];
         } else {
             query = `
                 SELECT te.*, p.username
                 FROM timeline_entries te
                 LEFT JOIN players p ON CAST(te.user_id AS CHAR) = CAST(p.user_id AS CHAR)
                 ORDER BY te.event_date DESC, te.entry_id DESC
-                LIMIT ?
+                LIMIT ${limit}
             `;
-            params = [limit];
+            params = [];
         }
 
         const [rows] = await pool.execute(query, params);
