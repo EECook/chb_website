@@ -8,7 +8,7 @@ function render(mount) {
     var data = window.MOD_DATA;
     if (!data) { mount.innerHTML = '<p style="text-align:center;padding:4rem;color:var(--marble-muted)">Mod data not loaded</p>'; return { cleanup: function(){} }; }
 
-    // Count mods per category (only those with names)
+    // Count mods per category
     var counts = { all: 0 };
     data.categories.forEach(function(c) { counts[c.id] = 0; });
     data.mods.forEach(function(m) { counts[m.cat] = (counts[m.cat]||0) + 1; counts.all++; });
@@ -78,7 +78,7 @@ function renderGrid(data) {
     });
 
     if (!filtered.length) {
-        grid.innerHTML = '<div class="mods-empty"><p>No mods found</p></div>';
+        grid.innerHTML = '<div class="mods-empty"><p>No mods found matching \u201C' + esc(searchTerm) + '\u201D</p></div>';
         return;
     }
 
@@ -88,10 +88,6 @@ function renderGrid(data) {
         cats.forEach(function(cat) {
             var catMods = filtered.filter(function(m) { return m.cat === cat.id; });
             if (!catMods.length) return;
-
-            // Separate: mods with descriptions first, blank ones collapsed
-            var described = catMods.filter(function(m) { return m.desc; });
-            var blank = catMods.filter(function(m) { return !m.desc; });
 
             h += '<div class="mods-section">'
                 + '<div class="mods-section-header">'
@@ -104,8 +100,7 @@ function renderGrid(data) {
                 + '</div>'
                 + '<div class="mods-section-grid">';
 
-            described.forEach(function(m) { h += modCard(m, catMap); });
-            blank.forEach(function(m) { h += modCard(m, catMap); });
+            catMods.forEach(function(m) { h += modCard(m, catMap); });
 
             h += '</div></div>';
         });
@@ -126,7 +121,7 @@ function renderGrid(data) {
 function modCard(m, catMap) {
     var cat = catMap[m.cat];
     var icon = cat ? cat.icon : '\u{1F4E6}';
-    return '<div class="mod-card' + (m.desc ? '' : ' mod-card-compact') + '">'
+    return '<div class="mod-card">'
         + '<div class="mod-card-icon">' + icon + '</div>'
         + '<div class="mod-card-body">'
         +   '<div class="mod-card-name">' + esc(m.name) + '</div>'
