@@ -1,4 +1,4 @@
-// Quest Tree Viewer — Celestial Edition
+// Quest Tree Viewer — Celestial Edition (Optimized)
 (function() {
 
 var canvas, ctx, mmCanvas, mmCtx;
@@ -10,27 +10,32 @@ var CELL = 75, NODE_R = 24, DPR = 1;
 var animFrame = null, frame = 0, lineAnim = 0;
 var bgStars = [], bgParticles = [];
 
-// ── EMOJI MAPPING ──
-// Maps item/keyword fragments to emojis for quest node display
+// ── DIRTY FLAGS ── skip redraws when nothing changed
+var dirty = true;           // force full redraw
+var camMoved = false;       // camera panned/zoomed
+var lastCam = {x:0,y:0,zoom:1};
+var CAM_EPS = 0.01;         // threshold for "camera stopped"
 
+// ── CACHES ──
+var emojiCache = {};         // quest.id -> emoji string
+var starCanvas = null;       // offscreen canvas for static stars
+var starsDirty = true;       // rebuild star layer on resize
+var mmFrameSkip = 0;         // throttle minimap to every 6th frame
+
+// ── EMOJI MAPPING ──
 var EMOJI_MAP = {
-    // Weapons
     sword:'\u2694\uFE0F', axe:'\u{1FA93}', bow:'\u{1F3F9}', trident:'\u{1F531}',
     crossbow:'\u{1F3F9}', shield:'\u{1F6E1}\uFE0F', dagger:'\u{1F5E1}',
-    // Armor
     helmet:'\u{1FA96}', chestplate:'\u{1F455}', legging:'\u{1F456}', boot:'\u{1F45F}',
     armor:'\u{1F6E1}\uFE0F', elytra:'\u{1FA82}',
-    // Ores & Materials
     diamond:'\u{1F48E}', emerald:'\u{1F48E}', gold_ingot:'\u{1F4B0}', gold_block:'\u{1F4B0}',
     iron:'\u2699\uFE0F', copper:'\u{1F7E7}', netherite:'\u{1F311}', coal:'\u2B2B',
     redstone:'\u{1F534}', lapis:'\u{1F535}', amethyst:'\u{1F7E3}', quartz:'\u25C7',
-    // Food
     bread:'\u{1F35E}', cake:'\u{1F382}', cookie:'\u{1F36A}', apple:'\u{1F34E}',
     chicken:'\u{1F357}', beef:'\u{1F969}', fish:'\u{1F41F}', cod:'\u{1F41F}',
     salmon:'\u{1F41F}', pizza:'\u{1F355}', stew:'\u{1F372}', potato:'\u{1F954}',
     carrot:'\u{1F955}', melon:'\u{1F348}', berry:'\u{1FAD0}', mushroom:'\u{1F344}',
     pumpkin:'\u{1F383}', sugar:'\u{1F36C}',
-    // Nature & Animals
     egg:'\u{1F95A}', feather:'\u{1FAB6}', bone:'\u{1F9B4}', wool:'\u{1F411}',
     leather:'\u{1F43E}', fur:'\u{1F43B}', honey:'\u{1F36F}', flower:'\u{1F33C}',
     seed:'\u{1F331}', sapling:'\u{1F331}', wheat:'\u{1F33E}', hay:'\u{1F33E}',
@@ -41,7 +46,6 @@ var EMOJI_MAP = {
     bee:'\u{1F41D}', turtle:'\u{1F422}', frog:'\u{1F438}', goat:'\u{1F410}',
     parrot:'\u{1F99C}', dolphin:'\u{1F42C}', squid:'\u{1F991}', spider:'\u{1F577}\uFE0F',
     bat:'\u{1F987}', penguin:'\u{1F427}', bison:'\u{1F403}',
-    // Blocks & Building
     stone:'\u{1FAA8}', cobble:'\u{1FAA8}', brick:'\u{1F9F1}', glass:'\u{1FA9F}',
     sand:'\u{1F3D6}\uFE0F', gravel:'\u26B0\uFE0F', clay:'\u{1F3FA}',
     obsidian:'\u{1F30C}', bedrock:'\u26F0\uFE0F', concrete:'\u{1F532}',
@@ -51,36 +55,30 @@ var EMOJI_MAP = {
     chest:'\u{1F4E6}', barrel:'\u{1F6E2}\uFE0F', hopper:'\u{1F3ED}',
     piston:'\u2699\uFE0F', lever:'\u{1F39B}\uFE0F',
     bed:'\u{1F6CF}\uFE0F', door:'\u{1F6AA}', fence:'\u{1F3E0}',
-    // Tools
     pickaxe:'\u26CF\uFE0F', shovel:'\u{1F6A7}', hoe:'\u{1F33E}',
     fishing_rod:'\u{1F3A3}', shears:'\u2702\uFE0F', bucket:'\u{1FAA3}',
     flint:'\u{1F525}', compass:'\u{1F9ED}', clock:'\u{1F552}', spyglass:'\u{1F52D}',
     lead:'\u{1FA62}', saddle:'\u{1F40E}', name_tag:'\u{1F3F7}\uFE0F',
-    // Magic & Combat
     potion:'\u{1F9EA}', ender_pearl:'\u{1F52E}', ender_eye:'\u{1F441}\uFE0F',
     blaze:'\u{1F525}', ghast:'\u{1F47B}', wither:'\u{1F480}', dragon:'\u{1F409}',
     totem:'\u{1F3C6}', enchanted:'\u2728', book:'\u{1F4D6}', experience:'\u{1F31F}',
     xp:'\u{1F31F}', firework:'\u{1F386}', tnt:'\u{1F4A3}', arrow:'\u{1F3F9}',
     beacon:'\u{1F4A0}', conduit:'\u{1F30A}',
-    // Items
     paper:'\u{1F4DC}', map:'\u{1F5FA}\uFE0F', writable:'\u{1F4DD}',
     painting:'\u{1F5BC}\uFE0F', frame:'\u{1F5BC}\uFE0F',
     music_disc:'\u{1F4BF}', record:'\u{1F4BF}', horn:'\u{1F4EF}',
     bundle:'\u{1F392}', backpack:'\u{1F392}', shulker:'\u{1F4E6}',
     head:'\u{1F464}', skull:'\u{1F480}', spawn_egg:'\u{1F95A}',
     string:'\u{1F9F5}', stick:'\u{1FAB5}', slime:'\u{1F7E2}',
-    // Biomes & Dimensions
     nether:'\u{1F525}', end:'\u{1F30C}', overworld:'\u{1F30D}',
     ocean:'\u{1F30A}', desert:'\u{1F3DC}\uFE0F', jungle:'\u{1F334}',
     swamp:'\u{1F40A}', mountain:'\u26F0\uFE0F', cave:'\u{1F573}\uFE0F',
     village:'\u{1F3D8}\uFE0F', fortress:'\u{1F3F0}', bastion:'\u{1F3F0}',
     monument:'\u{1F3DB}\uFE0F', temple:'\u{1F3DB}\uFE0F',
     portal:'\u{1F300}', ship:'\u26F5',
-    // Tasks
     kill:'\u2694\uFE0F', break:'\u26CF\uFE0F', location:'\u{1F4CD}',
     checkmark:'\u2714\uFE0F', advancement:'\u{1F3C5}',
     structure:'\u{1F3DB}\uFE0F',
-    // CHB themed
     lightning:'\u26A1', zeus:'\u26A1', poseidon:'\u{1F531}', hades:'\u{1F480}',
     hermes:'\u{1F45F}', artemis:'\u{1F3F9}', apollo:'\u2600\uFE0F',
     athena:'\u{1F989}', ares:'\u{1F6E1}\uFE0F', demeter:'\u{1F33E}',
@@ -100,8 +98,13 @@ var EMOJI_MAP = {
     skyforge:'\u{1F525}', divine:'\u{1F31F}', champion:'\u{1F451}'
 };
 
+// Pre-sorted keys by length descending (done once, not per-call)
+var EMOJI_KEYS_SORTED = Object.keys(EMOJI_MAP).sort(function(a,b) { return b.length - a.length; });
+
 function getQuestEmoji(q) {
-    // Priority: icon > task item > advancement > title keywords > task type
+    // Check cache first
+    if (emojiCache[q.id]) return emojiCache[q.id];
+
     var searchTerms = [];
     if (q.icon) searchTerms.push(q.icon.toLowerCase());
     if (q.tasks) q.tasks.forEach(function(t) {
@@ -115,26 +118,28 @@ function getQuestEmoji(q) {
     if (q.subtitle) searchTerms.push(q.subtitle.toLowerCase());
 
     var combined = searchTerms.join(' ');
+    var result = null;
 
-    // Try each key in EMOJI_MAP
-    var keys = Object.keys(EMOJI_MAP);
-    // Sort by length descending so longer/more specific matches win
-    keys.sort(function(a,b) { return b.length - a.length; });
-    for (var i = 0; i < keys.length; i++) {
-        if (combined.indexOf(keys[i]) >= 0) return EMOJI_MAP[keys[i]];
+    for (var i = 0; i < EMOJI_KEYS_SORTED.length; i++) {
+        if (combined.indexOf(EMOJI_KEYS_SORTED[i]) >= 0) {
+            result = EMOJI_MAP[EMOJI_KEYS_SORTED[i]];
+            break;
+        }
     }
 
-    // Fallback by task type
-    if (q.taskType === 'item') return '\u{1F4E6}';
-    if (q.taskType === 'checkmark') return '\u2714\uFE0F';
-    if (q.taskType === 'location') return '\u{1F4CD}';
-    if (q.taskType === 'advancement') return '\u{1F3C5}';
-    if (q.taskType === 'kill') return '\u2694\uFE0F';
+    if (!result) {
+        if (q.taskType === 'item') result = '\u{1F4E6}';
+        else if (q.taskType === 'checkmark') result = '\u2714\uFE0F';
+        else if (q.taskType === 'location') result = '\u{1F4CD}';
+        else if (q.taskType === 'advancement') result = '\u{1F3C5}';
+        else if (q.taskType === 'kill') result = '\u2694\uFE0F';
+        else result = '\u2B50';
+    }
 
-    return '\u2B50';
+    emojiCache[q.id] = result;
+    return result;
 }
 
-// Chapter-specific accent colors
 var CHAPTER_COLORS = {
     story_quests: { main: '#D4AF37', glow: 'rgba(212,175,55,', line: 'rgba(212,175,55,' },
     the_overworld: { main: '#4ade80', glow: 'rgba(74,222,128,', line: 'rgba(74,222,128,' },
@@ -189,7 +194,8 @@ function switchChapter(fn) {
     if (!ch) return;
     if (animFrame) { cancelAnimationFrame(animFrame); animFrame = null; }
     activeChapter = ch; selectedQuest = null; hoveredQuest = null;
-    questMap = {}; ch.quests.forEach(function(q) { questMap[q.id] = q; });
+    questMap = {}; emojiCache = {};  // clear emoji cache on chapter switch
+    ch.quests.forEach(function(q) { questMap[q.id] = q; });
     document.querySelectorAll('.qt-tab').forEach(function(t) { t.classList.toggle('active', t.getAttribute('data-chapter') === fn); });
     if (fn === 'battle_pass') renderBP(ch); else renderTree(ch);
 }
@@ -215,6 +221,7 @@ function renderTree(ch) {
     initBgStars();
     bindCanvas();
     lineAnim = 0;
+    dirty = true;
     splash(ch);
     fit(true);
     setTimeout(function() { var h = document.getElementById('qh'); if (h) h.style.opacity = '0'; }, 4000);
@@ -230,6 +237,29 @@ function initBgStars() {
     for (var j = 0; j < 20; j++) {
         bgParticles.push({ x: Math.random(), y: Math.random(), vx: (Math.random()-0.5)*0.0001, vy: (Math.random()-0.5)*0.0001, r: Math.random()*40+20, o: Math.random()*0.03+0.01 });
     }
+    starsDirty = true;
+}
+
+// ── BUILD OFFSCREEN STAR LAYER ──
+// Stars twinkle slowly enough that we can redraw them every ~8 frames
+// instead of every frame. We bake them to an offscreen canvas.
+var starsLastFrame = -999;
+
+function buildStarLayer(cw, ch) {
+    if (!starCanvas) {
+        starCanvas = document.createElement('canvas');
+    }
+    starCanvas.width = cw;
+    starCanvas.height = ch;
+    var sctx = starCanvas.getContext('2d');
+    sctx.clearRect(0, 0, cw, ch);
+    var t = frame * 0.02;
+    bgStars.forEach(function(s) {
+        var twinkle = 0.4 + 0.6 * Math.sin(t * s.s + s.phase);
+        sctx.fillStyle = 'rgba(245,245,240,' + (twinkle * 0.5) + ')';
+        sctx.beginPath(); sctx.arc(s.x*cw, s.y*ch, s.r, 0, Math.PI*2); sctx.fill();
+    });
+    starsLastFrame = frame;
 }
 
 function resize() {
@@ -239,6 +269,8 @@ function resize() {
     canvas.style.width = w.clientWidth + 'px'; canvas.style.height = w.clientHeight + 'px';
     var mm = document.getElementById('qmm');
     if (mm && mmCanvas) { mmCanvas.width = mm.clientWidth * DPR; mmCanvas.height = mm.clientHeight * DPR; }
+    starsDirty = true;
+    dirty = true;
 }
 
 function splash(ch) {
@@ -257,23 +289,42 @@ function fit(instant) {
     z = Math.max(z, 0.12);
     tCam.x = -(mnX+mxX)/2*CELL; tCam.y = -(mnY+mxY)/2*CELL; tCam.zoom = z;
     if (instant) { cam.x=tCam.x; cam.y=tCam.y; cam.zoom=tCam.zoom; }
+    dirty = true;
 }
 
 function bindCanvas() {
     var w = document.getElementById('qcw'); if (!w) return;
     window.addEventListener('resize', resize);
     w.addEventListener('mousedown', function(e) { if(e.button!==0) return; isDragging=true; dragStart.x=e.clientX; dragStart.y=e.clientY; w.classList.add('grabbing'); });
-    window.addEventListener('mousemove', function(e) { if(isDragging) { tCam.x+=(e.clientX-dragStart.x)/cam.zoom; tCam.y+=(e.clientY-dragStart.y)/cam.zoom; cam.x=tCam.x; cam.y=tCam.y; dragStart.x=e.clientX; dragStart.y=e.clientY; } });
+    window.addEventListener('mousemove', function(e) {
+        if(isDragging) {
+            tCam.x+=(e.clientX-dragStart.x)/cam.zoom; tCam.y+=(e.clientY-dragStart.y)/cam.zoom;
+            cam.x=tCam.x; cam.y=tCam.y;
+            dragStart.x=e.clientX; dragStart.y=e.clientY;
+            dirty = true;
+        }
+    });
     window.addEventListener('mouseup', function() { isDragging=false; if(w)w.classList.remove('grabbing'); });
-    w.addEventListener('wheel', function(e) { e.preventDefault(); tCam.zoom=Math.max(0.08,Math.min(3.5,tCam.zoom*(e.deltaY>0?0.88:1.12))); }, {passive:false});
-    canvas.addEventListener('click', function(e) { if(!activeChapter) return; var r=canvas.getBoundingClientRect(); var h=hit(e.clientX-r.left,e.clientY-r.top); if(h){selectedQuest=h;showDetail(h);}else{closeDetail();selectedQuest=null;} });
-    canvas.addEventListener('mousemove', function(e) { if(isDragging||!activeChapter) return; var r=canvas.getBoundingClientRect(); hoveredQuest=hit(e.clientX-r.left,e.clientY-r.top); canvas.style.cursor=hoveredQuest?'pointer':'grab'; });
+    w.addEventListener('wheel', function(e) { e.preventDefault(); tCam.zoom=Math.max(0.08,Math.min(3.5,tCam.zoom*(e.deltaY>0?0.88:1.12))); dirty=true; }, {passive:false});
+    canvas.addEventListener('click', function(e) {
+        if(!activeChapter) return;
+        var r=canvas.getBoundingClientRect(); var h=hit(e.clientX-r.left,e.clientY-r.top);
+        if(h){selectedQuest=h;showDetail(h);dirty=true;}else{closeDetail();selectedQuest=null;dirty=true;}
+    });
+    canvas.addEventListener('mousemove', function(e) {
+        if(isDragging||!activeChapter) return;
+        var r=canvas.getBoundingClientRect();
+        var prev = hoveredQuest;
+        hoveredQuest=hit(e.clientX-r.left,e.clientY-r.top);
+        canvas.style.cursor=hoveredQuest?'pointer':'grab';
+        if (prev !== hoveredQuest) dirty = true;
+    });
     // Touch
     var ts=null,td=0;
     w.addEventListener('touchstart',function(e){if(e.touches.length===1)ts={x:e.touches[0].clientX,y:e.touches[0].clientY};else if(e.touches.length===2)td=Math.hypot(e.touches[1].clientX-e.touches[0].clientX,e.touches[1].clientY-e.touches[0].clientY);},{passive:true});
-    w.addEventListener('touchmove',function(e){e.preventDefault();if(e.touches.length===1&&ts){var dx=e.touches[0].clientX-ts.x,dy=e.touches[0].clientY-ts.y;tCam.x+=dx/cam.zoom;tCam.y+=dy/cam.zoom;cam.x=tCam.x;cam.y=tCam.y;ts={x:e.touches[0].clientX,y:e.touches[0].clientY};}else if(e.touches.length===2){var nd=Math.hypot(e.touches[1].clientX-e.touches[0].clientX,e.touches[1].clientY-e.touches[0].clientY);if(td>0)tCam.zoom=Math.max(0.08,Math.min(3.5,tCam.zoom*(nd/td)));td=nd;}},{passive:false});
-    document.getElementById('qzi').addEventListener('click',function(){tCam.zoom=Math.min(3.5,tCam.zoom*1.35);});
-    document.getElementById('qzo').addEventListener('click',function(){tCam.zoom=Math.max(0.08,tCam.zoom/1.35);});
+    w.addEventListener('touchmove',function(e){e.preventDefault();dirty=true;if(e.touches.length===1&&ts){var dx=e.touches[0].clientX-ts.x,dy=e.touches[0].clientY-ts.y;tCam.x+=dx/cam.zoom;tCam.y+=dy/cam.zoom;cam.x=tCam.x;cam.y=tCam.y;ts={x:e.touches[0].clientX,y:e.touches[0].clientY};}else if(e.touches.length===2){var nd=Math.hypot(e.touches[1].clientX-e.touches[0].clientX,e.touches[1].clientY-e.touches[0].clientY);if(td>0)tCam.zoom=Math.max(0.08,Math.min(3.5,tCam.zoom*(nd/td)));td=nd;}},{passive:false});
+    document.getElementById('qzi').addEventListener('click',function(){tCam.zoom=Math.min(3.5,tCam.zoom*1.35);dirty=true;});
+    document.getElementById('qzo').addEventListener('click',function(){tCam.zoom=Math.max(0.08,tCam.zoom/1.35);dirty=true;});
     document.getElementById('qzf').addEventListener('click',function(){fit(false);});
     document.getElementById('qdo').addEventListener('click',function(e){if(e.target===this)closeDetail();});
 }
@@ -322,18 +373,55 @@ function showDetail(q) {
     h+='<div class="qd-id">'+q.id+'</div></div>';
     p.innerHTML=h; ov.classList.add('open');
     document.getElementById('qdc').addEventListener('click',closeDetail);
-    p.querySelectorAll('.qd-dep-chip').forEach(function(c){c.addEventListener('click',function(){var d=questMap[this.getAttribute('data-dep')];if(d){selectedQuest=d;tCam.x=-d.x*CELL;tCam.y=-d.y*CELL;showDetail(d);}});});
+    p.querySelectorAll('.qd-dep-chip').forEach(function(c){c.addEventListener('click',function(){var d=questMap[this.getAttribute('data-dep')];if(d){selectedQuest=d;tCam.x=-d.x*CELL;tCam.y=-d.y*CELL;showDetail(d);dirty=true;}});});
 }
 
-function closeDetail() { var o=document.getElementById('qdo'); if(o)o.classList.remove('open'); selectedQuest=null; }
+function closeDetail() { var o=document.getElementById('qdo'); if(o)o.classList.remove('open'); selectedQuest=null; dirty=true; }
+
+// ── VIEWPORT CULLING HELPER ──
+// Returns the visible world-space bounding box with padding
+function getViewBounds() {
+    var cw = canvas.width/DPR, ch = canvas.height/DPR;
+    var pad = NODE_R * 3 + 40; // extra padding for labels/glows
+    return {
+        left:   (-cam.x - cw/2/cam.zoom) * (1/CELL) - pad/CELL,
+        right:  (-cam.x + cw/2/cam.zoom) * (1/CELL) + pad/CELL,
+        top:    (-cam.y - ch/2/cam.zoom) * (1/CELL) - pad/CELL,
+        bottom: (-cam.y + ch/2/cam.zoom) * (1/CELL) + pad/CELL
+    };
+}
+
+function isInView(q, bounds) {
+    return q.x >= bounds.left && q.x <= bounds.right && q.y >= bounds.top && q.y <= bounds.bottom;
+}
 
 // ── RENDER LOOP ──
 function loop() {
     animFrame = requestAnimationFrame(loop);
-    cam.x+=(tCam.x-cam.x)*0.1; cam.y+=(tCam.y-cam.y)*0.1; cam.zoom+=(tCam.zoom-cam.zoom)*0.1;
-    if(lineAnim<1) lineAnim+=0.012;
+
+    // Smooth camera interpolation
+    var dx = tCam.x - cam.x, dy = tCam.y - cam.y, dz = tCam.zoom - cam.zoom;
+    if (Math.abs(dx) > CAM_EPS || Math.abs(dy) > CAM_EPS || Math.abs(dz) > 0.001) {
+        cam.x += dx * 0.1;
+        cam.y += dy * 0.1;
+        cam.zoom += dz * 0.1;
+        dirty = true;
+    }
+
+    // Line animation drives dirty too
+    if (lineAnim < 1) { lineAnim += 0.012; dirty = true; }
+
+    // Animated elements (shimmer dots, pulse rings) need periodic redraws
+    // but only if we have a selected/hovered quest
+    if (hoveredQuest || selectedQuest) dirty = true;
+
+    if (dirty) {
+        draw();
+        dirty = false;
+    }
+
+    // Update zoom label less frequently
     if(frame%10===0){var l=document.getElementById('qzl');if(l)l.textContent=Math.round(cam.zoom*100)+'%';}
-    draw();
     frame++;
 }
 
@@ -347,7 +435,7 @@ function draw() {
     // Background
     ctx.fillStyle='#030014'; ctx.fillRect(0,0,cw,ch);
 
-    // Nebula blobs
+    // Nebula blobs — only update positions, draw simply
     bgParticles.forEach(function(p) {
         p.x+=p.vx; p.y+=p.vy;
         if(p.x<-0.1||p.x>1.1) p.vx*=-1;
@@ -358,13 +446,14 @@ function draw() {
         ctx.fillStyle=g; ctx.fillRect(0,0,cw,ch);
     });
 
-    // Stars
-    var t = frame * 0.02;
-    bgStars.forEach(function(s) {
-        var twinkle = 0.4 + 0.6 * Math.sin(t * s.s + s.phase);
-        ctx.fillStyle = 'rgba(245,245,240,' + (twinkle * 0.5) + ')';
-        ctx.beginPath(); ctx.arc(s.x*cw, s.y*ch, s.r, 0, Math.PI*2); ctx.fill();
-    });
+    // Stars — use offscreen canvas, rebuilt every 8 frames
+    if (starsDirty || frame - starsLastFrame > 8) {
+        buildStarLayer(cw, ch);
+        starsDirty = false;
+    }
+    if (starCanvas) {
+        ctx.drawImage(starCanvas, 0, 0);
+    }
 
     // Grid (subtle)
     var gs=CELL*cam.zoom;
@@ -379,19 +468,30 @@ function draw() {
     ctx.save();
     ctx.translate(cw/2,ch/2); ctx.scale(cam.zoom,cam.zoom); ctx.translate(cam.x,cam.y);
 
-    drawDeps(colors);
-    drawNodes(colors);
+    var bounds = getViewBounds();
+    drawDeps(colors, bounds);
+    drawNodes(colors, bounds);
 
     ctx.restore(); ctx.restore();
-    drawMinimap(colors);
+
+    // Minimap — throttle to every 6 frames
+    mmFrameSkip++;
+    if (mmFrameSkip >= 6) {
+        drawMinimap(colors);
+        mmFrameSkip = 0;
+    }
 }
 
-function drawDeps(colors) {
+function drawDeps(colors, bounds) {
     var qs=activeChapter.quests, prog=Math.min(lineAnim,1);
     qs.forEach(function(q) {
         if(!q.dependencies) return;
         q.dependencies.forEach(function(did) {
             var dep=questMap[did]; if(!dep) return;
+
+            // Cull: skip if both endpoints are offscreen
+            if (!isInView(q, bounds) && !isInView(dep, bounds)) return;
+
             var x1=dep.x*CELL,y1=dep.y*CELL,x2=q.x*CELL,y2=q.y*CELL;
             var ex=x1+(x2-x1)*prog,ey=y1+(y2-y1)*prog;
             var isHL=(hoveredQuest&&(hoveredQuest.id===q.id||hoveredQuest.id===dep.id))||(selectedQuest&&(selectedQuest.id===q.id||selectedQuest.id===dep.id));
@@ -402,17 +502,15 @@ function drawDeps(colors) {
                 ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(ex,ey); ctx.stroke();
             }
 
-            // Main line
             ctx.strokeStyle=isHL?colors.line+'0.7)':colors.line+'0.2)';
             ctx.lineWidth=isHL?2.5:1.2;
 
-            // Slight curve
             var midX=(x1+ex)/2,midY=(y1+ey)/2,dist=Math.sqrt((ex-x1)*(ex-x1)+(ey-y1)*(ey-y1));
             var curve=Math.min(dist*0.12,18);
             var nx=-(ey-y1)/(dist||1)*curve,ny=(ex-x1)/(dist||1)*curve;
             ctx.beginPath(); ctx.moveTo(x1,y1); ctx.quadraticCurveTo(midX+nx,midY+ny,ex,ey); ctx.stroke();
 
-            // Animated shimmer dot on line
+            // Animated shimmer dot
             if(prog>=0.9) {
                 var shimPos = ((frame*0.008)%1);
                 var sx=x1+(x2-x1)*shimPos, sy=y1+(y2-y1)*shimPos;
@@ -434,16 +532,19 @@ function drawDeps(colors) {
     });
 }
 
-function drawNodes(colors) {
+function drawNodes(colors, bounds) {
     var t = frame*0.025;
     activeChapter.quests.forEach(function(q) {
+        // Viewport culling
+        if (!isInView(q, bounds)) return;
+
         var x=q.x*CELL, y=q.y*CELL;
         var r=NODE_R*(q.size>1?Math.min(q.size*0.55,1.8):1);
         var isH=hoveredQuest&&hoveredQuest.id===q.id;
         var isS=selectedQuest&&selectedQuest.id===q.id;
         var isC=false;
         if(hoveredQuest||selectedQuest){var ref=selectedQuest||hoveredQuest;if(ref.dependencies&&ref.dependencies.indexOf(q.id)>=0)isC=true;if(q.dependencies&&q.dependencies.indexOf(ref.id)>=0)isC=true;}
-        var em=getQuestEmoji(q);
+        var em=getQuestEmoji(q);  // cached lookup
 
         // Outer glow
         if(isH||isS) {
@@ -468,20 +569,17 @@ function drawNodes(colors) {
         else{ctx.arc(x,y,r,0,Math.PI*2);}
 
         if(shape!=='none') {
-            // Rich gradient fill
             var fg=ctx.createRadialGradient(x-r*0.25,y-r*0.35,0,x,y,r*1.2);
             fg.addColorStop(0,isS?'#2a2560':isH?'#221e55':'#12103a');
             fg.addColorStop(0.7,isS?'#1a1545':'#0a0825');
             fg.addColorStop(1,'#060518');
             ctx.fillStyle=fg; ctx.fill();
 
-            // Stroke
             var sc=isS?colors.main:isH?colors.main:isC?colors.line+'0.6)':'rgba(212,175,55,0.25)';
             ctx.strokeStyle=sc;
             ctx.lineWidth=isS?2.5:isH?2:1;
             ctx.stroke();
 
-            // Inner highlight arc
             ctx.beginPath();
             ctx.arc(x,y-r*0.15,r*0.7,-Math.PI*0.8,-Math.PI*0.2);
             ctx.strokeStyle='rgba(255,255,255,'+(isH||isS?0.08:0.03)+')';
@@ -489,7 +587,7 @@ function drawNodes(colors) {
             ctx.stroke();
         }
 
-        // Pulse ring
+        // Pulse ring (selected only)
         if(isS) {
             var pr=r+6+Math.sin(t*3)*3;
             ctx.strokeStyle=colors.glow+(0.25+Math.sin(t*3)*0.1)+')';
@@ -514,12 +612,10 @@ function drawNodes(colors) {
             var label=q.title.length>22?q.title.substring(0,20)+'..':q.title;
             var ly=y+r+6;
 
-            // Shadow
             ctx.fillStyle='rgba(3,0,20,0.85)';
             ctx.fillText(label,x+1,ly+1);
             ctx.fillText(label,x-1,ly+1);
 
-            // Text
             ctx.fillStyle=isH||isS?'#f5f5f0':isC?colors.main:'rgba(200,200,192,0.55)';
             ctx.fillText(label,x,ly);
         }
@@ -534,11 +630,8 @@ function drawMinimap(colors) {
     qs.forEach(function(q){if(q.x<mnX)mnX=q.x;if(q.x>mxX)mxX=q.x;if(q.y<mnY)mnY=q.y;if(q.y>mxY)mxY=q.y;});
     var sx=mw/((mxX-mnX+2)||1),sy=mh/((mxY-mnY+2)||1),sc=Math.min(sx,sy);
     var ox=(mw-(mxX-mnX)*sc)/2,oy=(mh-(mxY-mnY)*sc)/2;
-    // Draw deps
     qs.forEach(function(q){if(!q.dependencies)return;q.dependencies.forEach(function(d){var dep=questMap[d];if(!dep)return;mmCtx.strokeStyle=colors.line+'0.15)';mmCtx.lineWidth=DPR;mmCtx.beginPath();mmCtx.moveTo((dep.x-mnX)*sc+ox,(dep.y-mnY)*sc+oy);mmCtx.lineTo((q.x-mnX)*sc+ox,(q.y-mnY)*sc+oy);mmCtx.stroke();});});
-    // Draw dots
     qs.forEach(function(q){mmCtx.fillStyle=colors.glow+'0.7)';mmCtx.beginPath();mmCtx.arc((q.x-mnX)*sc+ox,(q.y-mnY)*sc+oy,2*DPR,0,Math.PI*2);mmCtx.fill();});
-    // Viewport
     var cw=canvas.width/DPR,cch=canvas.height/DPR;
     var vl=(-cam.x-cw/2/cam.zoom)/CELL,vt=(-cam.y-cch/2/cam.zoom)/CELL;
     var vw=cw/cam.zoom/CELL,vh=cch/cam.zoom/CELL;
@@ -547,7 +640,7 @@ function drawMinimap(colors) {
 }
 
 // ═════════════════════════════════
-// BATTLE PASS
+// BATTLE PASS (unchanged — DOM-based, not a perf concern)
 // ═════════════════════════════════
 
 function renderBP(ch) {
