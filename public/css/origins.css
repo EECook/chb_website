@@ -1,0 +1,235 @@
+/* ═══════════════════════════════════════════════════════════════════
+   ORIGINS & CLASSES PAGE — origins.css
+   Matches site aesthetic: Cinzel/Crimson fonts, dark navy, gold accents
+   ═══════════════════════════════════════════════════════════════════ */
+
+.origins-page { min-height: 100vh; position: relative; overflow: hidden; }
+
+/* ── Hero ── */
+.ori-hero { position: relative; padding: 5rem 2rem 2.5rem; text-align: center; overflow: hidden; }
+.ori-hero-glow {
+    position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(212,175,55,0.07) 0%, transparent 70%);
+    pointer-events: none;
+}
+.ori-hero .gs-ornament { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1rem; }
+.ori-hero .ornament-line { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-dim, #7a6a3a), transparent); }
+.ori-hero .gs-ornament span { font-family: 'Source Code Pro', monospace; font-size: 0.7rem; letter-spacing: 0.2em; color: var(--gold-dim, #7a6a3a); }
+.ori-hero h1 {
+    font-family: 'Cinzel Decorative', 'Cinzel', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: var(--gold-light, #e8d5a3);
+    margin: 0 0 0.5rem;
+    text-shadow: 0 0 30px rgba(212,175,55,0.15);
+}
+.ori-hero-sub {
+    font-family: 'Crimson Text', serif; font-size: 1.1rem;
+    color: var(--marble-muted, #9b9b8d); max-width: 520px; margin: 0 auto;
+}
+
+/* ── Explainer layers ── */
+.ori-explainer { max-width: 880px; margin: 0 auto 2.5rem; padding: 0 2rem; }
+.ori-layers { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.2rem; }
+.ori-layer-card {
+    background: rgba(20,16,28,0.6); border: 1px solid rgba(212,175,55,0.1);
+    border-radius: 12px; padding: 1.4rem 1.2rem; text-align: center;
+    transition: border-color 0.3s, transform 0.3s;
+}
+.ori-layer-card:hover { border-color: rgba(212,175,55,0.25); transform: translateY(-2px); }
+.ori-layer-num {
+    font-family: 'Source Code Pro', monospace; font-size: 0.6rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold-dim, #7a6a3a); margin-bottom: 0.3rem;
+}
+.ori-layer-icon { font-size: 2rem; margin-bottom: 0.4rem; filter: drop-shadow(0 0 8px rgba(212,175,55,0.15)); }
+.ori-layer-title { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--gold-light, #e8d5a3); margin-bottom: 0.3rem; }
+.ori-layer-desc { font-family: 'Crimson Text', serif; font-size: 0.86rem; color: var(--marble-muted, #9b9b8d); line-height: 1.5; }
+.ori-layer-count {
+    display: inline-block; margin-top: 0.5rem; padding: 0.2rem 0.65rem;
+    font-family: 'Source Code Pro', monospace; font-size: 0.68rem;
+    color: var(--gold-light, #e8d5a3); background: rgba(212,175,55,0.08);
+    border: 1px solid rgba(212,175,55,0.15); border-radius: 20px;
+}
+
+/* ── Search ── */
+.ori-search-wrap { max-width: 550px; margin: 0 auto 1.2rem; padding: 0 2rem; }
+.ori-search {
+    display: flex; align-items: center; gap: 0.6rem;
+    background: rgba(20,16,28,0.6); border: 1px solid rgba(212,175,55,0.1);
+    border-radius: 10px; padding: 0.6rem 1.2rem; transition: border-color 0.3s;
+}
+.ori-search:focus-within { border-color: rgba(212,175,55,0.25); }
+.ori-search-icon { font-size: 0.95rem; opacity: 0.5; }
+.ori-search-input {
+    flex: 1; background: none; border: none; outline: none;
+    color: var(--marble-light, #d4d0c4); font-family: 'Crimson Text', serif; font-size: 0.95rem;
+}
+.ori-search-input::placeholder { color: var(--marble-muted, #9b9b8d); opacity: 0.6; }
+
+/* ── Source tabs ── */
+.ori-tabs { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; padding: 0 2rem; margin-bottom: 2rem; }
+.ori-tab {
+    font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--marble-muted, #9b9b8d);
+    background: rgba(20,16,28,0.4); border: 1px solid rgba(212,175,55,0.1);
+    border-radius: 20px; padding: 0.45rem 1rem; cursor: pointer;
+    transition: all 0.3s; white-space: nowrap;
+}
+.ori-tab:hover { border-color: rgba(212,175,55,0.25); color: var(--gold-light, #e8d5a3); }
+.ori-tab.active {
+    background: rgba(212,175,55,0.1); border-color: rgba(212,175,55,0.3);
+    color: var(--gold-light, #e8d5a3); box-shadow: 0 0 12px rgba(212,175,55,0.08);
+}
+.ori-tab-count {
+    display: inline-block; font-family: 'Source Code Pro', monospace; font-size: 0.58rem;
+    background: rgba(212,175,55,0.12); color: var(--gold-light, #e8d5a3);
+    padding: 0.08rem 0.4rem; border-radius: 8px; margin-left: 0.35rem; vertical-align: 1px;
+}
+
+/* ── Content wrapper ── */
+.ori-content { max-width: 1100px; margin: 0 auto; padding: 0 2rem 4rem; }
+
+/* ── Section headers ── */
+.ori-section { margin-bottom: 2.5rem; }
+.ori-section-header {
+    display: flex; align-items: center; gap: 0.8rem;
+    padding-bottom: 0.7rem; margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(212,175,55,0.08);
+}
+.ori-section-icon { font-size: 1.6rem; filter: drop-shadow(0 0 6px rgba(212,175,55,0.15)); }
+.ori-section-title { font-family: 'Cinzel', serif; font-size: 1.15rem; color: var(--gold-light, #e8d5a3); }
+.ori-section-sub { font-family: 'Crimson Text', serif; font-size: 0.85rem; color: var(--marble-muted, #9b9b8d); margin-top: 0.1rem; }
+.ori-section-count {
+    margin-left: auto; font-family: 'Source Code Pro', monospace; font-size: 0.7rem;
+    color: var(--marble-muted, #9b9b8d); background: rgba(20,16,28,0.5);
+    border: 1px solid rgba(212,175,55,0.08); padding: 0.25rem 0.6rem; border-radius: 6px;
+}
+
+/* ── Origin card grid ── */
+.ori-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 0.9rem; }
+
+/* ── Origin card (expandable) ── */
+.ori-card {
+    background: rgba(20,16,28,0.5); border: 1px solid rgba(212,175,55,0.08);
+    border-radius: 12px; overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    animation: oriFadeUp 0.4s ease both;
+}
+.ori-card:hover {
+    border-color: rgba(212,175,55,0.2); transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25), 0 0 15px rgba(212,175,55,0.04);
+}
+.ori-card-head { display: flex; align-items: center; gap: 0.7rem; padding: 0.9rem 1.1rem; cursor: pointer; user-select: none; }
+.ori-card-emoji { font-size: 1.5rem; flex-shrink: 0; filter: drop-shadow(0 0 5px rgba(212,175,55,0.15)); transition: transform 0.25s; }
+.ori-card:hover .ori-card-emoji { transform: scale(1.1); }
+.ori-card-info { flex: 1; min-width: 0; }
+.ori-card-name { font-family: 'Cinzel', serif; font-size: 0.92rem; color: var(--gold-light, #e8d5a3); line-height: 1.3; }
+.ori-card-tagline { font-family: 'Crimson Text', serif; font-size: 0.8rem; color: var(--marble-muted, #9b9b8d); line-height: 1.4; margin-top: 0.1rem; }
+
+/* Impact dots */
+.ori-card-impact { flex-shrink: 0; display: flex; gap: 3px; align-items: center; margin-right: 0.3rem; }
+.ori-impact-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(212,175,55,0.15); transition: background 0.2s; }
+.ori-impact-dot.filled.low { background: #27ae60; }
+.ori-impact-dot.filled.med { background: #d4af37; }
+.ori-impact-dot.filled.high { background: #c0392b; }
+
+/* Chevron toggle */
+.ori-card-toggle { font-size: 0.7rem; color: var(--marble-muted, #9b9b8d); transition: transform 0.3s; flex-shrink: 0; }
+.ori-card.open .ori-card-toggle { transform: rotate(180deg); }
+
+/* Expandable body */
+.ori-card-body { max-height: 0; overflow: hidden; transition: max-height 0.45s ease; }
+.ori-card.open .ori-card-body { max-height: 800px; }
+.ori-powers { padding: 0.2rem 1.1rem 1rem; border-top: 1px solid rgba(212,175,55,0.06); }
+.ori-power { display: flex; gap: 0.45rem; padding: 0.35rem 0; font-family: 'Crimson Text', serif; font-size: 0.84rem; line-height: 1.45; color: var(--marble-light, #d4d0c4); }
+.ori-power-icon { flex-shrink: 0; font-size: 0.78rem; margin-top: 0.15rem; }
+.ori-power-icon.pro { color: #4ecdc4; }
+.ori-power-icon.con { color: #e74c3c; }
+.ori-power-name { font-weight: 700; color: var(--gold-light, #e8d5a3); }
+
+/* ── Source badge on card ── */
+.ori-card-source {
+    font-family: 'Source Code Pro', monospace; font-size: 0.5rem;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--marble-muted, #9b9b8d); opacity: 0;
+    position: absolute; top: 0.5rem; right: 0.7rem;
+    transition: opacity 0.2s;
+}
+.ori-card:hover .ori-card-source { opacity: 0.5; }
+.ori-card { position: relative; }
+
+/* ── Class grid (simpler, no expand) ── */
+.ori-class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.8rem; }
+.ori-class-card {
+    background: rgba(20,16,28,0.5); border: 1px solid rgba(212,175,55,0.08);
+    border-radius: 10px; padding: 1rem 1.1rem; display: flex; gap: 0.8rem; align-items: flex-start;
+    transition: border-color 0.3s, transform 0.3s;
+    animation: oriFadeUp 0.4s ease both;
+}
+.ori-class-card:hover { border-color: rgba(212,175,55,0.2); transform: translateY(-2px); }
+.ori-class-emoji { font-size: 1.4rem; flex-shrink: 0; filter: drop-shadow(0 0 4px rgba(212,175,55,0.12)); }
+.ori-class-body { flex: 1; }
+.ori-class-name { font-family: 'Cinzel', serif; font-size: 0.88rem; color: var(--gold-light, #e8d5a3); margin-bottom: 0.25rem; }
+.ori-class-perks { list-style: none; padding: 0; margin: 0; }
+.ori-class-perk {
+    display: flex; gap: 0.4rem; padding: 0.12rem 0;
+    font-family: 'Crimson Text', serif; font-size: 0.82rem;
+    color: var(--marble-muted, #9b9b8d); line-height: 1.45;
+}
+.ori-class-perk::before { content: '\2726'; color: var(--gold-dim, #7a6a3a); flex-shrink: 0; font-size: 0.65rem; margin-top: 0.2rem; }
+.ori-class-tag {
+    display: inline-block; margin-top: 0.45rem; padding: 0.12rem 0.5rem;
+    font-family: 'Source Code Pro', monospace; font-size: 0.55rem;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: #4ecdc4; background: rgba(78,205,196,0.08);
+    border: 1px solid rgba(78,205,196,0.15); border-radius: 10px;
+}
+
+/* ── Origins++ note + chip grid ── */
+.ori-pp-note {
+    background: rgba(212,175,55,0.04); border: 1px solid rgba(212,175,55,0.1);
+    border-radius: 10px; padding: 1.1rem 1.4rem; margin-bottom: 1.2rem;
+    font-family: 'Crimson Text', serif; font-size: 0.9rem;
+    color: var(--marble-muted, #9b9b8d); line-height: 1.6;
+}
+.ori-pp-note strong { color: var(--gold-light, #e8d5a3); }
+.ori-pp-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.45rem; margin-bottom: 1.5rem;
+}
+.ori-pp-chip {
+    font-family: 'Crimson Text', serif; font-size: 0.82rem;
+    color: var(--marble-light, #d4d0c4); background: rgba(20,16,28,0.5);
+    border: 1px solid rgba(212,175,55,0.06); border-radius: 8px;
+    padding: 0.4rem 0.6rem; text-align: center;
+    transition: border-color 0.3s, background 0.3s; cursor: default;
+}
+.ori-pp-chip:hover { border-color: rgba(212,175,55,0.18); background: rgba(20,16,28,0.7); }
+
+/* Spotlight label */
+.ori-spotlight-label {
+    font-family: 'Source Code Pro', monospace; font-size: 0.62rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold-dim, #7a6a3a); margin: 1.5rem 0 0.8rem;
+}
+
+/* ── Empty ── */
+.ori-empty { text-align: center; padding: 3rem 2rem; color: var(--marble-muted, #9b9b8d); font-family: 'Crimson Text', serif; font-style: italic; }
+
+/* ── Animations ── */
+@keyframes oriFadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .ori-layers { grid-template-columns: 1fr; }
+    .ori-grid { grid-template-columns: 1fr; }
+    .ori-class-grid { grid-template-columns: 1fr; }
+    .ori-pp-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+    .ori-hero { padding: 4rem 1.5rem 2rem; }
+    .ori-section-header { flex-wrap: wrap; }
+}
+@media (max-width: 480px) {
+    .ori-tabs { gap: 0.3rem; }
+    .ori-tab { font-size: 0.66rem; padding: 0.38rem 0.7rem; }
+}
