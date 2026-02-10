@@ -1060,6 +1060,224 @@ app.put('/api/server-info', async (req, res) => {
     }
 });
 
+// ══════════════════════════════════════════════════════════════════════════
+// TIMELINE API
+// ══════════════════════════════════════════════════════════════════════════
+
+const TIMELINE_ADMIN_IDS = ['667478723213262848', '788852381726015489'];
+
+// PUBLIC: Get timeline entries
+app.get('/api/public/timeline', async (req, res) => {
+    if (!pool) return res.json({ success: true, data: [] });
+
+    try {
+        const category = req.query.category;
+        const limit = Math.min(parseInt(req.query.limit) || 100, 200);
+        let query, params;
+
+        if (category && category.toLowerCase() !== 'all') {
+            query = `
+                SELECT te.*, p.username
+                FROM timeline_entries te
+                LEFT JOIN players p ON CAST(te.user_id AS CHAR) = CAST(p.user_id AS CHAR)
+                WHERE te.category = ?
+                ORDER BY te.event_date DESC, te.entry_id DESC
+                LIMIT ?
+            `;
+            params = [category, limit];
+        } else {
+            query = `
+                SELECT te.*, p.username
+                FROM timeline_entries te
+                LEFT JOIN players p ON CAST(te.user_id AS CHAR) = CAST(p.user_id AS CHAR)
+                ORDER BY te.event_date DESC, te.entry_id DESC
+                LIMIT ?
+            `;
+            params = [limit];
+        }
+
+        const [rows] = await pool.execute(query, params);
+
+        const entries = rows.map(row => ({
+            entry_id: row.entry_id,
+            user_id: row.user_id,
+            event_date: row.event_date,
+            subject: row.subject,
+            title: row.subject,
+            description: row.description,
+            content: row.description,
+            category: row.category,
+            created_at: row.created_at,
+            username: row.username,
+            author_name: row.username
+        }));
+
+        res.json({ success: true, data: entries });
+    } catch (err) {
+        console.error('[Timeline] GET error:', err.message);
+        res.json({ success: true, data: [] });
+    }
+});
+
+// PUBLIC: Get timeline categories
+app.get('/api/public/timeline/categories', async (req, res) => {
+    if (!pool) return res.json({ success: true, data: [] });
+
+    try {
+        const [rows] = await pool.execute(
+            `SELECT DISTINCT category FROM timeline_entries
+             WHERE category IS NOT NULL
+             ORDER BY category`
+        );
+        const cats = rows.map(r => r.category).filter(Boolean);
+        res.json({ success: true, data: cats });
+    } catch (err) {
+        console.error('[Timeline] Categories error:', err.message);
+        res.json({ success: true, data: [] });
+    }
+});
+
+// AUTH: Create timeline entry
+app.post('/api/timeline', async (req, res) => {
+    if (!pool) return res.status(500).json({ success: false, error: 'Database not connected' });
+
+    const { subject, event_date, category, description, username } = req.body;
+
+    if (!username) {
+        return res.status(401).json({ success: false, error: 'Not authenticated' });
+    }
+    if (!subject || !subject.trim()) {
+        return res.json({ success: false, error: 'Title is required' });
+    }
+    if (!event_date) {
+        return res.json({ success: false, error: 'Date is required' });
+    }
+
+    try {
+        const discordId = await getDiscordIdFromUsername(username);
+        if (!discordId) {
+            return res.json({ success: false, error: 'Player not found' });
+        }
+
+        const [result] = await pool.execute(
+            `INSERT INTO timeline_entries (user_id, event_date, subject, description, category, created_at)
+             VALUES (?, ?, ?, ?, ?, NOW())`,
+            [discordId, event_date, subject.trim(), (description || '').trim(), (category || 'event').toLowerCase()]
+        );
+
+        console.log(`[Timeline] Created entry #${result.insertId} by ${username}`);
+        res.json({ success: true, entry_id: result.insertId });
+    } catch (err) {
+        console.error('[Timeline] Create error:', err.message);
+        res.json({ success: false, error: 'Failed to create entry' });
+    }
+});
+
+// AUTH: Update timeline entry
+app.put('/api/timeline/:id', async (req, res) => {
+    if (!pool) return res.status(500).json({ success: false, error: 'Database not connected' });
+
+    const entryId = parseInt(req.params.id);
+    const { subject, event_date, category, description, username } = req.body;
+
+    if (!username) {
+        return res.status(401).json({ success: false, error: 'Not authenticated' });
+    }
+
+    try {
+        const discordId = await getDiscordIdFromUsername(username);
+        if (!discordId) {
+            return res.json({ success: false, error: 'Player not found' });
+        }
+
+        const isAdmin = TIMELINE_ADMIN_IDS.includes(discordId);
+
+        const [entries] = await pool.execute(
+            'SELECT CAST(user_id AS CHAR) as user_id FROM timeline_entries WHERE entry_id = ?',
+            [entryId]
+        );
+
+        if (entries.length === 0) {
+            return res.json({ success: false, error: 'Entry not found' });
+        }
+
+        if (entries[0].user_id !== discordId && !isAdmin) {
+            return res.json({ success: false, error: 'Permission denied' });
+        }
+
+        const updates = [];
+        const values = [];
+
+        if (subject && subject.trim()) { updates.push('subject = ?'); values.push(subject.trim()); }
+        if (event_date) { updates.push('event_date = ?'); values.push(event_date); }
+        if (category) { updates.push('category = ?'); values.push(category.toLowerCase()); }
+        if (description !== undefined) { updates.push('description = ?'); values.push((description || '').trim()); }
+
+        if (updates.length === 0) {
+            return res.json({ success: false, error: 'Nothing to update' });
+        }
+
+        values.push(entryId);
+
+        await pool.execute(
+            `UPDATE timeline_entries SET ${updates.join(', ')} WHERE entry_id = ?`,
+            values
+        );
+
+        console.log(`[Timeline] Updated entry #${entryId} by ${username}`);
+        res.json({ success: true });
+    } catch (err) {
+        console.error('[Timeline] Update error:', err.message);
+        res.json({ success: false, error: 'Failed to update entry' });
+    }
+});
+
+// AUTH: Delete timeline entry
+app.delete('/api/timeline/:id', async (req, res) => {
+    if (!pool) return res.status(500).json({ success: false, error: 'Database not connected' });
+
+    const entryId = parseInt(req.params.id);
+    const { username } = req.query;
+
+    if (!username) {
+        return res.status(401).json({ success: false, error: 'Not authenticated' });
+    }
+
+    try {
+        const discordId = await getDiscordIdFromUsername(username);
+        if (!discordId) {
+            return res.json({ success: false, error: 'Player not found' });
+        }
+
+        const isAdmin = TIMELINE_ADMIN_IDS.includes(discordId);
+
+        const [entries] = await pool.execute(
+            'SELECT CAST(user_id AS CHAR) as user_id FROM timeline_entries WHERE entry_id = ?',
+            [entryId]
+        );
+
+        if (entries.length === 0) {
+            return res.json({ success: false, error: 'Entry not found' });
+        }
+
+        if (entries[0].user_id !== discordId && !isAdmin) {
+            return res.json({ success: false, error: 'Permission denied' });
+        }
+
+        await pool.execute('DELETE FROM timeline_entries WHERE entry_id = ?', [entryId]);
+
+        console.log(`[Timeline] Deleted entry #${entryId} by ${username}`);
+        res.json({ success: true });
+    } catch (err) {
+        console.error('[Timeline] Delete error:', err.message);
+        res.json({ success: false, error: 'Failed to delete entry' });
+    }
+});
+
+// ══════════════════════════════════════════════════════════════════════════
+// CATCH-ALL & START
+// ══════════════════════════════════════════════════════════════════════════
+
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
