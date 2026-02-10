@@ -1065,6 +1065,87 @@ app.put('/api/server-info', async (req, res) => {
 // ══════════════════════════════════════════════════════════════════════════
 
 const TIMELINE_ADMIN_IDS = ['667478723213262848', '788852381726015489'];
+const DISCORD_TIMELINE_WEBHOOK = process.env.DISCORD_TIMELINE_WEBHOOK || null;
+const DISCORD_TIMELINE_CHANNEL = process.env.DISCORD_TIMELINE_CHANNEL || null;
+
+// Category display helpers for Discord embeds
+const TIMELINE_CAT_META = {
+    event:        { emoji: '🏆', color: 0xD4AF37 },
+    battle:       { emoji: '⚔️', color: 0xC0392B },
+    quest:        { emoji: '🗺️', color: 0x27AE60 },
+    lore:         { emoji: '📜', color: 0x8E44AD },
+    update:       { emoji: '📡', color: 0x3498DB },
+    ceremony:     { emoji: '🌟', color: 0xF39C12 },
+    announcement: { emoji: '📯', color: 0xE91E63 }
+};
+
+// Helper: Post timeline change to Discord
+async function postTimelineToDiscord(action, entry, username) {
+    const catInfo = TIMELINE_CAT_META[(entry.category || '').toLowerCase()] || { emoji: '📌', color: 0xD4AF37 };
+
+    const actionLabels = {
+        created: { title: '📜 New Chronicle Entry', verb: 'added' },
+        updated: { title: '✏️ Chronicle Entry Updated', verb: 'updated' },
+        deleted: { title: '🗑️ Chronicle Entry Removed', verb: 'removed' }
+    };
+    const info = actionLabels[action] || actionLabels.created;
+
+    const embed = {
+        title: info.title,
+        color: action === 'deleted' ? 0x95A5A6 : catInfo.color,
+        fields: [
+            { name: 'Title', value: entry.subject || 'Untitled', inline: true },
+            { name: 'Category', value: `${catInfo.emoji} ${(entry.category || 'event').charAt(0).toUpperCase() + (entry.category || 'event').slice(1)}`, inline: true },
+            { name: 'Date', value: entry.event_date || 'Unknown', inline: true }
+        ],
+        footer: { text: `${info.verb} by ${username} via Camp Website` },
+        timestamp: new Date().toISOString()
+    };
+
+    if (entry.description && action !== 'deleted') {
+        const desc = entry.description.length > 300 ? entry.description.substring(0, 297) + '...' : entry.description;
+        embed.description = desc;
+    }
+
+    // Try webhook first
+    if (DISCORD_TIMELINE_WEBHOOK) {
+        try {
+            const response = await fetch(DISCORD_TIMELINE_WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: 'Camp Chronicle', embeds: [embed] })
+            });
+            if (response.ok) {
+                console.log(`[Timeline] Discord webhook: ${action} entry`);
+                return;
+            }
+            console.error('[Timeline] Webhook failed:', response.status);
+        } catch (error) {
+            console.error('[Timeline] Webhook error:', error.message);
+        }
+    }
+
+    // Fallback: bot token + channel ID
+    if (DISCORD_BOT_TOKEN && DISCORD_TIMELINE_CHANNEL) {
+        try {
+            const response = await fetch(`https://discord.com/api/v10/channels/${DISCORD_TIMELINE_CHANNEL}/messages`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bot ${DISCORD_BOT_TOKEN}`
+                },
+                body: JSON.stringify({ embeds: [embed] })
+            });
+            if (response.ok) {
+                console.log(`[Timeline] Discord bot: ${action} entry`);
+                return;
+            }
+            console.error('[Timeline] Bot post failed:', response.status);
+        } catch (error) {
+            console.error('[Timeline] Bot post error:', error.message);
+        }
+    }
+}
 
 // PUBLIC: Get timeline entries
 app.get('/api/public/timeline', async (req, res) => {
@@ -1159,13 +1240,23 @@ app.post('/api/timeline', async (req, res) => {
             return res.json({ success: false, error: 'Player not found' });
         }
 
+        const cleanSubject = subject.trim();
+        const cleanDesc = (description || '').trim();
+        const cleanCat = (category || 'event').toLowerCase();
+
         const [result] = await pool.execute(
             `INSERT INTO timeline_entries (user_id, event_date, subject, description, category, created_at)
              VALUES (?, ?, ?, ?, ?, NOW())`,
-            [discordId, event_date, subject.trim(), (description || '').trim(), (category || 'event').toLowerCase()]
+            [discordId, event_date, cleanSubject, cleanDesc, cleanCat]
         );
 
         console.log(`[Timeline] Created entry #${result.insertId} by ${username}`);
+
+        // Notify Discord
+        postTimelineToDiscord('created', {
+            subject: cleanSubject, event_date, category: cleanCat, description: cleanDesc
+        }, username).catch(e => console.error('[Timeline] Discord notify error:', e.message));
+
         res.json({ success: true, entry_id: result.insertId });
     } catch (err) {
         console.error('[Timeline] Create error:', err.message);
@@ -1193,7 +1284,7 @@ app.put('/api/timeline/:id', async (req, res) => {
         const isAdmin = TIMELINE_ADMIN_IDS.includes(discordId);
 
         const [entries] = await pool.execute(
-            'SELECT CAST(user_id AS CHAR) as user_id FROM timeline_entries WHERE entry_id = ?',
+            'SELECT CAST(user_id AS CHAR) as user_id, subject, event_date, category FROM timeline_entries WHERE entry_id = ?',
             [entryId]
         );
 
@@ -1225,6 +1316,15 @@ app.put('/api/timeline/:id', async (req, res) => {
         );
 
         console.log(`[Timeline] Updated entry #${entryId} by ${username}`);
+
+        // Notify Discord
+        postTimelineToDiscord('updated', {
+            subject: (subject && subject.trim()) || entries[0].subject,
+            event_date: event_date || entries[0].event_date,
+            category: category ? category.toLowerCase() : entries[0].category,
+            description: description !== undefined ? (description || '').trim() : ''
+        }, username).catch(e => console.error('[Timeline] Discord notify error:', e.message));
+
         res.json({ success: true });
     } catch (err) {
         console.error('[Timeline] Update error:', err.message);
@@ -1252,7 +1352,7 @@ app.delete('/api/timeline/:id', async (req, res) => {
         const isAdmin = TIMELINE_ADMIN_IDS.includes(discordId);
 
         const [entries] = await pool.execute(
-            'SELECT CAST(user_id AS CHAR) as user_id FROM timeline_entries WHERE entry_id = ?',
+            'SELECT CAST(user_id AS CHAR) as user_id, subject, event_date, category FROM timeline_entries WHERE entry_id = ?',
             [entryId]
         );
 
@@ -1264,9 +1364,20 @@ app.delete('/api/timeline/:id', async (req, res) => {
             return res.json({ success: false, error: 'Permission denied' });
         }
 
+        // Capture entry info before deleting for Discord notification
+        const deletedEntry = entries[0];
+
         await pool.execute('DELETE FROM timeline_entries WHERE entry_id = ?', [entryId]);
 
         console.log(`[Timeline] Deleted entry #${entryId} by ${username}`);
+
+        // Notify Discord
+        postTimelineToDiscord('deleted', {
+            subject: deletedEntry.subject,
+            event_date: deletedEntry.event_date,
+            category: deletedEntry.category
+        }, username).catch(e => console.error('[Timeline] Discord notify error:', e.message));
+
         res.json({ success: true });
     } catch (err) {
         console.error('[Timeline] Delete error:', err.message);
