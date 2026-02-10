@@ -1,14 +1,14 @@
-// Timeline Page — Celestial Chronicle
+// Timeline Page -- Celestial Chronicle
 // Portal page for viewing, adding, editing, and deleting timeline entries
 (function() {
 
 var entries = [];
 var categories = [];
 var activeFilter = 'all';
-var currentUser = null;   // { discord_id, discord_username }
+var currentUsername = null;   // MC username from portal login
 var isAdmin = false;
-var editingEntry = null;   // entry being edited, or null for create
-var ADMIN_IDS = ['667478723213262848', '788852381726015489'];
+var editingEntry = null;
+var ADMIN_USERS = ['lizzzerd', 'ussdylan'];
 
 // Category display config
 var CAT_META = {
@@ -65,27 +65,24 @@ function getYear(d) {
     return isNaN(dt) ? '' : String(dt.getFullYear());
 }
 
-// ── API helpers ──
-function getSessionToken() {
-    return localStorage.getItem('chb_session_token') || '';
-}
-
-function api(endpoint, opts) {
-    opts = opts || {};
-    var headers = opts.headers || {};
-    headers['X-Session-Token'] = getSessionToken();
-    if (opts.body && typeof opts.body === 'object') {
-        headers['Content-Type'] = 'application/json';
-        opts.body = JSON.stringify(opts.body);
+// ── Auth helpers ──
+// Reads from the portal session that portal-session.js / portal.js manages
+function getStoredUsername() {
+    // Method 1: use PortalSession global if available (portal-session.js)
+    if (typeof PortalSession !== 'undefined' && PortalSession.getUsername) {
+        return PortalSession.getUsername() || '';
     }
-    opts.headers = headers;
-    return fetch(endpoint, opts).then(function(r) {
-        if (r.status === 401) {
-            toast('Session expired. Please log in again.', 'error');
-            throw new Error('Unauthorized');
+    // Method 2: fallback to reading localStorage directly
+    try {
+        var raw = localStorage.getItem('chb_portal_session');
+        if (!raw) return '';
+        var session = JSON.parse(raw);
+        if (session && session.player) {
+            return session.player.mc_username || session.player.username || '';
         }
-        return r.json();
-    });
+        if (session && session.username) return session.username;
+    } catch (e) {}
+    return '';
 }
 
 // ── Render entry point ──
@@ -122,35 +119,26 @@ function buildShell() {
         +     '<div class="tl-loading-text">Consulting the Oracle\u2026</div></div>'
         +   '</div>'
         + '</div>'
-        // Modal overlay
         + '<div class="tl-modal-overlay" id="tl-modal">'
         +   '<div class="tl-modal" id="tl-modal-inner"></div>'
         + '</div>'
-        // Toast
         + '<div class="tl-toast" id="tl-toast"></div>'
         + '</div>';
 }
 
 function loadSession() {
-    var token = getSessionToken();
-    if (!token) return;
-    // Try to get session info
-    api('/api/auth/check').then(function(data) {
-        if (data.authenticated) {
-            currentUser = {
-                discord_id: String(data.discord_id),
-                discord_username: data.discord_username
-            };
-            isAdmin = ADMIN_IDS.indexOf(currentUser.discord_id) >= 0;
-            // Show add button for logged-in users
-            var addBtn = document.getElementById('tl-add-btn');
-            if (addBtn) addBtn.style.display = '';
-        }
-    }).catch(function() {});
+    var username = getStoredUsername();
+    if (!username) return;
+
+    currentUsername = username;
+    isAdmin = ADMIN_USERS.indexOf(username.toLowerCase()) >= 0;
+
+    // Show add button for logged-in users
+    var addBtn = document.getElementById('tl-add-btn');
+    if (addBtn) addBtn.style.display = '';
 }
 
 function loadEntries() {
-    // Use public endpoint (no auth needed for viewing)
     var endpoint = '/api/public/timeline';
     if (activeFilter !== 'all') endpoint += '?category=' + encodeURIComponent(activeFilter);
 
@@ -188,7 +176,6 @@ function renderFilters() {
 
     var h = '<button class="tl-filter-btn' + (activeFilter === 'all' ? ' active' : '') + '" data-cat="all">All</button>';
 
-    // Merge known + any from DB
     var allCats = Object.keys(CAT_META);
     categories.forEach(function(c) {
         var lower = c.toLowerCase();
@@ -235,11 +222,10 @@ function renderEntries() {
     var lastYear = '';
     var delay = 0;
 
-    entries.forEach(function(entry, idx) {
+    entries.forEach(function(entry) {
         var entryDate = entry.event_date || entry.created_at;
         var year = getYear(entryDate);
 
-        // Year divider
         if (year && year !== lastYear) {
             h += '<div class="tl-entry is-year" style="animation-delay:' + delay + 's">'
                 + '<div class="tl-year-marker"><span>' + esc(year) + '</span></div>'
@@ -253,8 +239,14 @@ function renderEntries() {
         var desc = entry.description || entry.content || '';
         var author = entry.username || entry.author_name || 'Unknown';
         var entryId = entry.entry_id || entry.id;
-        var authorId = String(entry.user_id || entry.author_id || '');
-        var canEdit = currentUser && (currentUser.discord_id === authorId || isAdmin);
+
+        // Show edit/delete for admins and for the entry's author
+        var canEdit = false;
+        if (currentUsername) {
+            if (isAdmin) canEdit = true;
+            if (author && author.toLowerCase() === currentUsername.toLowerCase()) canEdit = true;
+        }
+
         var isLong = desc.length > 180;
 
         h += '<div class="tl-entry" style="animation-delay:' + delay + 's" data-id="' + entryId + '">'
@@ -262,7 +254,6 @@ function renderEntries() {
             + '<div class="tl-dot"></div>'
             + '<div class="tl-card">';
 
-        // Action buttons
         if (canEdit) {
             h += '<div class="tl-actions">'
                 + '<button class="tl-action-btn edit" data-id="' + entryId + '" title="Edit">\u270E</button>'
@@ -288,7 +279,6 @@ function renderEntries() {
         delay += 0.08;
     });
 
-    // End ornament
     h += '<div class="tl-end-ornament">'
         + '<div class="tl-end-ornament-inner">'
         + '<div class="tl-end-ornament-line"></div>'
@@ -359,13 +349,13 @@ function openEditModal(entry) {
 
 function buildFormModal(title, entry) {
     var isEdit = !!entry;
-    var catOptions = '<option value="event"' + (!isEdit || (entry.category||'').toLowerCase() === 'event' ? ' selected' : '') + '>Event</option>';
+
     var allCats = ['event','battle','quest','lore','update','ceremony','announcement'];
     categories.forEach(function(c) {
         var lower = c.toLowerCase();
         if (allCats.indexOf(lower) < 0) allCats.push(lower);
     });
-    catOptions = '';
+    var catOptions = '';
     allCats.forEach(function(c) {
         var sel = isEdit && (entry.category||'').toLowerCase() === c ? ' selected' : (!isEdit && c === 'event' ? ' selected' : '');
         catOptions += '<option value="' + esc(c) + '"' + sel + '>' + getCatIcon(c) + ' ' + esc(getCatLabel(c)) + '</option>';
@@ -414,7 +404,6 @@ function bindFormEvents() {
     if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
     if (saveBtn) saveBtn.addEventListener('click', handleSave);
 
-    // Focus title
     var titleInput = document.getElementById('tl-f-title');
     if (titleInput) setTimeout(function() { titleInput.focus(); }, 100);
 }
@@ -428,6 +417,7 @@ function handleSave() {
 
     if (!title) { toast('Title is required', 'error'); return; }
     if (!date) { toast('Date is required', 'error'); return; }
+    if (!currentUsername) { toast('Please log in via the Portal first', 'error'); return; }
 
     saveBtn.disabled = true;
     saveBtn.textContent = 'Saving\u2026';
@@ -436,49 +426,58 @@ function handleSave() {
         subject: title,
         event_date: date,
         category: category,
-        description: desc
+        description: desc,
+        username: currentUsername
     };
 
     if (editingEntry) {
-        // Update
         var entryId = editingEntry.entry_id || editingEntry.id;
-        api('/api/timeline/' + entryId, { method: 'PUT', body: payload })
-            .then(function(data) {
-                if (data.success) {
-                    toast('Entry updated', 'success');
-                    closeModal();
-                    loadEntries();
-                } else {
-                    toast(data.error || 'Failed to update', 'error');
-                    saveBtn.disabled = false;
-                    saveBtn.textContent = 'Update';
-                }
-            })
-            .catch(function(err) {
-                toast('Error: ' + err.message, 'error');
+        fetch('/api/timeline/' + entryId, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.success) {
+                toast('Entry updated', 'success');
+                closeModal();
+                loadEntries();
+            } else {
+                toast(data.error || 'Failed to update', 'error');
                 saveBtn.disabled = false;
                 saveBtn.textContent = 'Update';
-            });
+            }
+        })
+        .catch(function(err) {
+            toast('Error: ' + err.message, 'error');
+            saveBtn.disabled = false;
+            saveBtn.textContent = 'Update';
+        });
     } else {
-        // Create
-        api('/api/timeline', { method: 'POST', body: payload })
-            .then(function(data) {
-                if (data.success) {
-                    toast('Entry created', 'success');
-                    closeModal();
-                    loadEntries();
-                    loadCategories();
-                } else {
-                    toast(data.error || 'Failed to create', 'error');
-                    saveBtn.disabled = false;
-                    saveBtn.textContent = 'Create';
-                }
-            })
-            .catch(function(err) {
-                toast('Error: ' + err.message, 'error');
+        fetch('/api/timeline', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.success) {
+                toast('Entry created', 'success');
+                closeModal();
+                loadEntries();
+                loadCategories();
+            } else {
+                toast(data.error || 'Failed to create', 'error');
                 saveBtn.disabled = false;
                 saveBtn.textContent = 'Create';
-            });
+            }
+        })
+        .catch(function(err) {
+            toast('Error: ' + err.message, 'error');
+            saveBtn.disabled = false;
+            saveBtn.textContent = 'Create';
+        });
     }
 }
 
@@ -509,23 +508,26 @@ function openDeleteConfirm(entry) {
         btn.disabled = true;
         btn.textContent = 'Deleting\u2026';
 
-        api('/api/timeline/' + entryId, { method: 'DELETE' })
-            .then(function(data) {
-                if (data.success) {
-                    toast('Entry deleted', 'success');
-                    closeModal();
-                    loadEntries();
-                } else {
-                    toast(data.error || 'Failed to delete', 'error');
-                    btn.disabled = false;
-                    btn.textContent = 'Delete';
-                }
-            })
-            .catch(function(err) {
-                toast('Error: ' + err.message, 'error');
+        fetch('/api/timeline/' + entryId + '?username=' + encodeURIComponent(currentUsername), {
+            method: 'DELETE'
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.success) {
+                toast('Entry deleted', 'success');
+                closeModal();
+                loadEntries();
+            } else {
+                toast(data.error || 'Failed to delete', 'error');
                 btn.disabled = false;
                 btn.textContent = 'Delete';
-            });
+            }
+        })
+        .catch(function(err) {
+            toast('Error: ' + err.message, 'error');
+            btn.disabled = false;
+            btn.textContent = 'Delete';
+        });
     });
 }
 
@@ -544,11 +546,10 @@ function toast(msg, type) {
 
 // ── Global events ──
 function bindEvents() {
-    // Add button
     var addBtn = document.getElementById('tl-add-btn');
     if (addBtn) {
         addBtn.addEventListener('click', function() {
-            if (!currentUser) {
+            if (!currentUsername) {
                 toast('Please log in via the Portal first', 'error');
                 return;
             }
@@ -556,7 +557,6 @@ function bindEvents() {
         });
     }
 
-    // Close modal on overlay click
     var overlay = document.getElementById('tl-modal');
     if (overlay) {
         overlay.addEventListener('click', function(e) {
@@ -564,13 +564,12 @@ function bindEvents() {
         });
     }
 
-    // Escape key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') closeModal();
     });
 }
 
-// Export
+// Export for router
 window.TimelinePage = render;
 
 })();
