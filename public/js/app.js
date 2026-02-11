@@ -21,6 +21,7 @@
     Router.register('/portal/mail', window.PortalMailPage);
     Router.register('/portal/leaderboard', window.PortalLeaderboardPage);
     Router.register('/portal/characters', window.PortalCharactersPage);
+    Router.register('/portal/quiz', window.PortalClaimingPage); 
     Router.register('/info/new-players', window.GettingStartedPage);
     Router.register('/info/mods', window.ModListPage);
     Router.register('/info/origins', window.OriginsPage);
@@ -28,7 +29,6 @@
     Router.register('/info*', placeholder('Coming Soon'));
     Router.register('/integrations*', placeholder('Integrations'));
     Router.register('/portal*', placeholder('Portal'));
-    Router.register('/portal/quiz', window.PortalClaimingPage);
     // go
     Router.init();
 })();
