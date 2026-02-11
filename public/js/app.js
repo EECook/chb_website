@@ -28,6 +28,7 @@
     Router.register('/info*', placeholder('Coming Soon'));
     Router.register('/integrations*', placeholder('Integrations'));
     Router.register('/portal*', placeholder('Portal'));
+    Router.register('/portal/quiz', window.PortalClaimingPage);
     // go
     Router.init();
 })();
