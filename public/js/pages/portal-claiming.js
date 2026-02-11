@@ -726,19 +726,13 @@
     // PAGE HANDLER (for SPA router)
     // ═══════════════════════════════════════════════════════════════════
 
-    window.PortalClaimingPage = {
-        render: function(mount) {
-            // the quiz takes over the full screen, so we just launch it
-            // and put a fallback in mount
-            mount.innerHTML = '<div style="min-height:60vh;display:flex;align-items:center;justify-content:center">'
-                + '<p style="color:var(--text-muted,rgba(245,245,240,0.5));font-family:var(--font-body)">Loading the Claiming Ceremony...</p>'
-                + '</div>';
-            setTimeout(launch, 100);
-        },
-        cleanup: function() {
-            teardown();
-        }
-    };
+window.PortalClaimingPage = function(mount) {
+    mount.innerHTML = '<div style="min-height:60vh;display:flex;align-items:center;justify-content:center">'
+        + '<p style="color:var(--text-muted,rgba(245,245,240,0.5));font-family:var(--font-body)">Loading the Claiming Ceremony...</p>'
+        + '</div>';
+    setTimeout(launch, 100);
+    return { cleanup: teardown };
+};
 
     // also expose globally so it can be triggered from anywhere
     window.launchClaimingCeremony = launch;
