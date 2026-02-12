@@ -1,0 +1,606 @@
+/* ═══════════════════════════════════════
+   GODS PAGE
+   Celestial Camp Half-Blood aesthetic
+   ═══════════════════════════════════════ */
+
+.gods-page {
+    position: relative;
+    min-height: 100vh;
+    padding-top: var(--nav-height);
+    padding-bottom: 4rem;
+}
+
+
+/* ── Hero ── */
+
+.gods-hero {
+    position: relative;
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+    overflow: hidden;
+}
+
+.gods-hero-glow {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 30% 30%, rgba(212, 175, 55, 0.06) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 70%, rgba(139, 92, 246, 0.04) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.gods-hero-content { position: relative; z-index: 1; }
+
+.gods-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    color: var(--gold);
+    text-shadow: 0 0 40px rgba(212, 175, 55, 0.3), 0 0 80px rgba(212, 175, 55, 0.1);
+    letter-spacing: 0.04em;
+    margin-bottom: 0.6rem;
+}
+
+.gods-subtitle {
+    font-family: 'Crimson Text', serif;
+    font-style: italic;
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    color: var(--marble-muted);
+    letter-spacing: 0.02em;
+    max-width: 540px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+
+/* ── Stats Banner ── */
+
+.gods-stats {
+    max-width: 720px;
+    margin: 0 auto 2.5rem;
+    padding: 0 1.5rem;
+}
+
+.gods-stats-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 1rem 1.5rem;
+    border: 1px solid var(--border-gold);
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.04), rgba(10, 5, 32, 0.6));
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(212, 175, 55, 0.08);
+}
+
+.gods-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+}
+
+.gods-stat-num {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.4rem;
+    color: var(--gold);
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+.gods-stat-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--marble-muted);
+}
+
+.gods-stat-div {
+    width: 1px;
+    height: 30px;
+    background: var(--border-subtle);
+}
+
+
+/* ── How Claiming Works ── */
+
+.gods-explainer {
+    max-width: 860px;
+    margin: 0 auto 2.5rem;
+    padding: 0 1.5rem;
+}
+
+.gods-explainer-inner {
+    padding: 2rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    background: rgba(10, 10, 30, 0.4);
+    backdrop-filter: blur(8px);
+}
+
+.gods-section-heading {
+    font-family: 'Cinzel', serif;
+    font-size: 1.15rem;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.04em;
+}
+
+.gods-explainer-steps {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.gods-exp-step {
+    flex: 1;
+    min-width: 180px;
+    max-width: 220px;
+    text-align: center;
+}
+
+.gods-exp-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.2));
+}
+
+.gods-exp-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    color: var(--gold-light);
+    margin-bottom: 0.35rem;
+}
+
+.gods-exp-desc {
+    font-family: 'Crimson Text', serif;
+    font-size: 0.88rem;
+    color: var(--marble-muted);
+    line-height: 1.55;
+}
+
+.gods-exp-arrow {
+    font-size: 1.4rem;
+    color: var(--gold);
+    opacity: 0.3;
+    padding-top: 1.2rem;
+    flex-shrink: 0;
+}
+
+.gods-exp-note {
+    margin-top: 1.5rem;
+    padding: 0.75rem 1rem;
+    border-left: 2px solid rgba(212, 175, 55, 0.25);
+    font-family: 'Crimson Text', serif;
+    font-size: 0.9rem;
+    color: var(--marble-muted);
+    line-height: 1.6;
+}
+
+.gods-exp-note strong {
+    color: var(--gold-light);
+}
+
+.gods-exp-note code {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.82rem;
+    color: #c4b5fd;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    background: rgba(139, 92, 246, 0.08);
+    border: 1px solid rgba(139, 92, 246, 0.15);
+}
+
+
+/* ── Search ── */
+
+.gods-search-wrap {
+    max-width: 500px;
+    margin: 0 auto 1.2rem;
+    padding: 0 1.5rem;
+}
+
+.gods-search {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.65rem 1rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    background: rgba(10, 10, 30, 0.5);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.gods-search:focus-within {
+    border-color: var(--border-gold);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.08);
+}
+
+.gods-search-icon { font-size: 1rem; opacity: 0.4; }
+
+.gods-search-input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--marble);
+    font-family: 'Crimson Text', serif;
+    font-size: 1rem;
+}
+
+.gods-search-input::placeholder { color: var(--marble-muted); opacity: 0.5; }
+
+
+/* ── Filter Tabs ── */
+
+.gods-tabs {
+    display: flex;
+    gap: 0.35rem;
+    padding: 0 1.5rem 2rem;
+    max-width: 700px;
+    margin: 0 auto;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.gods-tab {
+    padding: 0.4rem 0.85rem;
+    border: 1px solid rgba(212, 175, 55, 0.1);
+    border-radius: 100px;
+    background: rgba(15, 10, 48, 0.4);
+    color: var(--marble-muted);
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.25s;
+}
+
+.gods-tab:hover {
+    color: var(--marble);
+    border-color: rgba(212, 175, 55, 0.25);
+    background: rgba(212, 175, 55, 0.04);
+}
+
+.gods-tab.active {
+    color: var(--gold-light);
+    border-color: var(--gold);
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(139, 92, 246, 0.04));
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.08);
+}
+
+.gods-tab-count {
+    margin-left: 0.3rem;
+    padding: 0.05rem 0.35rem;
+    border-radius: 100px;
+    background: rgba(212, 175, 55, 0.08);
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.55rem;
+}
+
+.gods-tab.active .gods-tab-count {
+    background: rgba(212, 175, 55, 0.18);
+    color: var(--gold);
+}
+
+
+/* ── God Grid ── */
+
+.gods-grid-wrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.gods-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 0.75rem;
+}
+
+.gods-empty {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--marble-muted);
+    font-style: italic;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+}
+
+
+/* ── God Card ── */
+
+.god-card {
+    position: relative;
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    background: rgba(10, 10, 30, 0.45);
+    backdrop-filter: blur(8px);
+    overflow: hidden;
+    transition: all 0.35s ease;
+    animation: godCardIn 0.4s var(--ease-out) both;
+}
+
+@keyframes godCardIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.god-card-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    background: radial-gradient(ellipse at 15% 25%, var(--god-color-faint), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.35s;
+    pointer-events: none;
+}
+
+.god-card:hover {
+    border-color: var(--god-color-mid);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), 0 0 20px var(--god-color-faint);
+}
+
+.god-card:hover .god-card-glow { opacity: 1; }
+
+
+/* ── Card Head ── */
+
+.god-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.2rem 0.5rem;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+}
+
+.god-card-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+}
+
+.god-card-emoji {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 8px var(--god-color-mid));
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.god-card:hover .god-card-emoji { transform: scale(1.15); }
+
+.god-card-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.05rem;
+    color: var(--gold-light);
+    line-height: 1.2;
+}
+
+.god-card-domain {
+    font-family: 'Crimson Text', serif;
+    font-size: 0.82rem;
+    color: var(--marble-muted);
+    font-style: italic;
+    line-height: 1.3;
+}
+
+.god-card-toggle {
+    font-size: 1rem;
+    color: var(--marble-muted);
+    opacity: 0.4;
+    transition: all 0.3s;
+    flex-shrink: 0;
+}
+
+.god-card:hover .god-card-toggle { opacity: 0.7; }
+.god-card.open .god-card-toggle { transform: rotate(180deg); opacity: 0.8; }
+
+
+/* ── Preview Tags (always visible) ── */
+
+.god-card-preview {
+    display: flex;
+    gap: 0.4rem;
+    padding: 0.5rem 1.2rem 0.85rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+}
+
+.god-card-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 100px;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.01em;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: var(--marble-muted);
+    transition: all 0.25s;
+}
+
+.god-tag-icon { font-size: 0.72rem; }
+
+.god-nametag-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 6px var(--nc);
+}
+
+
+/* ── Expanded Body ── */
+
+.god-card-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s ease;
+    padding: 0 1.2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.god-card.open .god-card-body {
+    max-height: 400px;
+    padding: 0 1.2rem 1.2rem;
+}
+
+.god-card-desc {
+    font-family: 'Crimson Text', serif;
+    font-size: 0.92rem;
+    color: var(--marble-muted);
+    line-height: 1.6;
+    margin-bottom: 0.8rem;
+    padding-top: 0.4rem;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.god-card-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 0.75rem;
+}
+
+.god-detail {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.god-detail-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--marble-muted);
+    opacity: 0.6;
+    flex-shrink: 0;
+    min-width: 110px;
+}
+
+.god-detail-value {
+    font-family: 'Crimson Text', serif;
+    font-size: 0.88rem;
+    color: var(--marble);
+}
+
+.god-nametag-sample {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+}
+
+.god-card-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.god-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid rgba(139, 92, 246, 0.25);
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.06), rgba(10, 5, 32, 0.5));
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.03em;
+    color: #c4b5fd;
+    text-decoration: none;
+    transition: all 0.25s;
+}
+
+.god-action-btn:hover {
+    border-color: rgba(139, 92, 246, 0.5);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(10, 5, 32, 0.6));
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.1);
+    transform: translateY(-1px);
+}
+
+
+/* ── Closing ── */
+
+.gods-closing {
+    text-align: center;
+    max-width: 600px;
+    margin: 3rem auto 0;
+    padding: 0 1.5rem;
+}
+
+.gods-closing-line {
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0 auto 1.5rem;
+}
+
+.gods-closing-text {
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    color: var(--marble-muted);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+}
+
+.gods-closing-links {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.gods-closing-links .cta-secondary {
+    font-size: 0.85rem;
+    padding: 0.65rem 1.4rem;
+}
+
+
+/* ═══ RESPONSIVE ═══ */
+
+@media (max-width: 768px) {
+    .gods-stats-inner {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    .gods-stat-div {
+        width: 60px;
+        height: 1px;
+    }
+    .gods-explainer-steps {
+        flex-direction: column;
+        align-items: center;
+    }
+    .gods-exp-arrow {
+        transform: rotate(90deg);
+        padding: 0;
+    }
+    .gods-exp-step { max-width: 300px; }
+    .gods-grid { grid-template-columns: 1fr; }
+    .gods-closing-links { flex-direction: column; align-items: center; }
+    .gods-tabs { padding: 0 1rem 1.5rem; }
+    .god-detail { flex-direction: column; gap: 0.15rem; }
+    .god-detail-label { min-width: auto; }
+}
+
+@media (max-width: 480px) {
+    .gods-hero { padding: 3rem 1.5rem 2rem; }
+    .gods-grid-wrap { padding: 0 1rem; }
+    .god-card-head { padding: 0.85rem 1rem 0.4rem; }
+    .god-card-preview { padding: 0.4rem 1rem 0.75rem; }
+}
